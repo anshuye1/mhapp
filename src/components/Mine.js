@@ -10,12 +10,10 @@ import {
     AsyncStorage
 } from 'react-native';
 import { connect } from 'react-redux';
-import { doLogin } from '../store/actions/login';
-import * as types from "../store/constants";
 
-import Icon from "react-native-vector-icons/Ionicons"
 
-import ScrollableTabView, { DefaultTabBar } from 'react-native-scrollable-tab-view';
+import User from "./User";
+import Ajax from "../common/Ajax";
 
 
 const {width,height} = Dimensions.get('window');
@@ -26,33 +24,15 @@ class Mine extends Component {
   };
   constructor(props) {
     super(props);
-    this.state = {
-      color: '#000'
-    }
+
   }
   componentDidMount() {
   }
+
   render() {
     const { navigate } = this.props.navigation;
     const { token } = this.props.state.login;
-      const userView = (
-        <View>
-            <View style={{marginBottom:10}}>
-                <Text style={{ fontSize: 18, color: '#9B9B9B' }}>{token}</Text>
-            </View>
-            <View style={{flexDirection:'row'}}>
-                <Text style={{fontSize:14,backgroundColor:'#1e88f5',width:20,height:20,lineHeight:20,color:'#fff',borderRadius:10,textAlign:'center',marginRight:5}}>
-                    邀
-                </Text>
-                <Text>剩余29天</Text>
-                <Text style={{fontSize:14,backgroundColor:'#F54E33',width:20,height:20,lineHeight:20,color:'#fff',borderRadius:10,textAlign:'center',marginLeft:25,marginRight:5}}>
-                    ￥
-                </Text>
-                <Text>剩余19天</Text>
-            </View>
 
-        </View>
-    );
     return (
       <View style={styles.container}>
         <ImageBackground style={styles.top} source={require('../img/wde_bg.png')} resizeMode='cover'>
@@ -62,9 +42,16 @@ class Mine extends Component {
                   <Image source={token?require('../img/txiang2.png'):require('../img/txiang1.png')} style={{ width: 80, height: 80 }} />
               </View>
 
-              <TouchableOpacity style={{flexDirection:'column'}} onPress={()=>{if(!token)navigate('Login')}}>
+              <TouchableOpacity
+                  style={{flexDirection:'column'}}
+                  onPress={()=>{
+                      if(!token){
+                          navigate('Login')
+                      }
+                    }}
+              >
 
-                  {token?userView:<Text style={{ fontSize: 18, color: '#9B9B9B' }}>点击登录账号</Text>}
+                  {token?<User token={token}/>:<Text style={{ fontSize: 18, color: '#9B9B9B' }}>点击登录账号</Text>}
 
                   {!token&&<Text style={{fontSize:12,color:'#9B9B9B',marginTop:3}}>登录后更方便使用</Text>}
               </TouchableOpacity>

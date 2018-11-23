@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import {
-    StyleSheet,
     Text,
     View,
     TouchableOpacity,
     Image,
 } from 'react-native';
+
+import good_css from '../css/good_css';
 
 export default class WeiItem extends Component {
     constructor(props) {
@@ -16,102 +17,60 @@ export default class WeiItem extends Component {
         data:[]
     };
     render(){
-        const {item,data,navigate} = this.props;
+        const {item} = this.props;
+        let result = item&&item.result&&item.result[0]?item.result[0]:{};
         return (
-            <TouchableOpacity
-                style={[
-                    styles.SkuList, item.key + 1 == data.length && styles.lastList
-                ]}
-                onPress={() => navigate('Ranking', {
-                    id: item.value.id,
-                    callback: (data) => {
-                        this.setState({ childState: data })
-                    }
-                })}
+            <View
+                style={good_css.SkuList}
             >
-                <View style={{
-                    flex: 0
-                }}>
+                <View style={good_css.img_wrap}>
                     <Image source={{
-                        uri: 'https://img13.360buyimg.com/n1/s450x450_jfs/t25075/312/1904738735/406912/ff77e158/5bbf19ccN5af1e7f5.jpg'||item.value.images.large
-                    }} style={{
-                        width: 130,
-                        height: 130
-                    }} />
+                        uri: result.good_img_url
+                    }} style={good_css.good_img} />
                 </View>
-                <View style={{
-                    height: 130,
-                    flex: 2,
-                    paddingLeft:14,
-                    alignItems: 'flex-start',
-                }}>
+                <View style={good_css.good_detail}>
 
-                    <Text style={styles.title} numberOfLines={1}>{'华为 HUAWEI Mate 20 Pro 麒麟980芯片全面屏超微距影像超大广角徕卡三摄6GB+128GB亮黑色全网通版双4G手机'||item.value.title}
+                    <Text style={good_css.title} numberOfLines={1}>{result.good_title}
                     </Text>
 
 
-                    <View style={styles.itemWrap}>
-                        <Text style={{fontSize:18,color:'#FF314B',width:150}}>￥ 5399.00</Text>
-                        <Text style={{fontSize:14,color:'#9B9B9B',textAlign:'right',flex:1,lineHeight:25}}>11/01 14:17</Text>
+                    <View style={good_css.itemWrap}>
+                        <Text style={{fontSize:18,color:'#FF314B',width:150}}>￥ {result.price}</Text>
+                        <Text style={{fontSize:14,color:'#9B9B9B',textAlign:'right',flex:1,lineHeight:25}}>{result.create_at}</Text>
                     </View>
 
 
-                    <View style={styles.itemWrap}>
-                        <Text style={[styles.right,styles.right1]} numberOfLines={1}>8GB+256GB 标准版 黑亮色</Text>
+                    <View style={good_css.itemWrap}>
+                        <Text numberOfLines={1}>{result.specification}</Text>
                     </View>
 
-                    <View style={[styles.itemWrap,styles.itemWrap1]}>
-                        <Text style={styles.left} numberOfLines={1}>
-                            手机
+                    <View style={[good_css.itemWrap,good_css.itemWrap1]}>
+                        <Text style={good_css.left} numberOfLines={1}>
+                            {result.keyword}
                         </Text>
-                        <Text style={styles.right} numberOfLines={1}>sku:100000986038</Text>
+                        <Text style={good_css.right} numberOfLines={1}>sku:{result.sku}</Text>
                     </View>
 
-                    <View style={styles.itemWrap}>
-                        <Text style={styles.left} numberOfLines={1}>
-                            标题分：1090
-                        </Text>
-                        <Text style={styles.right} numberOfLines={1}>权重分：<Text style={{color:'#FF314B'}}>1445</Text></Text>
-                        <Text style={styles.right} numberOfLines={1}>排名：<Text style={{color:'#FF314B'}}>45</Text></Text>
+                    <View style={good_css.itemWrap3}>
+                        <View>
+                            <Text style={good_css.left1} numberOfLines={1}>
+                                标题：<Text>{result.title_weight}</Text>
+                            </Text>
+                        </View>
+                        <View>
+                            <Text style={good_css.left1} numberOfLines={1}>
+                                标题：<Text style={{color:'#FF314B'}}>{result.weight}</Text>
+                            </Text>
+                        </View>
+                        <View>
+                            <Text style={good_css.left1} numberOfLines={1}>
+                                排名：<Text style={{color:'#FF314B'}}>{result.page_order}</Text>
+                            </Text>
+                        </View>
                     </View>
 
                 </View>
-            </TouchableOpacity>
+            </View>
         )
     }
 }
-
-const styles = StyleSheet.create({
-    SkuList: {
-        padding: 10,
-        flexDirection: 'row',
-        alignItems: 'center',
-        borderBottomWidth: 1,
-        borderBottomColor: '#EFEFEF'
-    },
-    lastList: {
-        borderBottomWidth: 0
-    },
-    title: {
-        fontSize: 16,
-        color:'#4A4A4A'
-    },
-    right:{
-        flex:1,paddingLeft:20,flexDirection:'row',color:'#555'
-    },
-    right1:{
-        paddingLeft:0
-    },
-    left:{
-        width:90,
-        color:'#555'
-    },
-    itemWrap: {
-        display:'flex',
-        flexDirection: 'row',
-        marginTop: 4,
-    },
-    itemWrap1: {
-        marginTop:10
-    }
-});

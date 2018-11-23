@@ -1,12 +1,42 @@
 import React, { Component } from 'react';
-import { Text, View,Button,Image,Dimensions,TouchableOpacity,StyleSheet } from 'react-native';
+import {Text, View, Button, Image, Dimensions, TouchableOpacity, StyleSheet, AsyncStorage} from 'react-native';
+import Ajax from "../common/Ajax";
+import {doLogin} from "../store/actions/login";
+import {connect} from "react-redux";
+import * as types from "../store/constants";
+
 
 const {width,height} = Dimensions.get('window');
 
-export default class Vip extends Component {
+class outLogin extends Component {
     static navigationOptions = ({ navigation }) => ({
         header:null
     });
+    constructor(props){
+        super(props);
+        this.state={
+            token:''
+        }
+    }
+    outLoading(){
+        Ajax.post('http://jdchamgapi.chaojids.com/jd/user/logaut',{token:this.props.state.login.token})
+            .then((response) => {
+                console.log(response);
+                if(response.result==1){
+                    alert(response.msg);
+                    this.props.login('');
+                    this.props.navigation.navigate('Login');
+                }else{
+                    alert(response.msg)
+                }
+            }).catch((error) => {
+            alert(error)
+        });
+    }
+    componentDidMount(){
+
+    }
+
     render() {
         const {goBack} = this.props.navigation;
         return (
@@ -19,7 +49,11 @@ export default class Vip extends Component {
                         <Text style={styles.header_text}>设置</Text>
                     </View>
                 </View>
-                <Text>Hello world!</Text>
+                <View>
+                    <TouchableOpacity onPress={this.outLoading.bind(this)}>
+                        <Text>退出登录</Text>
+                    </TouchableOpacity>
+                </View>
             </View>
         );
     }
@@ -45,3 +79,14 @@ const styles = StyleSheet.create({
         color:'#fff',fontSize:18,fontWeight:'600',textAlign:'center'
     }
 });
+
+const mapState = state => ({
+    state
+})
+
+const mapDispatchToProps = dispatch => ({
+    login: (payload) => dispatch(doLogin(payload))
+})
+
+
+export default connect(mapState,mapDispatchToProps)(outLogin)

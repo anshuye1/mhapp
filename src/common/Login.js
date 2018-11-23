@@ -95,7 +95,7 @@ class Login extends Component {
                   console.warn(responseText.data.token);
                   this.props.login(responseText.data.token);
                   AsyncStorage.setItem('token',responseText.data.token);
-                  this.props.navigation.navigate('Mine');
+                  this.props.navigation.navigate('SkuList');
               }else{
                 Alert.alert(responseText.msg)
               }

@@ -4,7 +4,8 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  Image
+  Image,
+  TextInput
 }
   from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -18,7 +19,7 @@ export default class SearchInput extends Component {
   }
   render() {
     const { navigate } = this.props.navigation;
-    return (
+      return (
       <View style={styles.header}>
 
         <TouchableOpacity style={styles.left} onPress={() => alert('ok')}>
@@ -26,15 +27,19 @@ export default class SearchInput extends Component {
         </TouchableOpacity>
 
 
-        <TouchableOpacity style={styles.search} onPress={() => navigate('Search')}>
-          <Text style={{
-            textAlign: 'left',
-            lineHeight: 25,
-            color: '#8B8B8B'
-          }}> <Icon name="search" size={16} color="#8B8B8B"/>  搜索</Text>
-        </TouchableOpacity>
+        <View style={styles.search}>
+            <Text style={styles.icon}><Icon name="search" size={16} color="#8B8B8B"/></Text>
+            <TextInput
+                underlineColorAndroid='transparent'
+                onChangeText={(text) => {this.props.searchData(text)}}
+                placeholder='搜索'
+                placeholderTextColor='#BDBDBD'
+                style={{flex:1,color:'#4a4a4a'}}
+            />
+        </View>
 
-          <TouchableOpacity style={styles.left} onPress={() => alert('ok')}>
+
+          <TouchableOpacity style={styles.left} onPress={() => this.props.delShow()}>
               <Image source={require('../img/schu1.png')} style={{width:40,height:40}}/>
           </TouchableOpacity>
       </View>
@@ -54,14 +59,19 @@ const styles = StyleSheet.create({
     flex: 6,
     height: 40,
     borderRadius: 10,
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center',
+      flexDirection: 'row',
   },
   left: {
     flex: 1,
     height: 60,
     justifyContent: 'center',
     alignItems: 'center',
-      paddingTop:8
+    paddingTop:8
+  },
+  icon:{
+    width:40,
+    textAlign:'center'
   }
 });
