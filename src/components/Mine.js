@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
     flex: 2
   },
   bottomItem:{
-   height:62,
+   height:52,
    width:width,
    borderBottomColor:'#F0F3F5',
    borderBottomWidth:1,

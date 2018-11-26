@@ -19,6 +19,7 @@ import Icon from "react-native-vector-icons/Ionicons";
 import * as types from "../store/constants";
 
 import Loading from './Loading';
+import login_css from '../css/login_css';
 
 const { width } = Dimensions.get('window');
 
@@ -28,6 +29,7 @@ class Login extends Component {
     this.state = {
       isFocus: 0,
       refreshing:true,
+      pass:true,
       formData:{
         mphone:'',
         password:''
@@ -111,25 +113,26 @@ class Login extends Component {
     header: null
   });
   render() {
-    const { isFocus,refreshing } = this.state;
-    const { navigatenavigate, goBack,navigate } = this.props.navigation;
+    const { isFocus,refreshing,pass } = this.state;
+    const { goBack,navigate } = this.props.navigation;
     return (
-      <View style={styles.container}>
+      <View style={login_css.container}>
         {!refreshing&&<Loading />}
-        <ImageBackground style={styles.top} source={require('../img/dlbg.png')} resizeMode='cover'>
-          <View style={{ width,flexDirection: 'row', justifyContent: 'flex-start',paddingLeft: 10 }}>
-              <Icon name="ios-arrow-back" size={40} color={'#fff'} onPress={() => goBack()} />
+        <ImageBackground style={login_css.top} source={require('../img/dlbg.png')} resizeMode='stretch'>
+          <View style={login_css.iconWrap}>
+              <Icon name="ios-arrow-back" size={50} color={'#fff'} onPress={() => goBack()} />
           </View>
-          <View style={{marginTop:120}}>
+          <View style={{marginTop:130}}>
               <Image
+                  style={{width:100,height:67}}
                   source={require('../img/Group23.png')}
               />
           </View>
 
         </ImageBackground>
-        <View style={{ width, paddingHorizontal: 20, alignItems: 'center' }}>
+        <View style={login_css.inputWrap}>
           <TextInput
-            style={[styles.loginInput,{borderColor: isFocus===1?'#1e88f5':'#DBDBDB'}]}
+            style={[login_css.loginInput,{borderColor: isFocus===1?'#1e88f5':'#DBDBDB'}]}
             underlineColorAndroid='transparent'
             onFocus={()=>this.setState({isFocus: 1})}
             onChangeText={(text) => this.setState({ text,formData:{...this.state.formData,mphone:text} })}
@@ -138,36 +141,42 @@ class Login extends Component {
             keyboardType="numeric"
           />
 
-          <TextInput
-              style={[styles.loginInput,{borderColor: isFocus===2?'#1e88f5':'#DBDBDB'}]}
-              underlineColorAndroid='transparent'
-              onFocus={()=>this.setState({isFocus: 2})}
-              onChangeText={(text) => this.setState({ text,formData:{...this.state.formData,password:text} })}
-              placeholder='请输入密码'
-              maxLength={16}
-              placeholderTextColor='#ccc'
-              keyboardType="number-pad"
-          />
+            <View style={{position:'relative'}}>
+                <TextInput
+                    style={[login_css.loginInput,{borderColor: isFocus===2?'#1e88f5':'#DBDBDB'}]}
+                    underlineColorAndroid='transparent'
+                    onFocus={()=>this.setState({isFocus: 2})}
+                    onChangeText={(text) => this.setState({ text,formData:{...this.state.formData,password:text} })}
+                    placeholder='请输入密码'
+                    maxLength={16}
+                    placeholderTextColor='#ccc'
+                    keyboardType="default"
+                    secureTextEntry={pass}
+                />
+                <TouchableOpacity style={{position:'absolute',right:10,top:15}} onPress={()=>{this.setState({pass:!pass})}}>
+                    <Image source={pass?require('../img/mimaxianshi1.png'):require('../img/mimaxianshi2.png')} style={{width:20,height:20}}/>
+                </TouchableOpacity>
+            </View>
+
 
           <View>
-            <View style={{width: width*0.9, paddingVertical: 20}}>
+
               <TouchableOpacity
                   onPress={()=>{
                       this.loginFun();
-                      // goBack();
                   }}
-                  style={{width: width*0.9,backgroundColor:'#1e88f5',borderRadius:8}}
+                  style={login_css.btnWrap}
               >
-                <Text style={{color:'#fff',fontSize:16,lineHeight:50,textAlign:'center'}}>登录</Text>
+                <Text style={login_css.btn}>登录</Text>
               </TouchableOpacity>
-            </View>
-            <View style={styles.middleBottom}>
+
+            <View style={login_css.middleBottom}>
               <TouchableOpacity login={this.props.login} onPress={()=>navigate('Signup')}>
-                  <Text style={styles.textColor} >注册京东魔盒</Text>
+                  <Text style={login_css.textColor} >注册京东魔盒</Text>
               </TouchableOpacity>
 
               <TouchableOpacity>
-                  <Text style={styles.textColor}>忘记密码</Text>
+                  <Text style={login_css.textColor}>忘记密码</Text>
               </TouchableOpacity>
           </View>
           </View>
@@ -178,40 +187,6 @@ class Login extends Component {
     )
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    backgroundColor: '#fff'
-  },
-  loginInput: {
-    width: width*0.9,
-    height: 60,
-    borderWidth: 1,
-    marginBottom:15,
-    borderRadius:8,
-    fontSize:16,
-    paddingLeft:10
-  },
-  middleBottom: {
-    flexDirection:'row',
-    justifyContent: 'space-between'
-  },
-  textColor:{
-    color:'#9B9B9B'
-  },
-  top: {
-      width:width,
-      flexDirection: 'column',
-      alignItems: 'center',
-      backgroundColor: '#fff',
-      height:250,
-      marginBottom:60,
-      justifyContent:'flex-start'
-  },
-});
 
 const mapStateToProps = state => ({
   state

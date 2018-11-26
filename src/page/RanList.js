@@ -155,10 +155,14 @@ export default class SkuList extends Component {
         })
     }
     delShow(){
-        this.setState({
-            del:!this.state.del,
-            delArr:[]
-        })
+        if(this.state.skuArr.length){
+            this.setState({
+                del:!this.state.del,
+                delArr:[]
+            })
+        }else{
+            alert('没有可以删除的数据')
+        }
     }
     //删除ajax
     deleteFun(){
@@ -174,7 +178,11 @@ export default class SkuList extends Component {
                     console.log(response);
                     if(response.result==1){
                         alert(response.msg);
-                        this.refreshData(this.state.formData.type);
+                        this.setState({
+                            delArr:[]
+                        },()=>{
+                            this.refreshData(this.state.formData.type);
+                        });
                     }else{
                         if(response.msg){
                             alert(response.msg);
@@ -249,8 +257,8 @@ export default class SkuList extends Component {
                                 {del?
                                     <View>
                                         {delArr.filter((val)=>val==item.service_id).length?
-                                            <Image source={require('../img/xze2.png')} style={{margin:10}}/>:
-                                            <Image source={require('../img/xze1.png')} style={{margin:10}}/>
+                                            <Image source={require('../img/xze2.png')} style={good_css.radio}/>:
+                                            <Image source={require('../img/xze1.png')} style={good_css.radio}/>
                                         }
                                     </View>
                                     :null}
@@ -303,9 +311,9 @@ export default class SkuList extends Component {
                                 }
                             }}
                         >
-                            {skuArr.length==delArr.length?
-                                <Image source={require('../img/xze2.png')} style={{margin:10}}/>:
-                                <Image source={require('../img/xze1.png')} style={{margin:10}}/>
+                            {skuArr.length&&skuArr.length==delArr.length?
+                                <Image source={require('../img/xze2.png')} style={good_css.radio}/>:
+                                <Image source={require('../img/xze1.png')} style={good_css.radio}/>
                             }
                             <Text style={{fontSize:16}}>全选</Text>
                         </TouchableOpacity>

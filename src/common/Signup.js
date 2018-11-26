@@ -18,6 +18,8 @@ import Icon from "react-native-vector-icons/Ionicons";
 import * as types from "../store/constants";
 
 import Loading from './Loading';
+import login_css from '../css/login_css';
+import good_css from "../css/good_css";
 
 const { width } = Dimensions.get('window');
 
@@ -32,6 +34,7 @@ class Signup extends Component{
                 password:'',
                 validate_code:'',
             },
+            pass:true,
             countdown:60
         }
     }
@@ -164,18 +167,18 @@ class Signup extends Component{
         header: null
     });
     render(){
-        const { isFocus,refreshing,countdown } = this.state;
+        const { isFocus,refreshing,countdown,pass } = this.state;
         const { navigatenavigate, goBack,navigate } = this.props.navigation;
         return (
-            <View style={styles.container}>
+            <View style={login_css.container}>
                 {!refreshing&&<Loading />}
-                <View style={{ width,flexDirection: 'row', justifyContent: 'flex-start',paddingLeft: 10,backgroundColor:'#1e88f5',marginBottom:40,height:50,alignItems:'center' }}>
+                <View style={login_css.hea}>
                     <Icon name="ios-arrow-back" size={40} color={'#fff'} onPress={() => goBack()} />
                     <Text style={{color:'#fff',fontSize:20,textAlign:'center',flex:1,paddingRight:30}}>注册</Text>
                 </View>
-                <View style={{ width, paddingHorizontal: 20, alignItems: 'center' }}>
+                <View style={login_css.inputWrap}>
                     <TextInput
-                        style={[styles.loginInput,{borderColor: isFocus===1?'#1e88f5':'#DBDBDB'}]}
+                        style={[login_css.loginInput,{borderColor: isFocus===1?'#1e88f5':'#DBDBDB'}]}
                         underlineColorAndroid='transparent'
                         onFocus={()=>this.setState({isFocus: 1})}
                         onChangeText={(text) => this.setState({ text,formData:{...this.state.formData,mphone:text} })}
@@ -186,7 +189,7 @@ class Signup extends Component{
 
                     <View style={{flexDirection:'row',width: width*0.9,justifyContent:'space-between',flexWrap:'nowrap'}}>
                         <TextInput
-                            style={[styles.loginInput,{borderColor: isFocus===3?'#1e88f5':'#DBDBDB',width:width*0.9-150}]}
+                            style={[login_css.loginInput,{borderColor: isFocus===3?'#1e88f5':'#DBDBDB',width:width*0.9-150}]}
                             underlineColorAndroid='transparent'
                             onFocus={()=>this.setState({isFocus: 3})}
                             onChangeText={(text) => this.setState({ text,formData:{...this.state.formData,validate_code:text} })}
@@ -195,37 +198,42 @@ class Signup extends Component{
                         />
                         <TouchableOpacity>
                             {countdown<60?<Text
-                                style={{backgroundColor:'#1e88f5',color:'#fff',lineHeight:60,height:60,width:140,textAlign:'center',borderRadius:8,fontSize:16,opacity:0.6}}
+                                style={login_css.timeBtn1}
                             >重新发送({countdown})</Text>:<Text
                                 onPress={()=>{this.sendFun()}}
-                                style={{backgroundColor:'#1e88f5',color:'#fff',lineHeight:60,height:60,width:140,textAlign:'center',borderRadius:8,fontSize:16}}
+                                style={login_css.timeBtn}
                             >发送验证码</Text>}
                         </TouchableOpacity>
                     </View>
 
-                    <TextInput
-                        style={[styles.loginInput,{borderColor: isFocus===2?'#1e88f5':'#DBDBDB'}]}
-                        underlineColorAndroid='transparent'
-                        onFocus={()=>this.setState({isFocus: 2})}
-                        onChangeText={(text) => this.setState({ text,formData:{...this.state.formData,password:text} })}
-                        placeholder='请输入密码'
-                        maxLength={16}
-                        placeholderTextColor='#ccc'
-                        keyboardType="number-pad"
-                    />
+                    <View style={{position:'relative'}}>
+                        <TextInput
+                            style={[login_css.loginInput,{borderColor: isFocus===2?'#1e88f5':'#DBDBDB'}]}
+                            underlineColorAndroid='transparent'
+                            onFocus={()=>this.setState({isFocus: 2})}
+                            onChangeText={(text) => this.setState({ text,formData:{...this.state.formData,password:text} })}
+                            placeholder='请输入密码'
+                            maxLength={16}
+                            placeholderTextColor='#ccc'
+                            keyboardType="default"
+                            secureTextEntry={pass}
+                        />
+                        <TouchableOpacity style={{position:'absolute',right:10,top:15}} onPress={()=>{this.setState({pass:!pass})}}>
+                            <Image source={pass?require('../img/mimaxianshi1.png'):require('../img/mimaxianshi2.png')} style={{width:20,height:20}}/>
+                        </TouchableOpacity>
+                    </View>
 
                     <View>
-                        <View style={{width: width*0.9, paddingVertical: 20}}>
-                            <TouchableOpacity
-                                onPress={()=>{
-                                    this.SignupFun();
-                                    // goBack();
-                                }}
-                                style={{width: width*0.9,backgroundColor:'#1e88f5',borderRadius:8}}
-                            >
-                                <Text style={{color:'#fff',fontSize:16,lineHeight:50,textAlign:'center'}}>注册</Text>
-                            </TouchableOpacity>
-                        </View>
+
+                        <TouchableOpacity
+                            onPress={()=>{
+                                this.SignupFun();
+                            }}
+                            style={login_css.btnWrap}
+                        >
+                            <Text style={login_css.btn}>注册</Text>
+                        </TouchableOpacity>
+
                     </View>
                 </View>
                 <View>
@@ -235,39 +243,7 @@ class Signup extends Component{
     }
 }
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'flex-start',
-        alignItems: 'center',
-        backgroundColor: '#fff'
-    },
-    loginInput: {
-        width: width*0.9,
-        height: 60,
-        borderWidth: 1,
-        marginBottom:15,
-        borderRadius:8,
-        fontSize:16,
-        paddingLeft:10
-    },
-    middleBottom: {
-        flexDirection:'row',
-        justifyContent: 'space-between'
-    },
-    textColor:{
-        color:'#9B9B9B'
-    },
-    top: {
-        width:width,
-        flexDirection: 'column',
-        alignItems: 'center',
-        backgroundColor: '#fff',
-        height:250,
-        marginBottom:60,
-        justifyContent:'flex-start'
-    },
-});
+
 
 const mapStateToProps = state => ({
     state

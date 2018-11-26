@@ -6,43 +6,62 @@ const good_css = StyleSheet.create({
     img_wrap:{
         flex: 0
     },
+    SkuList: {
+        width:width,
+        flexDirection: 'row',
+        alignItems: 'center',
+        borderBottomWidth: 1,
+        padding:5,
+        borderBottomColor: '#EFEFEF',
+    },
     good_img:{
         width: 130,
         height: 130
     },
     good_detail:{
         height: 130,
-        flex: 2,
-        paddingLeft:14,
+        width:width-130-10,//宽度-图片宽度-sku的padding
+        paddingLeft:10,
+        paddingRight:5,
         alignItems: 'flex-start',
+        flexDirection:'column',
+        justifyContent:'space-between'
     },
-    SkuList: {
-        width:width,
-        padding: 10,
-        flexDirection: 'row',
-        alignItems: 'center',
-        borderBottomWidth: 1,
-        borderBottomColor: '#EFEFEF',
+    good_top:{
+        flexDirection:'column',
+    },
+    good_bottom:{
+        flexDirection:'column',
     },
     lastList: {
         borderBottomWidth: 0
     },
     title: {
-        fontSize: 16,
+        fontSize: 14,
         color:'#4A4A4A'
     },
     right:{
-        flex:1,
-        paddingLeft:20,
+        flex:0,
+        paddingLeft:10,
         flexDirection:'row',
-        color:'#555'
+        color:'#4a4a4a',
+        fontSize:12
     },
     left:{
-        width:100,
-        color:'#555'
+        width:80,
+        flexDirection:'row',
+        color:'#4a4a4a',
+        fontSize:12
+    },
+    left1:{
+        color:'#4a4a4a',
+        fontSize:12
+    },
+    smallFont:{
+        color:'#4a4a4a',
+        fontSize:12
     },
     itemWrap: {
-        display:'flex',
         flexDirection: 'row',
         marginTop: 4,
     },
@@ -50,10 +69,14 @@ const good_css = StyleSheet.create({
         flexDirection:'row',
         justifyContent:'space-between',
         alignItems:'center',
-        width:width-150-14
+        marginTop: 4,
+        width:width-130-10-10-5//宽度-图片宽度-sku的padding-detail的padding
     },
-    itemWrap1: {
-        marginTop:10
+    itemWrap4:{
+        flexDirection:'row',
+        alignItems:'center',
+        marginTop: 4,
+        width:width-130-10-10-5//宽度-图片宽度-sku的padding-detail的padding
     },
     loadding:{
         marginTop:150
@@ -131,7 +154,11 @@ const good_css = StyleSheet.create({
         paddingBottom: 50,
         marginBottom:30,
     },
-    left1:{}
+    radio:{
+        width:20,
+        height:20,
+        margin:10
+    }
 });
 
 export default good_css;

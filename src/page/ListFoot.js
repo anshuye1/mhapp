@@ -6,7 +6,7 @@ export default class ListFoot extends Component{
         if (foot === 1) {
             return (
                 <View style={{height:60,alignItems:'center',justifyContent:'flex-start',}}>
-                    <Text style={{color:'#999999',fontSize:18,marginTop:5,marginBottom:20,}}>
+                    <Text style={{color:'#999999',fontSize:16,marginTop:5,marginBottom:20,}}>
                         没有更多数据了
                     </Text>
                 </View>

@@ -72,8 +72,8 @@ class skuList extends Component {
             <TouchableOpacity style={{flexDirection:'column',justifyContent:'center',alignItems:'center',height:500}} onPress={()=>{
                 this.props.navigation.navigate('Login')
             }}>
-                <Image source={require('../img/kbai1.png')} />
-                <Text style={{fontSize:20,flexWrap:'nowrap',width:width*0.8,marginTop:20,color:'#BDBDBD'}}>登录状态下 PC端查询的历史数据会同步到这里哦，<Text style={{color:'#1e88fe'}}>去登录</Text></Text>
+                <Image source={require('../img/kbai1.png')} style={{width:105,height:75}}/>
+                <Text style={{fontSize:14,flexWrap:'nowrap',width:width*0.8,marginTop:20,color:'#BDBDBD'}}>登录状态下 PC端查询的历史数据会同步到这里哦，<Text style={{color:'#1e88fe'}}>去登录</Text></Text>
             </TouchableOpacity>
         );
 
@@ -85,16 +85,16 @@ class skuList extends Component {
                     delShow={this.delShow.bind(this)}
                 />
                 <ScrollableTabView
-                    renderTabBar={() => <DefaultTabBar />}
+                    renderTabBar={() => <DefaultTabBar style={{height:45}}/>}
                     tabBarUnderlineStyle={{
-                        backgroundColor: '#fff',
-                        height: 2
+                        backgroundColor: '#f5f5f5',
+                        height: 3
                     }}
                     onChangeTab = {(obj)=>{this.setState({type:(obj.i*1+1)})}}
                     tabBarBackgroundColor='#1e88f5'
                     tabBarActiveTextColor='#fff'
                     tabBarInactiveTextColor='#fff'
-                    tabBarTextStyle={{ fontSize: 18 }}
+                    tabBarTextStyle={{ fontSize: 16,paddingTop:5 }}
                     locked={false}
                 >
                     <View tabLabel='查排名' style={{ marginBottom: 50 }}>
