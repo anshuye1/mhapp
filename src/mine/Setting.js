@@ -24,6 +24,7 @@ class outLogin extends Component {
                 console.log(response);
                 if(response.result==1){
                     alert(response.msg);
+                    AsyncStorage.setItem('token','');
                     this.props.login('');
                     this.props.navigation.navigate('Login');
                 }else{

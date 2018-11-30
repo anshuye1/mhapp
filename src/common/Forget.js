@@ -12,10 +12,9 @@ import {
     TouchableOpacity, AsyncStorage
 } from 'react-native';
 
-import { connect } from 'react-redux';
-import { doLogin } from '../store/actions/login';
+
 import Icon from "react-native-vector-icons/Ionicons";
-import * as types from "../store/constants";
+
 
 import Loading from './Loading';
 import login_css from '../css/login_css';
@@ -23,7 +22,7 @@ import Ajax from "../common/Ajax";
 
 const { width } = Dimensions.get('window');
 
-class Signup extends Component{
+export default class Forget extends Component{
     constructor(props){
         super(props);
         this.state = {
@@ -35,6 +34,7 @@ class Signup extends Component{
                 validate_code:'',
             },
             pass:true,
+            pass1:true,
             countdown:60
         };
         this.goLogin = this.goLogin.bind(this);
@@ -57,6 +57,7 @@ class Signup extends Component{
         let mphone = this.state.formData.mphone;
         let validate_code = this.state.formData.validate_code;
         let password = this.state.formData.password;
+        let password_confirm = this.state.formData.password_confirm;
         if(!mphone){
             Alert.alert('请输入手机号');
             return false;
@@ -77,10 +78,14 @@ class Signup extends Component{
             Alert.alert('密码至少为6位');
             return false;
         }
+        if(password_confirm!==password){
+            Alert.alert('两次输入密码不一致');
+            return false;
+        }
         this.setState({
             refreshing:false,
         });
-        Ajax.post('http://jdchamgapi.chaojids.com/site/signup',this.state.formData)
+        Ajax.post('http://jdchamgapi.chaojids.com/site/request-password-reset',this.state.formData)
             .then((response)=>{
                 console.log(response);
                 this.setState({ refreshing: true });
@@ -89,7 +94,7 @@ class Signup extends Component{
                 }else{
                     Alert.alert(response.msg)
                 }
-        }).catch((error) => {
+            }).catch((error) => {
             this.setState({ refreshing: true });
             // Alert.alert('系统错误');
             // console.warn(error);
@@ -121,19 +126,19 @@ class Signup extends Component{
             Alert.alert('请输入正确的手机号');
             return false;
         }
-        Ajax.post('http://jdchamgapi.chaojids.com/site/send-mphone-code',{"mphone":mphone,type:1})
+        Ajax.post('http://jdchamgapi.chaojids.com/site/send-mphone-code',{"mphone":mphone,type:2})
             .then((response) => {
                 console.log(response);
                 if(response.result*1===1){
-                Alert.alert(response.msg)
-                this.settime();
-            }else{
-                this.setState({
-                    currentDown:60
-                });
-                Alert.alert(response.msg)
-            }
-        }).catch((error) => {
+                    this.settime();
+                    Alert.alert(response.msg)
+                }else{
+                    this.setState({
+                        currentDown:60
+                    });
+                    Alert.alert(response.msg)
+                }
+            }).catch((error) => {
             this.setState({
                 currentDown:60
             });
@@ -146,14 +151,14 @@ class Signup extends Component{
         header: null
     });
     render(){
-        const { isFocus,refreshing,countdown,pass } = this.state;
+        const { isFocus,refreshing,countdown,pass,pass1 } = this.state;
         const { goBack,navigate } = this.props.navigation;
         return (
             <View style={login_css.container}>
                 {!refreshing&&<Loading />}
                 <View style={login_css.hea}>
                     <Icon name="ios-arrow-back" size={40} color={'#fff'} onPress={() => goBack()} />
-                    <Text style={{color:'#fff',fontSize:20,textAlign:'center',flex:1,paddingRight:30}}>注册</Text>
+                    <Text style={{color:'#fff',fontSize:20,textAlign:'center',flex:1,paddingRight:30}}>忘记密码</Text>
                 </View>
                 <View style={login_css.inputWrap}>
                     <TextInput
@@ -202,6 +207,23 @@ class Signup extends Component{
                         </TouchableOpacity>
                     </View>
 
+                    <View style={{position:'relative'}}>
+                        <TextInput
+                            style={[login_css.loginInput,{borderColor: isFocus===4?'#1e88f5':'#DBDBDB'}]}
+                            underlineColorAndroid='transparent'
+                            onFocus={()=>this.setState({isFocus: 4})}
+                            onChangeText={(text) => this.setState({ text,formData:{...this.state.formData,password_confirm:text} })}
+                            placeholder='请输入密码'
+                            maxLength={16}
+                            placeholderTextColor='#ccc'
+                            keyboardType="default"
+                            secureTextEntry={pass1}
+                        />
+                        <TouchableOpacity style={{position:'absolute',right:10,top:15}} onPress={()=>{this.setState({pass1:!pass1})}}>
+                            <Image source={pass1?require('../img/mimaxianshi1.png'):require('../img/mimaxianshi2.png')} style={{width:20,height:20}}/>
+                        </TouchableOpacity>
+                    </View>
+
                     <View>
 
                         <TouchableOpacity
@@ -210,7 +232,7 @@ class Signup extends Component{
                             }}
                             style={login_css.btnWrap}
                         >
-                            <Text style={login_css.btn}>注册</Text>
+                            <Text style={login_css.btn}>确定</Text>
                         </TouchableOpacity>
 
                     </View>
@@ -221,15 +243,3 @@ class Signup extends Component{
         )
     }
 }
-
-
-
-const mapStateToProps = state => ({
-    state
-})
-
-const mapDispatchToProps = dispatch => ({
-    login: (payload) => dispatch(doLogin(payload))
-})
-
-export default connect(mapStateToProps, mapDispatchToProps)(Signup)

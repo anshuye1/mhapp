@@ -11,12 +11,14 @@ import SkuList from './components/SkuList';
 import Ranking from './components/Ranking';
 import Weight from './components/Weight';
 import Sales from './components/Sales';
+import RanHistory from './page/RanHistory';
 
 import Chat from './components/Chat';
 import Search from './components/Search';
 
 import Login from './common/Login';
 import Signup from './common/Signup';
+import Forget from './common/Forget';
 import Mine from './components/Mine';
 import Vip from "./mine/Vip";
 import Product from "./mine/Product";
@@ -84,6 +86,8 @@ const MyApp = createStackNavigator({
     Search,
     Login,
     Signup,
+    Forget,
+    RanHistory,
     Vip,
     Product,
     Customer_service,

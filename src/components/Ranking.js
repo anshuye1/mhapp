@@ -1,24 +1,70 @@
 import React, { Component } from 'react';
-import { Text, View,Button,Image,Dimensions,TouchableOpacity,StyleSheet,TextInput,Animated,Easing, } from 'react-native';
+import {
+    Text,
+    View,
+    Button,
+    ActivityIndicator,
+    Image,
+    Dimensions,
+    TouchableOpacity,
+    ScrollView,
+    TextInput,
+    Animated,
+    Easing,
+    AsyncStorage,
+} from 'react-native';
 
 const {width,height} = Dimensions.get('window');
-const navigatorH = 64; // navigator height
-const [aWidth, aHeight] = [300, 214];
-const [left, top] = [0, 0];
-const [middleLeft, middleTop] = [(width - aWidth) / 2, (height - aHeight) / 2 - navigatorH];
+
 
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 import Filter from '../page/Filter';
+import RanItem from '../page/RanItem';
+import good_css from '../css/good_css';
+import Ajax from "../common/Ajax";
+import Loading from "../common/Loading";
 
-export default class Vip extends Component {
+const defaultVal = {
+    entrance:'1',// 1：电脑端 2手机端 3微信端
+    type:'1',//1：指定商品 2指定店铺
+    sort:'1',//1：综合 2：销售 3：评论数 4：新品 5：价格
+    price_min:'',
+    price_max:'',
+    page:1,
+    page_size:50,
+    service_id:'',
+    city_id:'',//按地区查询
+};
+const UrlStart = 'http://jdchamgapi.chaojids.com';
+
+export default class Ranking extends Component {
     constructor(props){
         super(props);
+        const {state:{params:{item}}} = props.navigation;
         this.state={
             filter:false,
             offset: new Animated.Value(0),
             opacity: new Animated.Value(0),
-            data:this.props.data||[]
+            data:[],
+            error:0,//0默认 1：成功 2：查询失败，有商品 3：查询失败无商品
+            errorMsg:'',
+            cityArr:[],
+            token:'',
+            ready:true,
+            formData:{
+                keyword:item.keyword||'',
+                sku:item.sku||'',
+                entrance:item.entrance||defaultVal.entrance,// 1：电脑端 2手机端 3微信端
+                type:item.type||defaultVal.type,//1：指定商品 2指定店铺
+                sort:item.sort||defaultVal.sort,//1：综合 2：销售 3：评论数 4：新品 5：价格
+                price_min:item.price_max*1?item.price_min:defaultVal.price_min,
+                price_max:item.price_max*1?item.price_max:defaultVal.price_max,
+                page:item.page_start||defaultVal.page,
+                page_size:item.page_end||defaultVal.page_size,
+                service_id:'',
+                city_id:'',//按地区查询
+            }
         };
     }
     static navigationOptions = ({ navigation }) => ({
@@ -54,22 +100,160 @@ export default class Vip extends Component {
             )
         ]).start();
         setTimeout(()=>this.setState({filter: false}),200)
+    }
+    //确定点击
+    submitFun(){
+        this.out();
+        this.setState({
+            formData:{
+                ...this.state.formData,
+                ...this.refs.filter11.state.formData,
+            }
+        })
+    }
+    //城市
+    cityAjax(){
+        Ajax.post(UrlStart+'/user/citys')
+            .then((response)=>{
+                console.log(response);
+                if(response.result==1){
+                    let arr=[];
+                    response.data.map((item)=>{
+                        arr.push(item)
+                    });
+                    this.setState({
+                        cityArr:arr
+                    })
+                }else{
+                    console.log(response.msg);
+                }
+            })
+            .catch((error)=>{
 
+            })
+    }
+    //得到token
+    getToken (){
+        AsyncStorage.getItem('token').then((value) => {
+            this.setState({
+                token:value
+            })
+        });
+    }
+    //查询点击
+    queryAjax(){
+        let formData = this.state.formData;
+        formData.token = this.state.token;
+        console.log(formData,UrlStart);
+        if(!formData.keyword){
+            alert('请输入关键词');
+            return false;
+        }
+        if(!formData.sku){
+            alert('请输入sku或链接或店铺名');
+            return false;
+        }
+        this.setState({
+            ready:false
+        });
+        Ajax.post(UrlStart+'/jd/ranking/rank-search',formData)
+            .then((response)=>{
+                console.log(response);
+                if(response.result==1){
+                    this.setState({
+                        data:response.data.result,
+                        error:1,
+                        errorMsg:response.msg||''
+                    })
+                }else{
+                    if(response.msg){
+                        this.setState({
+                            data:[],
+                            error:2,
+                            errorMsg:response.msg
+                        })
+                    }else{
+                        this.setState({
+                            data:[],
+                            error:3,
+                            errorMsg:'服务器响应超时，请手动刷新查询'
+                        })
+                    }
+                }
+                this.setState({
+                    ready:true
+                });
+            })
+            .catch((error)=>{
+                this.setState({
+                    ready:true,
+                    data:[],
+                    error:3,
+                    errorMsg:'服务器响应超时，请手动刷新查询'
+                });
+                console.log(error);
+            })
+    }
+
+    componentDidMount(){
+        this.cityAjax();
+        this.getToken();
     }
 
     render() {
-        const {goBack} = this.props.navigation;
-        const {filter} = this.state;
+        const {goBack,navigate} = this.props.navigation;
+        const {filter,formData,cityArr,ready,data,error,errorMsg,token} = this.state;
+        const entranceObj = {
+            '1':'pc端',
+            '2':'app端',
+            '3':'微信端',
+        };
+        const typeObj = {
+            '1':'指定商品',
+            '2':'指定店铺',
+        };
+        const sortObj = {
+            1:'综合',
+            2:'销售',
+            3:'评论数',
+            4:'新品',
+            5:'价格'
+        };
+        let cityNameText = '';
+        if(formData.city_id&&cityArr.length){
+            let arr1 = cityArr.filter((item)=>item.id==formData.city_id);
+            cityNameText = arr1.length?arr1[0].cityName:''
+        }
+        let footer =error*1?
+                (<View style={good_css.footer_view}>
+                    <View style={[good_css.foo_top_wrap]}>
+                        <Text style={good_css.msg_text}>{errorMsg}</Text>
+                        {error==3?<Text style={good_css.msg_btn}>一键刷新</Text>:null}
+                    </View>
+                    <View style={good_css.foo_bom_wrap}>
+                        <TouchableOpacity onPress={()=>navigate('Weight',{
+                            item:data&&data.length?data[0]:''
+                        })}>
+                            <Text style={good_css.foo_bom_btn}>去查权重</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={()=>navigate('Sales',{
+                            item:data&&data.length?data[0]:''
+                        })}>
+                            <Text style={[good_css.foo_bom_btn,good_css.foo_bom_btn1]}>去查销量</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>)
+                :null;
 
         return (
-            <View style={styles.container}>
+            <View style={good_css.container}>
 
-                <View style={styles.header}>
+                <View style={good_css.header}>
                     <TouchableOpacity style={{alignItems:'flex-start',flex:1}} onPress={()=>goBack()}>
                         <Image source={require('../img/fhui1.png')} style={{width:25,height:25,marginLeft:5}}/>
                     </TouchableOpacity>
-                    <View style={styles.header_wrap}>
-                        <Text style={styles.header_text}>查排名</Text>
+                    <View style={good_css.header_wrap}>
+                        <Text style={good_css.header_text}>查排名</Text>
                     </View>
                     <View style={{justifyContent:'flex-end',flex:1,flexDirection:'row'}}>
                         <TouchableOpacity  onPress={()=>this.in()}>
@@ -81,160 +265,125 @@ export default class Vip extends Component {
                     </View>
                 </View>
 
-                <View style={styles.headerBottom}>
-                    <View style={styles.search}>
-                        <Icon style={styles.searchIcon}
+                <View style={good_css.headerBottom}>
+                    <View style={good_css.search}>
+                        <Icon style={good_css.searchIcon}
                               name="search"
                               size={18}
                               color="#8B8B8B" />
                         <TextInput
-                            style={styles.input}
+                            style={good_css.input}
                             multiline = {true}
                             numberOfLines={1}
                             placeholder="关键词"
-                            onChangeText={(text) => this.setState({text})}
+                            value={formData.keyword}
+                            onChangeText={(keyword) => this.setState({
+                                formData:{
+                                    ...formData,
+                                    keyword:keyword
+                                }
+                            })}
                         />
                     </View>
 
-                    <View style={styles.search}>
-                        <Icon style={styles.searchIcon}
+                    <View style={good_css.search}>
+                        <Icon style={good_css.searchIcon}
                               name="search"
                               size={18}
                               color="#8B8B8B" />
                         <TextInput
-                            style={styles.input}
+                            style={good_css.input}
                             multiline = {true}
                             placeholder="sku或商品链接"
+                            value={formData.sku.toString()}
                             numberOfLines={1}
-                            onChangeText={(text) => this.setState({text})}
+                            onChangeText={(sku) => this.setState({
+                                formData:{
+                                    ...formData,
+                                    sku:sku
+                                }
+                            })}
                         />
                     </View>
 
-                    <View style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between',marginBottom:10}}>
-                        <Text style={[styles.filterFont,styles.filterFont1]}>pc</Text>
-                        <Text style={styles.filterFont}>指定商品</Text>
-                        <Text style={styles.filterFont}>综合</Text>
-                        <Text style={styles.filterFont}>1-50页</Text>
-                        <Text style={styles.filterFont}>300-500元</Text>
-                        <Text style={styles.filterFont}>浙江</Text>
+                    <View style={{flexDirection:'row',alignItems:'center',justifyContent:'flex-start',marginBottom:10}}>
+                        <Text style={[good_css.filterFont,good_css.filterFont1]}>{entranceObj[formData.entrance]}</Text>
+                        <Text style={good_css.filterFont}>{typeObj[formData.type]}</Text>
+                        <Text style={good_css.filterFont}>{sortObj[formData.sort]}</Text>
+                        <Text style={good_css.filterFont}>{formData.page}-{formData.page_size}页</Text>
+                        <Text style={good_css.filterFont}>{formData.price_min&&`${formData.price_min}-${formData.price_max}元`}</Text>
+                        <Text style={good_css.filterFont}>{cityNameText}</Text>
                     </View>
 
 
                     <View style={{flexDirection:'row',justifyContent:'center',marginTop:10}}>
                         <TouchableOpacity
-                            style={{backgroundColor:'#fff',width:100,borderRadius:4}}
-                            onPress={()=>alert('查询')}
+                            style={good_css.query_btn}
+                            onPress={this.queryAjax.bind(this)}
                         >
-                            <Text style={{color:'#1e88f5',fontSize:18,textAlign:'center',lineHeight:40,height:40,}}>查询</Text>
+                            <Text style={good_css.query_btn_text}>查询</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={{marginRight:-50,marginLeft:10}} onPress={()=>alert('历史纪录')}>
-                            <Text style={{color:'#fff',fontSize:16,textAlign:'center',lineHeight:40,height:40}}>历史记录</Text>
+                        <TouchableOpacity style={good_css.history_btn_wrap} onPress={()=>navigate('RanHistory',{
+                            token:token,
+                            type:1
+                        })}>
+                            <Text style={good_css.history_btn}>历史记录</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
 
+                <ScrollView>
+                    {ready?
+                        <View style={good_css.ran_hea}>
+                            <Text style={good_css.ran_hea_left}>最新查询结果</Text>
+                            <Text style={good_css.ran_hea_right}>{data[0]&&data[0].create_at}</Text>
+                        </View>
+                        :null
+                    }
 
-                {filter&&<View style={styles.wrap}>
-                    <Animated.View style={ styles.mask }>
+                    {ready?
+                        (data.length?data.map((item,index)=>{//有结果
+                            return (
+                                <View key={index.toString()} style={{backgroundColor:'#fff',flexDirection:'column'}}>
+                                    {index*1?<Text style={good_css.other_sku}>关联sku:</Text>:null}
+                                    <RanItem item1={item} navigate={navigate}/>
+                                    {footer}
+                                </View>
+                            )
+                        }): footer)//无结果
+                        :null
+                    }
+                </ScrollView>
+                {
+                    ready?null:<Loading />
+                }
+
+                {filter&&<View style={good_css.wrap}>
+                    <Animated.View style={ good_css.mask }>
                         <TouchableOpacity onPress={()=>this.out()} style={{width:width,height:height}}>
 
                         </TouchableOpacity>
                     </Animated.View>
-                    <Animated.View style={[styles.tip , {transform: [{
+                    <Animated.View style={[good_css.tip , {transform: [{
                             translateY: this.state.offset.interpolate({
                                 inputRange: [0, 1],
-                                outputRange: [height,200]
+                                outputRange: [height,300]
                             }),
                         }]
                     }]}>
-                        <Filter />
+                        <Filter
+                            submitFun={this.submitFun.bind(this)}
+                            ref="filter11"
+                            defaultVal={defaultVal}
+                            formData={formData}
+                            entranceObj={entranceObj}
+                            typeObj={typeObj}
+                            sortObj={sortObj}
+                            cityArr={cityArr}
+                        />
                     </Animated.View>
                 </View>}
             </View>
         );
     }
 }
-
-const styles = StyleSheet.create({
-    container:{
-        flex:1,
-        backgroundColor:'#F0F3F5'
-    },
-    header:{
-        width:width,
-        height:50,
-        backgroundColor:'#1388f5',
-        justifyContent:'flex-start',
-        alignItems:'center',
-        flexDirection:'row'
-    },
-    header_wrap:{
-        flex:2,
-    },
-    header_text:{
-        color:'#fff',
-        fontSize:20,
-        fontWeight:'600',
-        textAlign:'center'
-    },
-    headerBottom:{
-      backgroundColor:'#1e88f5',
-      width:width,
-        paddingLeft:50,
-        paddingRight:50,
-        paddingTop:10,
-        padding:20
-    },
-    search: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        backgroundColor: '#fff',
-        marginBottom: 10,
-        borderRadius: 5,
-        paddingTop:8,
-        paddingBottom:8
-    },
-    input:{
-        flex:1,
-        padding: 0,
-        lineHeight:25,
-        fontSize:18,
-        color:'#666'
-    },
-    searchIcon: {
-        paddingLeft: 10,
-        paddingRight: 10,
-        color:'#B0B0B0'
-    },
-    filterFont:{
-        fontSize:15,
-        color:'#fff'
-    },
-    filterFont1:{
-      color:'#F8E71C'
-    },
-    wrap:{
-        position:"absolute",
-        width:width,
-        height:height,
-        left:left,
-        top:top,
-    },
-    mask: {
-        justifyContent:"center",
-        backgroundColor:"#000",
-        opacity:0.3,
-        position:"absolute",
-        width:width,
-        height:height,
-        left:left,
-        top:top,
-    },
-    tip:{
-        flex:1,
-        backgroundColor:'#fff',
-        borderTopLeftRadius:16,
-        borderTopRightRadius:16,
-        padding:15,
-    }
-});

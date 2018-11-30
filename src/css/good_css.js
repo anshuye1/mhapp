@@ -1,6 +1,10 @@
 import {StyleSheet,Dimensions} from 'react-native';
 
 const {width,height} = Dimensions.get('window');
+const navigatorH = 64; // navigator height
+const [aWidth, aHeight] = [300, 214];
+const [left, top] = [0, 0];
+const [middleLeft, middleTop] = [(width - aWidth) / 2, (height - aHeight) / 2 - navigatorH];
 
 const good_css = StyleSheet.create({
     img_wrap:{
@@ -10,9 +14,8 @@ const good_css = StyleSheet.create({
         width:width,
         flexDirection: 'row',
         alignItems: 'center',
-        borderBottomWidth: 1,
         padding:5,
-        borderBottomColor: '#EFEFEF',
+        backgroundColor:'#fff',
     },
     good_img:{
         width: 130,
@@ -64,6 +67,11 @@ const good_css = StyleSheet.create({
     itemWrap: {
         flexDirection: 'row',
         marginTop: 4,
+    },
+    itemWrap1: {
+        flexDirection: 'row',
+        marginTop: 4,
+        justifyContent:'space-between'
     },
     itemWrap3:{
         flexDirection:'row',
@@ -150,6 +158,19 @@ const good_css = StyleSheet.create({
         alignItems:'center',
         paddingRight:30,
     },
+    bottomHisFix:{
+        backgroundColor:"#fff",
+        position:"absolute",
+        width:width,
+        height:50,
+        left:0,
+        bottom:0,
+        zIndex:9,
+        justifyContent:'space-between',
+        flexDirection:'row',
+        alignItems:'center',
+        paddingRight:30,
+    },
     content:{
         paddingBottom: 50,
         marginBottom:30,
@@ -158,6 +179,201 @@ const good_css = StyleSheet.create({
         width:20,
         height:20,
         margin:10
+    },
+    //查询样式
+    container:{
+        flex:1,
+        backgroundColor:'#F0F3F5'
+    },
+    header:{
+        width:width,
+        height:50,
+        backgroundColor:'#1388f5',
+        justifyContent:'flex-start',
+        alignItems:'center',
+        flexDirection:'row'
+    },
+    header_wrap:{
+        flex:2,
+    },
+    header_text:{
+        color:'#fff',
+        fontSize:20,
+        fontWeight:'600',
+        textAlign:'center'
+    },
+    headerBottom:{
+        backgroundColor:'#1e88f5',
+        width:width,
+        paddingLeft:50,
+        paddingRight:50,
+        paddingTop:10,
+        padding:20
+    },
+    search: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#fff',
+        marginBottom: 10,
+        borderRadius: 4,
+    },
+    input:{
+        flex:1,
+        fontSize:14,
+        height: 40,
+        color:'#666'
+    },
+    searchIcon: {
+        paddingLeft: 10,
+        paddingRight: 10,
+        color:'#B0B0B0'
+    },
+    filterFont:{
+        fontSize:14,
+        color:'#fff',
+        marginRight:15
+    },
+    filterFont1:{
+        color:'#F8E71C'
+    },
+    wrap:{
+        position:"absolute",
+        width:width,
+        height:height,
+        left:left,
+        top:top,
+    },
+    mask: {
+        justifyContent:"center",
+        backgroundColor:"#000",
+        opacity:0.3,
+        position:"absolute",
+        width:width,
+        height:height,
+        left:left,
+        top:top,
+    },
+    tip:{
+        flex:1,
+        backgroundColor:'#fff',
+        borderTopLeftRadius:16,
+        borderTopRightRadius:16,
+        padding:15,
+    },
+    history_btn_wrap:{
+        marginRight:-50,marginLeft:10
+    },
+    history_btn:{
+        color:'#fff',fontSize:14,textAlign:'center',lineHeight:35,height:35
+    },
+    query_btn:{
+        backgroundColor:'#fff',width:100,borderRadius:4
+    },
+    query_btn_text:{
+        color:'#1e88f5',fontSize:14,textAlign:'center',lineHeight:35,height:35,
+    },
+    ran_hea:{
+        flexDirection:'row',
+        height:36,
+        marginBottom:4,
+        backgroundColor:'#fff',
+        justifyContent:'space-between',
+        paddingLeft:10,
+        paddingRight:10,
+    },
+    ran_hea_left:{
+        lineHeight:36,
+        color:'#4a4a4a',
+        fontSize:15
+    },
+    ran_hea_right:{
+        lineHeight:36,
+        color:'#999',
+        fontSize:12
+    },
+    foo_bom_wrap:{
+        flexDirection:'row',
+        justifyContent:'center',
+        height:40,
+        alignItems:'center',
+        marginTop:10,
+        marginBottom:15,
+    },
+    foo_bom_btn:{
+        width:80,
+        height:36,
+        lineHeight:36,
+        textAlign:'center',
+        backgroundColor:'#1e88f5',
+        color:'#fff',
+        borderRadius:4,
+        marginRight:35,
+    },
+    foo_bom_btn1:{
+        marginRight:0,
+    },
+    other_sku:{
+        lineHeight:30,
+        color:'#4a4a4a',
+        paddingLeft:10,
+        paddingRight:10,
+    },
+    foo_top_wrap:{
+        flexDirection:'column',
+        justifyContent:'center',
+        alignItems:'center',
+        textAlign:'center',
+    },
+    msg_text:{
+        color:'#FE344E',
+        textAlign:'center',
+        lineHeight:30,
+        fontSize:12
+    },
+    msg_btn:{
+        width:80,
+        height:36,
+        lineHeight:36,
+        textAlign:'center',
+        backgroundColor:'#FE344E',
+        color:'#fff',
+        borderRadius:4,
+    },
+    footer_view:{
+        backgroundColor:'#fff',
+    },
+    item_ran_wrap:{
+        backgroundColor:'#fff',
+        marginBottom:1,
+        flexDirection:'column'
+    },
+    sal_tr:{
+        flexDirection:'row',
+        flex:1,
+        justifyContent:'space-between'
+    },
+    sal_td:{
+        flex:1,
+        textAlign:'center',
+        color:'#4a4a4a',
+        lineHeight:20
+    },
+    sal_th:{
+        flex:1,
+        textAlign:'center',
+        color:'#1e88f5',
+        lineHeight:20
+    },
+    sal_table:{
+        paddingLeft:15,
+        paddingRight:15,
+        paddingBottom:20,
+        backgroundColor:'#fff',
+        marginBottom:1
+    },
+    sal_title:{
+        lineHeight:40,
+        color:'#4a4a4a',
     }
 });
 

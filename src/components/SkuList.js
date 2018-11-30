@@ -57,10 +57,10 @@ class skuList extends Component {
     }
     //token置失效
     token_Del(){
-        this.props.login('');
-        this.setState({
-            token:''
-        })
+        // this.props.login('');
+        // this.setState({
+        //     token:''
+        // })
     }
 
     componentDidMount(){
@@ -68,6 +68,7 @@ class skuList extends Component {
     }
     render() {
         const {token} = this.props.state.login;
+        console.log(token);
         const ViewLoginOut = (
             <TouchableOpacity style={{flexDirection:'column',justifyContent:'center',alignItems:'center',height:500}} onPress={()=>{
                 this.props.navigation.navigate('Login')

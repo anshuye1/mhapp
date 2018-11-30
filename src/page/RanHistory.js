@@ -1,81 +1,76 @@
 import React, { Component } from 'react';
-import {
-    Text,
-    View,
-    TouchableOpacity,
-    Image,
-    FlatList,
-    ActivityIndicator
-} from 'react-native';
+import { Text, View,FlatList,Image,Dimensions,TouchableOpacity,StyleSheet } from 'react-native';
 
-import SalItem from './SalItem';
 import good_css from "../css/good_css";
 import ListFoot from "./ListFoot";
+import RanItem from "./RanItem";
+import WeiItem from "./WeiItem";
+import SalItem from "./SalItem";
+import Loading from "../common/Loading";
 import Ajax from "../common/Ajax";
 
-export default class SkuList extends Component {
-    constructor(props) {
+export default class RanHistory extends Component {
+    static navigationOptions = ({ navigation }) => ({
+        header:null
+    });
+    constructor(props){
         super(props);
+        const {state:{params:{token,type}}} = props.navigation;
         this.state = {
-            ready: true,//加载是否完成
+            ready: false,//加载是否完成
             refreshing: false,//下拉加载
             skuArr: [],//存储数据
             showFoot:0,//显示第八加载
             formData:{//存储请求条件
-                token:this.props.token,//登录token
-                content:'',//输入内容
-                type:3,//查权重
+                token:token,//登录token
+                type:type,//查排名
                 page:1,//第一页
                 page_size:10,//每页10条
-                cap_type:2,//1：关键词 2：时间 3：频率
-                entrance:''//查询入口方式 4：全部（默认） 1：电脑 2：手机 3：微信
             },
             del:false,
             delArr:[],
-        };
-        this.refreshData = this.refreshData.bind(this);
-        this.delShow = this.delShow.bind(this);
-        this.checkFun = this.checkFun.bind(this);
+            total_page:2,
+        }
     }
     //请求数据
     fetchData = () => {
         const {formData} = this.state;
         console.log(formData);
-        Ajax.post('http://jdchamgapi.chaojids.com/jd/ranking/seek',formData)
+        Ajax.post('http://jdchamgapi.chaojids.com/jd/ranking/history-log',formData)
             .then((response) => {
                 console.log(response);
                 if(response.result==1){
-                    let arrData = response.data||[];
+                    let arrData = [];
+                    response.data.map((item)=>{
+                        if(formData.type==3){
+                            item.service_id = item.id;
+                        }
+                        arrData.push(item);
+                    });
                     let foot=0;
-                    if(arrData.length===0||arrData.length<9){
+                    if(arrData.length===0||response.total_page<=formData.page){
                         foot=1;
                     }
-                    this.setState({ skuArr:this.state.skuArr.concat(arrData),showFoot:foot});
+                    this.setState({ skuArr:this.state.skuArr.concat(arrData),showFoot:foot,total_page:response.total_page});
                     arrData = null;
                 }else{
                     if(response.result == 1065){
                         this.setState({showFoot:1 });
                     }else{
                         if(response.msg){
-                            alert(response.msg);
+                            alert(response.msg+'31231');
                         }else{
                             alert('服务器响应超时');
                         }
                     }
                 }
-                this.setState({ ready: false, refreshing: false });
+                this.setState({ ready: true, refreshing: false });
             }).catch((error) => {
             this.setState({
-                formData:{
-                    ...this.state.formData,
-                    token:''
-                },
-                ready: false,
+                ready: true,
                 refreshing: false
-            },()=>{
-                this.props.token_Del();
             });
-            alert(error);
+            alert(error+'23423');
         });
     }
     //下拉加载
@@ -85,6 +80,9 @@ export default class SkuList extends Component {
             return ;
         }
         //如果当前页大于或等于总页数，那就是到最后一页了，返回
+        if(this.state.formData.page>=this.state.total_page){
+            return ;
+        }
         this.state.formData.page++;
         //底部显示正在加载更多数据
         this.setState({showFoot:2});
@@ -95,17 +93,17 @@ export default class SkuList extends Component {
         }
     }
     //请求数据
-    refreshData (type,content){
+    refreshData (type){//带type的话表示要初始化参数
         if(type){
-            this.setState({
+            this.setState({//初始化参数
                 refreshing: true,
                 formData:{
                     ...this.state.formData,
                     type:type||this.state.formData.type,
-                    content:content||content==''?content:this.state.formData.content,
                     page:1
                 },
-                ready:true,
+                ready:false,
+                del:false,
                 skuArr: [],
                 showFoot:0,
             },()=>{
@@ -119,20 +117,9 @@ export default class SkuList extends Component {
             });
         }
     }
-    //关键词时间等切换
-    cap_type_change(cap_type){
-        this.setState({
-            formData:{
-                ...this.state.formData,
-                cap_type:cap_type||'',
-                page:1,
-            },
-            ready:true,
-            skuArr: [],
-            showFoot:0,
-        },()=>{
-            this.refreshData()
-        })
+    //下拉刷新
+    _onRefresh(){
+        this.refreshData(this.state.formData.type);
     }
     delShow(){
         if(this.state.skuArr.length){
@@ -146,15 +133,17 @@ export default class SkuList extends Component {
     }
     //删除ajax
     deleteFun(){
-        const {delArr} = this.state;
+        const {delArr,formData:{token,type}} = this.state;
         let formData = {
-            token:this.props.token,
-            type:this.state.formData.type,
+            token:token,
+            type:type,
             id:delArr.join(',')
         };
         if(delArr.length){
+            console.log(formData);
             Ajax.post('http://jdchamgapi.chaojids.com/jd/ranking/delete-log',formData)
                 .then((response) => {
+                    console.log(response);
                     if(response.result==1){
                         alert(response.msg);
                         this.setState({
@@ -177,95 +166,92 @@ export default class SkuList extends Component {
     }
     //选择
     checkFun(item){
-        let id = item.id;
+        let service_id = item.service_id;
         const {delArr,del} = this.state;
+        console.log(item);
         if(!del){
-            this.props.navigation.navigate('Sales',{
+            this.props.navigation.navigate('Ranking',{
                 item:item
             })
         }
-        let arr = delArr.filter((val)=>val==id);//过滤下看看是否有
+        let arr = delArr.filter((val)=>val==service_id);//过滤下看看是否有
         if(arr.length){//有
-            let arr1 = delArr.filter((val)=>val!=id);
+            let arr1 = delArr.filter((val)=>val!=service_id);
             this.setState({
                 delArr:arr1
             })
         }else{//没有
             let arr2 = delArr;
-            arr2.push(id);
+            arr2.push(service_id);
             this.setState({
                 delArr:arr2
             })
         }
     }
-    //下拉刷新
-    _onRefresh(){
-        this.refreshData(this.state.formData.type);
-    }
+
     componentDidMount(){
         this.refreshData()
     }
 
-    componentWillReceiveProps(nextProps){
-        if(nextProps.token!==this.state.formData.token){
-            this.setState({//初始化
-                formData:{
-                    ...this.state.formData,
-                    token:nextProps.token,
-                },
-                ready: true,//加载是否完成
-                refreshing: false,//下拉加载
-                skuArr: [],//存储数据
-                showFoot:0,//显示第八加载
-                del:false,
-                delArr:[],
-            },()=>{
-                this.refreshData()
-            })
-        }
-    }
-
-
     render() {
-        const { navigate } = this.props.navigation;
-        const { skuArr,showFoot,refreshing,ready,formData,del,delArr} = this.state;
+        const {goBack,navigate} = this.props.navigation;
+        const { skuArr,showFoot,refreshing,ready,del,delArr,formData:{type}} = this.state;
         return (
-            <View style={good_css.content}>
-                <View style={good_css.heaTab}>
-                    <Text style={[good_css.heaTabItem,formData.cap_type==2?good_css.active:{}]} onPress={()=>this.cap_type_change(2)}>时间</Text>
-                    <Text style={[good_css.heaTabItem,formData.cap_type==3?good_css.active:{}]} onPress={()=>this.cap_type_change(3)}>频率</Text>
+            <View style={good_css.container}>
+                <View style={good_css.header}>
+                    <TouchableOpacity style={{alignItems:'flex-start',flex:1}} onPress={()=>goBack()}>
+                        <Image source={require('../img/fhui1.png')} style={{width:20,height:20,marginLeft:5}}/>
+                    </TouchableOpacity>
+                    <View style={good_css.header_wrap}>
+                        <Text style={good_css.header_text}>历史记录</Text>
+                    </View>
+                    <TouchableOpacity  onPress={this.delShow.bind(this)} style={{flex:1}} >
+                        <Text style={[good_css.header_text,{marginRight:15,textAlign:'right',fontSize:16}]}>{del?'取消':'编辑'}</Text>
+                    </TouchableOpacity>
                 </View>
-                {ready ? <ActivityIndicator size="large" style={good_css.loadding}/>:<FlatList
+
+
+                {ready ?
+                    <FlatList
                     data={skuArr}
                     refreshing={refreshing}
+                    onRefresh={this._onRefresh.bind(this)}
                     keyExtractor={(item,index)=>index.toString()}
                     onEndReachedThreshold={1}
-                    onRefresh={this._onRefresh.bind(this)}
                     onEndReached={this._onEndReached.bind(this)}
                     ListFooterComponent={()=>ListFoot.RenderFooter(showFoot)}
                     renderItem={({ item }) => {
                         return (
                             <TouchableOpacity
-                                style={{flexDirection:'row',alignItems:'center'}}
+                                style={{flexDirection:'row',alignItems:'center',backgroundColor:'#fff',marginBottom:1}}
                                 onPress={()=>this.checkFun(item)}
                             >
                                 {del?
                                     <View>
-                                        {delArr.filter((val)=>val==item.id).length?
+                                        {delArr.filter((val)=>val==item.service_id).length?
                                             <Image source={require('../img/xze2.png')} style={good_css.radio}/>:
                                             <Image source={require('../img/xze1.png')} style={good_css.radio}/>
                                         }
                                     </View>
                                     :null}
-                                <SalItem item={item} data={skuArr} navigate={navigate} />
+                                {type==1?<RanItem dataHis={item} navigate={navigate} />:null}
+                                {type==2?<WeiItem dataHis={item} navigate={navigate} />:null}
+                                {type==3?<SalItem dataHis={item} navigate={navigate} />:null}
                             </TouchableOpacity>
                         );
                     }} />
+                    :null
+                }
+
+                {ready ?
+                    null
+                    :
+                    <Loading />
                 }
 
                 {/*删除*/}
                 {del?
-                    <View style={good_css.bottomFix}>
+                    <View style={good_css.bottomHisFix}>
                         <TouchableOpacity
                             style={{flexDirection:'row',alignItems:'center'}}
                             onPress={()=>{
@@ -275,7 +261,7 @@ export default class SkuList extends Component {
                                     })
                                 }else{
                                     let arr = [];
-                                    skuArr.map(val=>{arr.push(val.id)});
+                                    skuArr.map(val=>{arr.push(val.service_id)});
                                     this.setState({
                                         delArr:arr
                                     })
@@ -290,16 +276,9 @@ export default class SkuList extends Component {
                         </TouchableOpacity>
                         <View style={{flexDirection:'row'}}>
                             <TouchableOpacity
-                                onPress={()=>this.setState({
-                                    del:false
-                                })}
-                            >
-                                <Text style={{fontSize:16,width:80,height:40,lineHeight:40,borderColor:'#999',borderWidth:1,color:'#999',borderRadius:8,textAlign:'center'}}>取消</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity
                                 onPress={this.deleteFun.bind(this)}
                             >
-                                <Text style={{fontSize:16,width:80,height:40,lineHeight:40,backgroundColor:'#FF3851',color:'#fff',borderRadius:8,textAlign:'center',marginLeft:15}}>删除</Text>
+                                <Text style={{fontSize:16,width:80,height:40,lineHeight:40,backgroundColor:'#FF3851',color:'#fff',borderRadius:8,textAlign:'center'}}>删除</Text>
                             </TouchableOpacity>
                         </View>
 

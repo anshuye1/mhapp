@@ -17,8 +17,10 @@ export default class RanItem extends Component {
         data:[]
     };
     render(){
-        const {item} = this.props;
+        const {item,item1,dataHis} = this.props;
         let result = item&&item.result&&item.result[0]?item.result[0]:{};
+        result = item1?item1:result;
+        result =dataHis?dataHis:result;
         let entranceObj = {1:'pc',2:'app',3:'微信'};//1表示电脑端 2表示移动端 3微信
         return (
             <View
@@ -34,7 +36,7 @@ export default class RanItem extends Component {
                         <Text style={good_css.title} numberOfLines={1}>{result.good_title}</Text>
                         <View style={good_css.itemWrap}>
                             <Text style={[good_css.left,{fontSize:16,color:'#FF314B'}]}>￥ {result.price}</Text>
-                            <Text style={[good_css.smallFont,{color:'#9B9B9B',textAlign:'right',flex:1,lineHeight:25}]}>{result.create_at}</Text>
+                            <Text style={[good_css.smallFont,{color:'#9B9B9B',textAlign:'right',flex:1,lineHeight:25}]}>{item1?'':result.create_at}</Text>
                         </View>
                         <View style={good_css.itemWrap}>
                             <View style={good_css.left}>

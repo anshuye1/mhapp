@@ -19,6 +19,7 @@ import Icon from "react-native-vector-icons/Ionicons";
 import * as types from "../store/constants";
 
 import Loading from './Loading';
+import Ajax from "../common/Ajax";
 import login_css from '../css/login_css';
 
 const { width } = Dimensions.get('window');
@@ -80,32 +81,37 @@ class Login extends Component {
       this.setState({
           refreshing:false,
       });
-      let formData = JSON.stringify(this.state.formData);
-      let opts = {
-          headers: {
-              "Content-Type": "application/json"
-          },
-          method:"POST",   //请求方法
-          body:formData,   //请求体
-      };
-      fetch('http://jdchamgapi.chaojids.com/site/login',opts)
-          .then((response) => {
-              this.setState({ refreshing: true });
-              return response.json();
-          }).then((responseText) => {
-              if(responseText.result*1===1){
-                  console.warn(responseText.data.token);
-                  this.props.login(responseText.data.token);
-                  AsyncStorage.setItem('token',responseText.data.token);
+      Ajax.post('http://jdchamgapi.chaojids.com/site/login',this.state.formData)
+            .then((response) => {
+              if(response.result*1===1){
+                  console.warn(response.data.token);
+                  this.props.login(response.data.token);
+                  AsyncStorage.setItem('token',response.data.token);
                   this.props.navigation.navigate('SkuList');
               }else{
-                Alert.alert(responseText.msg)
+                Alert.alert(response.msg)
               }
           }).catch((error) => {
-          this.setState({ refreshing: true });
+              this.setState({ refreshing: true });
               Alert.alert('系统错误');
               // console.error(error);
           });
+  }
+
+  setVal(data){
+      this.setState({
+          formData:{
+              mphone:data.mphone,
+              password:data.password
+          }
+      });
+      if(data.password){
+          if(data.password_confirm){
+              alert('修改密码成功')
+          }else{
+              alert('注册成功')
+          }
+      }
   }
 
 
@@ -113,8 +119,9 @@ class Login extends Component {
     header: null
   });
   render() {
-    const { isFocus,refreshing,pass } = this.state;
+    const { isFocus,refreshing,pass,formData } = this.state;
     const { goBack,navigate } = this.props.navigation;
+    console.log(this.state.formData);
     return (
       <View style={login_css.container}>
         {!refreshing&&<Loading />}
@@ -135,8 +142,9 @@ class Login extends Component {
             style={[login_css.loginInput,{borderColor: isFocus===1?'#1e88f5':'#DBDBDB'}]}
             underlineColorAndroid='transparent'
             onFocus={()=>this.setState({isFocus: 1})}
-            onChangeText={(text) => this.setState({ text,formData:{...this.state.formData,mphone:text} })}
+            onChangeText={(text) => this.setState({ formData:{...formData,mphone:text} })}
             placeholder='手机号'
+            value={formData.mphone}
             placeholderTextColor='#ccc'
             keyboardType="numeric"
           />
@@ -146,8 +154,9 @@ class Login extends Component {
                     style={[login_css.loginInput,{borderColor: isFocus===2?'#1e88f5':'#DBDBDB'}]}
                     underlineColorAndroid='transparent'
                     onFocus={()=>this.setState({isFocus: 2})}
-                    onChangeText={(text) => this.setState({ text,formData:{...this.state.formData,password:text} })}
+                    onChangeText={(text) => this.setState({ formData:{...formData,password:text} })}
                     placeholder='请输入密码'
+                    value={formData.password}
                     maxLength={16}
                     placeholderTextColor='#ccc'
                     keyboardType="default"
@@ -171,11 +180,15 @@ class Login extends Component {
               </TouchableOpacity>
 
             <View style={login_css.middleBottom}>
-              <TouchableOpacity login={this.props.login} onPress={()=>navigate('Signup')}>
+              <TouchableOpacity login={this.props.login} onPress={()=>navigate('Signup',{
+                  setVal:this.setVal.bind(this)
+              })}>
                   <Text style={login_css.textColor} >注册京东魔盒</Text>
               </TouchableOpacity>
 
-              <TouchableOpacity>
+              <TouchableOpacity login={this.props.login} onPress={()=>navigate('Forget',{
+                  setVal:this.setVal.bind(this)
+              })}>
                   <Text style={login_css.textColor}>忘记密码</Text>
               </TouchableOpacity>
           </View>

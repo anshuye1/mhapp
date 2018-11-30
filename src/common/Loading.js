@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
         zIndex:10,
         flexDirection:'row',
         justifyContent:'center',
-        backgroundColor:'rgba(0,0,0,0.1)'
+        backgroundColor:'rgba(0,0,0,0.01)'
     },
     loading:{
     }

@@ -181,7 +181,7 @@ export default class SkuList extends Component {
         const {delArr,del} = this.state;
         if(!del){
             this.props.navigation.navigate('Weight',{
-                item:item
+                item:item.result[0]
             })
         }
         let arr = delArr.filter((val)=>val==service_id);//过滤下看看是否有
@@ -205,7 +205,24 @@ export default class SkuList extends Component {
     componentDidMount(){
         this.refreshData()
     }
-
+    componentWillReceiveProps(nextProps){
+        if(nextProps.token!==this.state.formData.token){
+            this.setState({//初始化
+                formData:{
+                    ...this.state.formData,
+                    token:nextProps.token,
+                },
+                ready: true,//加载是否完成
+                refreshing: false,//下拉加载
+                skuArr: [],//存储数据
+                showFoot:0,//显示第八加载
+                del:false,
+                delArr:[],
+            },()=>{
+                this.refreshData()
+            })
+        }
+    }
 
     render() {
         const { navigate } = this.props.navigation;

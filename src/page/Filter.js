@@ -6,50 +6,85 @@ import {
     TouchableOpacity,
     TextInput,
     Dimensions,
-    ScrollView
+    ScrollView,
+    Picker
 } from 'react-native';
-
+import Ajax from '../common/Ajax'
 const {width,height} = Dimensions.get('window');
 
 export default class RanItem extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            minVal:1,
-            maxVal:50
+            isFocus:0,
+            cityName:'',
+            formData:{
+                ...this.props.formData,
+            }
         }
-    };
+    }
+
+    componentDidMount(){
+
+    }
 
     render(){
-        const {minVal,maxVal} = this.state;
+        const {formData} = this.state;
+        const {entranceObj,typeObj,sortObj,defaultVal,cityArr} = this.props;
 
         return (
-            <ScrollView style={styles.filterWrap}>
+            <View style={styles.filterWrap}>
                 <View style={styles.optionItem}>
                     <Text style={styles.name}>查询入口：</Text>
-                    <TouchableOpacity><Text style={styles.btn}>pc端</Text></TouchableOpacity>
-                    <TouchableOpacity><Text style={styles.btn}>app端</Text></TouchableOpacity>
-                    <TouchableOpacity><Text style={styles.btn}>微信端</Text></TouchableOpacity>
+                    {Object.keys(entranceObj).map((item)=>{
+                        return (
+                            <TouchableOpacity key={item} onPress={()=>{
+                                this.setState({
+                                    formData:{
+                                        ...formData,
+                                        entrance:item,
+                                    }
+                                })
+                            }}>
+                                <Text style={[styles.btn,formData.entrance==item?styles.active:{}]}>{entranceObj[item]}</Text>
+                            </TouchableOpacity>
+                        )
+                    })}
                 </View>
                 <View style={styles.optionItem}>
                     <Text style={styles.name}>查询模式：</Text>
-                    <TouchableOpacity><Text style={styles.btn}>指定商品</Text></TouchableOpacity>
-                    <TouchableOpacity><Text style={styles.btn}>指定店铺</Text></TouchableOpacity>
-                </View>
-                <View style={styles.optionItem}>
-                    <Text style={styles.name}>排序方式：</Text>
-                    <TouchableOpacity><Text style={styles.btn}>pc端</Text></TouchableOpacity>
-                    <TouchableOpacity><Text style={styles.btn}>app端</Text></TouchableOpacity>
-                    <TouchableOpacity><Text style={styles.btn}>微信端</Text></TouchableOpacity>
+                    {Object.keys(typeObj).map((item)=>{
+                        return (
+                            <TouchableOpacity key={item} onPress={()=>{
+                                this.setState({
+                                    formData:{
+                                        ...formData,
+                                        type:item,
+                                    }
+                                })
+                            }}>
+                                <Text style={[styles.btn,formData.type==item?styles.active:{}]}>{typeObj[item]}</Text>
+                            </TouchableOpacity>
+                        )
+                    })}
                 </View>
                 <View style={styles.optionItem}>
                     <Text style={styles.name}>页码区间：</Text>
-                    <View style={{flexDirection:'row',flexWrap:'wrap'}}>
-                        <TouchableOpacity><Text style={styles.btn}>综合</Text></TouchableOpacity>
-                        <TouchableOpacity><Text style={styles.btn}>销量</Text></TouchableOpacity>
-                        <TouchableOpacity><Text style={styles.btn}>评论数</Text></TouchableOpacity>
-                        <TouchableOpacity><Text style={styles.btn}>新品</Text></TouchableOpacity>
-                        <TouchableOpacity><Text style={styles.btn}>价格</Text></TouchableOpacity>
+                    <View style={styles.btnBox}>
+                        {Object.keys(sortObj).map((item)=>{
+                            return (
+                                <TouchableOpacity key={item} onPress={()=>{
+                                    this.setState({
+                                        formData:{
+                                            ...formData,
+                                            sort:item,
+                                        }
+                                    })
+                                }}>
+                                    <Text style={[styles.btn,formData.sort==item?styles.active:{}]}>{sortObj[item]}</Text>
+                                </TouchableOpacity>
+                            )
+                        })}
                     </View>
                 </View>
                 <View style={styles.optionItem}>
@@ -57,31 +92,114 @@ export default class RanItem extends Component {
                     <TextInput
                         style={styles.num_input}
                         numberOfLines={1}
-                        value={minVal.toString()}
+                        maxLength={3}
+                        value={formData.page.toString()}
+                        keyboardType="numeric"
+                        underlineColorAndroid='transparent'
+                        onChangeText={(text) => {
+                            this.setState({ formData:{...formData,page:text} })
+                        }}
+                        // onBlur={()=>{
+                        //     if(formData.page*1>formData.page_max*1){
+                        //         this.setState({ formData:{...formData,page:formData.page_size} })
+                        //     }
+                        // }}
                     />
                     <Text style={styles.line}>--</Text>
                     <TextInput
                         style={styles.num_input}
                         numberOfLines={1}
-                        value={maxVal.toString()}
+                        maxLength={3}
+                        value={formData.page_size.toString()}
+                        keyboardType="numeric"
+                        underlineColorAndroid='transparent'
+                        onChangeText={(text) => {
+                            this.setState({ formData:{...formData,page_size:text} })
+                        }}
+                        // onBlur={()=>{
+                        //     if(formData.page_size*1<formData.page_size*1){
+                        //         this.setState({ formData:{...formData,page_size:formData.page} })
+                        //     }
+                        // }}
                     />
                 </View>
                 <View style={styles.optionItem}>
                     <View style={styles.name}>
-                        <Text style={{fontSize:16,paddingTop:8}}>价格区间：</Text>
-                        <Text>(选填)</Text>
+                        <Text style={[{paddingTop:8},styles.nameFont]}>价格区间：</Text>
+                        <Text style={{fontSize:12}}>(选填)</Text>
                     </View>
                     <TextInput
                         style={styles.num_input}
                         numberOfLines={1}
+                        maxLength={10}
+                        value={formData.price_min.toString()}
+                        keyboardType="numeric"
+                        underlineColorAndroid='transparent'
+                        onChangeText={(text) => {
+                            this.setState({ formData:{...formData,price_min:text} })
+                        }}
                     />
                     <Text style={styles.line}>--</Text>
                     <TextInput
                         style={styles.num_input}
                         numberOfLines={1}
+                        maxLength={10}
+                        value={formData.price_max.toString()}
+                        keyboardType="numeric"
+                        underlineColorAndroid='transparent'
+                        onChangeText={(text) => {
+                            this.setState({ formData:{...formData,price_max:text} })
+                        }}
                     />
                 </View>
-            </ScrollView>
+                <View style={styles.optionItem}>
+                    <View style={[styles.name,{width:120}]}>
+                        <Text style={[{paddingTop:8},styles.nameFont]}>按地区（选填）：</Text>
+                    </View>
+                    <View style={[styles.btnBox,{width:100,height:35,backgroundColor:'#1e88f5',borderRadius:8}]}>
+                        <Picker
+                            selectedValue={this.state.formData.city_id}
+                            style={{ height: 35, width: 100,color:'#fff'}}
+                            onValueChange={(itemValue, itemIndex) => this.setState({
+                                formData: {
+                                    ...formData,
+                                    city_id:itemValue
+                                },
+                                cityName:itemIndex
+                            })}
+                        >
+                            <Picker.Item label="选择地区" value=""/>
+                            {cityArr&&cityArr.map((item)=>{
+                                return (
+                                    <Picker.Item label={item.cityName} value={item.id} key={item.id}/>
+                                )
+                            })}
+
+                        </Picker>
+                    </View>
+                </View>
+
+                <View style={{flex:1,flexDirection:'row',justifyContent:'flex-end',paddingTop:80}}>
+                    <TouchableOpacity
+                        onPress={()=>{
+                            this.setState({
+                                formData:{
+                                    ...defaultVal
+                                }
+                            })
+                        }}
+                    >
+                        <Text style={styles.bottomBtn}>重置</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={()=>{
+                            this.props.submitFun()
+                        }}
+                    >
+                        <Text style={styles.bottomBtn1}>确定</Text>
+                    </TouchableOpacity>
+                </View>
+            </View>
         )
     }
 }
@@ -92,42 +210,87 @@ const styles = StyleSheet.create({
         padding:10
     },
     optionItem:{
+        width:width,
         flexDirection:'row',
+        marginBottom:8
+    },
+    btnBox:{
+        flexDirection:'row',
+        flexWrap:'wrap',
+        width:width-80-20
+    },
+    cityBox:{
+        flex:1,
+        height:200
+    },
+    cityBtn:{
+        flexWrap:'wrap',
+        padding:30,
+        flex:1,
+        flexDirection:'row',
+        height:150,
     },
     btn:{
-        width:72,
-        height:40,
+        width:70,
+        height:35,
         borderWidth:1,
         borderColor:'#ddd',
         textAlign:'center',
-        lineHeight:38,
+        lineHeight:35,
         borderRadius:8,
         marginRight:15,
         fontSize:14,
         marginBottom:10
     },
-    name:{
-        fontSize:16,
-        lineHeight:40,
-        color:'#4a4a4a',
+    active:{
+        backgroundColor:'#1e88f5',
+        color:'#fff',
+        borderColor:'#1e88f5',
+    },
+    btnActive:{
+        width:70,
+        height:35,
+        borderWidth:1,
+        borderColor:'#1e88f5',
+        backgroundColor:'#1e88f5',
+        textAlign:'center',
+        lineHeight:35,
+        borderRadius:8,
         marginRight:10,
+        color:'#fff',
+        fontSize:14,
+        marginBottom:10,
+    },
+    name:{
+        fontSize:14,
+        lineHeight:35,
+        color:'#4a4a4a',
         flexDirection:'column',
-        alignItems:'center'
+        alignItems:'center',
+        width:80,
+        textAlign:'center',
+    },
+    nameFont:{
+        fontSize:14,
+        color:'#4a4a4a',
     },
     num_input:{
-        width:75,
+        width:70,
+        height:35,
         textAlign:'center',
         marginRight:5,
         borderColor:'#C7C7C7',
         borderWidth:1,
         borderRadius:8,
         fontSize:14,
-        padding:5,
-        marginBottom:10
+        marginBottom:8,
+        alignItems:'center',
     },
     line:{
-        lineHeight:40,
+        lineHeight:35,
         color:'#C7C7C7',
         marginRight:5
-    }
+    },
+    bottomBtn:{width:90,height:40,borderTopLeftRadius:8,borderBottomLeftRadius:8,backgroundColor:'#F5A623',color:'#fff',lineHeight:36,textAlign:'center',fontSize:16,marginRight:1},
+    bottomBtn1:{width:90,height:40,borderTopRightRadius:8,borderBottomRightRadius:8,backgroundColor:'#FF465D',color:'#fff',lineHeight:36,textAlign:'center',fontSize:16}
 });

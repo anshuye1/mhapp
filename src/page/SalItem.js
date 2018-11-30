@@ -17,9 +17,10 @@ export default class SalItem extends Component {
         data:[]
     };
     render(){
-        const {item} = this.props;
+        const {item,dataHis} = this.props;
         let result = item?item:{};
-        let result_json = item&&item.result_json?item.result_json:{};
+        result = dataHis?dataHis:result;
+        let result_json = result&&result.result_json?result.result_json:{};
         return (
             <View
                 style={good_css.SkuList}

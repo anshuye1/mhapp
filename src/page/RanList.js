@@ -17,7 +17,7 @@ export default class SkuList extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            ready: true,//加载是否完成
+            ready: false,//加载是否完成
             refreshing: false,//下拉加载
             skuArr: [],//存储数据
             showFoot:0,//显示第八加载
@@ -64,14 +64,14 @@ export default class SkuList extends Component {
                         }
                     }
                 }
-                this.setState({ ready: false, refreshing: false });
+                this.setState({ ready: true, refreshing: false });
             }).catch((error) => {
             this.setState({
                 formData:{
                     ...this.state.formData,
                     token:''
                 },
-                ready: false,
+                ready: true,
                 refreshing: false
             },()=>{
                 this.props.token_Del();
@@ -106,7 +106,7 @@ export default class SkuList extends Component {
                     content:content||content==''?content:this.state.formData.content,
                     page:1
                 },
-                ready:true,
+                ready:false,
                 skuArr: [],
                 showFoot:0,
                 shadow:false
@@ -146,7 +146,7 @@ export default class SkuList extends Component {
                 cap_type:cap_type||'',
                 page:1,
             },
-            ready:true,
+            ready:false,
             skuArr: [],
             showFoot:0,
             shadow:false
@@ -200,9 +200,10 @@ export default class SkuList extends Component {
     checkFun(item){
         let service_id = item.service_id;
         const {delArr,del} = this.state;
+        console.log(item);
         if(!del){
             this.props.navigation.navigate('Ranking',{
-                item:item
+                item:item.result[0]
             })
         }
         let arr = delArr.filter((val)=>val==service_id);//过滤下看看是否有
@@ -223,7 +224,24 @@ export default class SkuList extends Component {
     componentDidMount(){
         this.refreshData()
     }
-
+    componentWillReceiveProps(nextProps){
+        if(nextProps.token!==this.state.formData.token){
+            this.setState({//初始化
+                formData:{
+                    ...this.state.formData,
+                    token:nextProps.token,
+                },
+                ready: true,//加载是否完成
+                refreshing: false,//下拉加载
+                skuArr: [],//存储数据
+                showFoot:0,//显示第八加载
+                del:false,
+                delArr:[],
+            },()=>{
+                this.refreshData()
+            })
+        }
+    }
 
     render() {
         const { navigate } = this.props.navigation;
@@ -240,7 +258,7 @@ export default class SkuList extends Component {
                     <Text style={[good_css.heaTabItem,formData.cap_type==2?good_css.active:{}]} onPress={()=>this.cap_type_change(2)}>时间</Text>
                     <Text style={[good_css.heaTabItem,formData.cap_type==3?good_css.active:{}]} onPress={()=>this.cap_type_change(3)}>频率</Text>
                 </View>
-                {ready ? <ActivityIndicator size="large" style={good_css.loadding}/>:<FlatList
+                {!ready ? <ActivityIndicator size="large" style={good_css.loadding}/>:<FlatList
                     data={skuArr}
                     refreshing={refreshing}
                     onRefresh={this._onRefresh.bind(this)}

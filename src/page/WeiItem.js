@@ -17,8 +17,10 @@ export default class WeiItem extends Component {
         data:[]
     };
     render(){
-        const {item} = this.props;
+        const {item,item1,sku_self,dataHis} = this.props;
         let result = item&&item.result&&item.result[0]?item.result[0]:{};
+        result = item1?item1:result;
+        result = dataHis?dataHis:result;
         return (
             <View
                 style={good_css.SkuList}
@@ -31,9 +33,19 @@ export default class WeiItem extends Component {
                 <View style={good_css.good_detail}>
                     <View style={good_css.good_top}>
                         <Text style={good_css.title} numberOfLines={1}>{result.good_title}</Text>
-                        <View style={good_css.itemWrap}>
+                        <View style={good_css.itemWrap1}>
                             <Text style={{fontSize:16,color:'#FF314B',width:100}}>￥ {result.price}</Text>
-                            <Text style={[good_css.smallFont,{color:'#9B9B9B',textAlign:'right',flex:1,lineHeight:25}]}>{result.create_at}</Text>
+                            {sku_self?
+                                <TouchableOpacity onPress={this.props.goSelf}>
+                                    <Text style={[good_css.smallFont,{color:'#1e88f5',textAlign:'center',lineHeight:25,width:48,height:25,backgroundColor:'#EAF4FF',borderRadius:4}]}>查看</Text>
+                                </TouchableOpacity>
+                                :
+                                <Text style={[good_css.smallFont,{color:'#9B9B9B',textAlign:'right',lineHeight:25}]} onPress={()=>{
+                                    if(sku_self){
+                                        this.props.goSelf()
+                                    }
+                                }}>{result.create_at}</Text>
+                            }
                         </View>
                         <View style={good_css.itemWrap}>
                             <Text numberOfLines={1} style={good_css.smallFont}>{result.specification}</Text>
