@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
-import { Text, View,Button,Image,Dimensions,TouchableOpacity,StyleSheet } from 'react-native';
+import {Text, View, Button, Image, Dimensions, TouchableOpacity, StyleSheet, AsyncStorage} from 'react-native';
+
+import Ajax from '../common/Ajax';
+import Loading from '../common/Loading';
+const UrlStart = 'http://jdchamgapi.chaojids.com';
 
 const {width,height} = Dimensions.get('window');
 
@@ -7,12 +11,64 @@ export default class Vip extends Component {
     static navigationOptions = ({ navigation }) => ({
         header:null
     });
+    constructor(){
+        super();
+        this.state = {
+            data:[],
+            ready:false,
+        }
+    }
+
+    //得到token
+    getToken (){
+        AsyncStorage.getItem('token').then((value) => {
+            this.setState({
+                token:value
+            },()=>{
+                this.mesAjax()
+            })
+        });
+    }
+
+    mesAjax(){
+        Ajax.post(UrlStart+'/jd/user/my-message',{token:this.state.token})
+            .then((response)=>{
+                console.log(response);
+                if(response.result==1){
+                    this.setState({
+                        data:response.data,
+                        ready:true
+                    });
+                }else{
+                    if(response.msg){
+                        alert(response.msg)
+                    }else{
+                        alert('系统错误')
+                    }
+                    this.setState({
+                        ready:true
+                    });
+                }
+            })
+            .catch((error)=>{
+                this.setState({
+                    ready:true
+                });
+                alert('系统错误')
+            })
+    }
+
+    componentDidMount(){
+        this.getToken()
+    }
+
     render() {
         const {goBack,navigate} = this.props.navigation;
+        const {ready,data} = this.state;
         return (
             <View style={styles.container}>
                 <View style={styles.header}>
-                    <TouchableOpacity style={{alignItems:'flex-start',flex:0}} onPress={()=>goBack()}>
+                    <TouchableOpacity style={{alignItems:'flex-start',flex:0}}>
                         <Image source={require('../img/logo11.png')} style={{width:30,height:30,marginLeft:8}}/>
                     </TouchableOpacity>
                     <View style={styles.header_wrap}>
@@ -21,39 +77,23 @@ export default class Vip extends Component {
                 </View>
 
 
-                <View style={styles.bottom}>
+                {ready?
+                    <View style={styles.bottom}>
+                        {data.map((item,index)=>{
+                            return (
+                                <TouchableOpacity style={styles.bottomItem} onPress={()=>{navigate('Content',{
+                                    id:item.id
+                                })}} key={index.toString()}>
+                                    <View><Image source={require('../img/xxi12.png')} style={styles.iconImg}/></View>
+                                    <Text style={styles.item}>{item.title}</Text>
+                                </TouchableOpacity>
+                            )
+                        })}
+                    </View>
+                    :
+                    <Loading />
+                }
 
-                    <TouchableOpacity style={styles.bottomItem} onPress={()=>{navigate('Product')}}>
-                        <View><Image source={require('../img/xxi11.png')} style={styles.iconImg}/></View>
-                        <Text style={styles.item}>京东魔盒PC端说明</Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity style={styles.bottomItem} onPress={()=>{navigate('Customer_service')}}>
-                        <View><Image source={require('../img/xxi12.png')} style={styles.iconImg}/></View>
-                        <Text style={styles.item}>京东商家须知</Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity style={styles.bottomItem} onPress={()=>{navigate('Suggest')}}>
-                        <View><Image source={require('../img/xxi13.png')} style={styles.iconImg}/></View>
-                        <Text style={styles.item}>双11到啦</Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity style={styles.bottomItem} onPress={()=>{navigate('Version')}}>
-                        <View><Image source={require('../img/xxi14.png')} style={styles.iconImg}/></View>
-                        <Text style={styles.item}>如何提升排名</Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity style={styles.bottomItem} onPress={()=>{navigate('Setting')}}>
-                        <View><Image source={require('../img/xxi15.png')} style={styles.iconImg}/></View>
-                        <Text style={styles.item}>如何提升销量</Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity style={styles.bottomItem} onPress={()=>{navigate('Setting')}}>
-                        <View><Image source={require('../img/xxi16.png')} style={styles.iconImg}/></View>
-                        <Text style={styles.item}>如何提升流量</Text>
-                    </TouchableOpacity>
-
-                </View>
             </View>
         );
     }
@@ -98,7 +138,7 @@ const styles = StyleSheet.create({
         marginRight:16
     },
     item:{
-        fontSize:16,
+        fontSize:14,
         color:'#4A4A4A',
     },
     bottomLast:{

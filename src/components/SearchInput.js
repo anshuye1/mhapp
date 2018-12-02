@@ -15,14 +15,14 @@ export default class SearchInput extends Component {
     // city: true
   }
   componentDidMount() {
-    console.log(this.props);
+    // console.log(this.props);
   }
   render() {
     const { navigate } = this.props.navigation;
       return (
       <View style={styles.header}>
 
-        <TouchableOpacity style={styles.left} onPress={() => alert('ok')}>
+        <TouchableOpacity style={styles.left} onPress={() => {this.props.toggle()}}>
           <Image source={require('../img/flei1.png')} style={{width:40,height:40}}/>
         </TouchableOpacity>
 

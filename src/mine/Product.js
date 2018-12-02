@@ -12,12 +12,13 @@ export default class Vip extends Component {
         return (
             <View style={styles.container}>
                 <View style={styles.header}>
-                    <TouchableOpacity style={{alignItems:'flex-start',flex:0}} onPress={()=>goBack()}>
+                    <TouchableOpacity style={{alignItems:'flex-start',flex:1}} onPress={()=>goBack()}>
                         <Image source={require('../img/fhui1.png')} style={{width:20,height:20,marginLeft:5}}/>
                     </TouchableOpacity>
                     <View style={styles.header_wrap}>
                         <Text style={styles.header_text}>产品介绍</Text>
                     </View>
+                    <Text style={{flex:1}}></Text>
                 </View>
 
                 <ScrollView>
@@ -68,7 +69,7 @@ const styles = StyleSheet.create({
         flexDirection:'row'
     },
     header_wrap:{
-        flex:1,paddingRight:25
+        flex:2,paddingRight:25
     },
     header_text:{
         color:'#fff',fontSize:18,fontWeight:'600',textAlign:'center'
@@ -81,14 +82,14 @@ const styles = StyleSheet.create({
         color:'#288EF7'
     },
     fontWrap:{
-        fontSize:15,
+        fontSize:14,
         color:'#4A4A4A',
         flexDirection:'row',
         lineHeight:25,
         fontWeight:'600'
     },
     fontWrap1:{
-        fontSize:16,
+        fontSize:14,
         color:'#4A4A4A',
         flexDirection:'row',
         lineHeight:25

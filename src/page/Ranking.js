@@ -19,8 +19,10 @@ const {width,height} = Dimensions.get('window');
 
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-import Filter from '../page/Filter';
-import RanItem from '../page/RanItem';
+import Filter from './Filter';
+import RanItem from './RanItem';
+import MenuRan from './MenuRan';
+
 import good_css from '../css/good_css';
 import Ajax from "../common/Ajax";
 import Loading from "../common/Loading";
@@ -55,7 +57,7 @@ export default class Ranking extends Component {
             formData:{
                 keyword:item.keyword||'',
                 sku:item.sku||'',
-                entrance:item.entrance||defaultVal.entrance,// 1：电脑端 2手机端 3微信端
+                entrance:item.entrance||item.client_type||defaultVal.entrance,// 1：电脑端 2手机端 3微信端
                 type:item.type||defaultVal.type,//1：指定商品 2指定店铺
                 sort:item.sort||defaultVal.sort,//1：综合 2：销售 3：评论数 4：新品 5：价格
                 price_min:item.price_max*1?item.price_min:defaultVal.price_min,
@@ -64,7 +66,8 @@ export default class Ranking extends Component {
                 page_size:item.page_end||defaultVal.page_size,
                 service_id:'',
                 city_id:'',//按地区查询
-            }
+            },
+            menuRan:false,//导航
         };
     }
     static navigationOptions = ({ navigation }) => ({
@@ -194,6 +197,12 @@ export default class Ranking extends Component {
                 console.log(error);
             })
     }
+    //关闭导航
+    closeMenu(){
+        this.setState({
+            menuRan:false
+        })
+    }
 
     componentDidMount(){
         this.cityAjax();
@@ -202,7 +211,7 @@ export default class Ranking extends Component {
 
     render() {
         const {goBack,navigate} = this.props.navigation;
-        const {filter,formData,cityArr,ready,data,error,errorMsg,token} = this.state;
+        const {filter,formData,cityArr,ready,data,error,errorMsg,token,menuRan} = this.state;
         const entranceObj = {
             '1':'pc端',
             '2':'app端',
@@ -228,7 +237,10 @@ export default class Ranking extends Component {
                 (<View style={good_css.footer_view}>
                     <View style={[good_css.foo_top_wrap]}>
                         <Text style={good_css.msg_text}>{errorMsg}</Text>
-                        {error==3?<Text style={good_css.msg_btn}>一键刷新</Text>:null}
+                        {error==3?
+                            <TouchableOpacity onPress={this.queryAjax.bind(this)}><Text style={good_css.msg_btn}>一键刷新</Text></TouchableOpacity>
+                            :null
+                        }
                     </View>
                     <View style={good_css.foo_bom_wrap}>
                         <TouchableOpacity onPress={()=>navigate('Weight',{
@@ -259,7 +271,9 @@ export default class Ranking extends Component {
                         <TouchableOpacity  onPress={()=>this.in()}>
                             <Image source={require('../img/sxuan2.png')} style={{width:25,height:25,marginRight:20}}/>
                         </TouchableOpacity>
-                        <TouchableOpacity  onPress={()=>alert(2)}>
+                        <TouchableOpacity  onPress={()=>this.setState({
+                            menuRan:true
+                        })}>
                             <Image source={require('../img/flei2.png')} style={{width:25,height:25,marginRight:15}}/>
                         </TouchableOpacity>
                     </View>
@@ -358,7 +372,7 @@ export default class Ranking extends Component {
                     ready?null:<Loading />
                 }
 
-                {filter&&<View style={good_css.wrap}>
+                {filter?<View style={good_css.wrap}>
                     <Animated.View style={ good_css.mask }>
                         <TouchableOpacity onPress={()=>this.out()} style={{width:width,height:height}}>
 
@@ -367,7 +381,7 @@ export default class Ranking extends Component {
                     <Animated.View style={[good_css.tip , {transform: [{
                             translateY: this.state.offset.interpolate({
                                 inputRange: [0, 1],
-                                outputRange: [height,300]
+                                outputRange: [height,100]
                             }),
                         }]
                     }]}>
@@ -382,7 +396,9 @@ export default class Ranking extends Component {
                             cityArr={cityArr}
                         />
                     </Animated.View>
-                </View>}
+                </View>:null}
+
+                {menuRan?<MenuRan closeMenu={this.closeMenu.bind(this)} navigate={navigate} type={1}/>:null}
             </View>
         );
     }

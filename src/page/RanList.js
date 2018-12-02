@@ -9,6 +9,9 @@ import {
 } from 'react-native';
 
 import RanItem from './RanItem';
+import WeiItem from './WeiItem';
+import SalItem from './SalItem';
+
 import good_css from "../css/good_css";
 import ListFoot from "./ListFoot";
 import Ajax from "../common/Ajax";
@@ -22,13 +25,13 @@ export default class SkuList extends Component {
             skuArr: [],//存储数据
             showFoot:0,//显示第八加载
             formData:{//存储请求条件
-                token:this.props.token,//登录token
+                token:props.token,//登录token
                 content:'',//输入内容
-                type:1,//查排名
+                type:props.type,//查排名
                 page:1,//第一页
                 page_size:10,//每页10条
-                cap_type:'',//1：关键词 2：时间 3：频率
-                entrance:4//查询入口方式 4：全部（默认） 1：电脑 2：手机 3：微信
+                cap_type:props.type*1-1||'',//1：关键词 2：时间 3：频率
+                entrance:props.type==1?4:''//查询入口方式 4：全部（默认） 1：电脑 2：手机 3：微信
             },
             shadow:false,//显示端口pc、app等
             del:false,
@@ -199,11 +202,17 @@ export default class SkuList extends Component {
     //选择
     checkFun(item){
         let service_id = item.service_id;
-        const {delArr,del} = this.state;
-        console.log(item);
+        const {delArr,del,formData:{type}} = this.state;
+        console.log(item.result);
+        let urlObj = {
+            1:{url:'Ranking',result:item.result?item.result[0]:''},
+            2:{url:'Weight',result:item.result?item.result[0]:''},
+            3:{url:'Sales',result:item},
+        };
+        console.log(item,type,urlObj[type]);
         if(!del){
-            this.props.navigation.navigate('Ranking',{
-                item:item.result[0]
+            this.props.navigation.navigate(urlObj[type].url,{
+                item:urlObj[type].result
             })
         }
         let arr = delArr.filter((val)=>val==service_id);//过滤下看看是否有
@@ -247,17 +256,35 @@ export default class SkuList extends Component {
         const { navigate } = this.props.navigation;
         const { skuArr,showFoot,refreshing,ready,formData,shadow,del,delArr} = this.state;
         let textObj = {'4':'端口',1:'pc',2:'app',3:'微信'};
-        return (
-            <View style={good_css.content}>
-                <View style={good_css.heaTab}>
+
+        const hea = (
+            <View style={good_css.heaTab}>
+
+                {formData.type==1?//端口
                     <TouchableOpacity style={good_css.heaTabItem} onPress={this.entranceFun.bind(this)}>
                         <Text style={[{height:40,lineHeight:40,textAlign:'center',color:'#4A4A4A',},formData.entrance?good_css.active:{}]} >{textObj[formData.entrance]||'端口'} </Text>
-                        {shadow? <Image source={require('../img/xla2.png')}/>:<Image source={require('../img/xla1.png')}/>}
+                        {shadow? <Image source={require('../img/xla2.png')} style={{width:8,height:8}}/>:<Image source={require('../img/xla1.png')} style={{width:8,height:8}}/>}
                     </TouchableOpacity>
+                    :null
+                }
+
+                {formData.type?//关键词
                     <Text style={[good_css.heaTabItem,formData.cap_type==1?good_css.active:{}]} onPress={()=>this.cap_type_change(1)}>关键词</Text>
-                    <Text style={[good_css.heaTabItem,formData.cap_type==2?good_css.active:{}]} onPress={()=>this.cap_type_change(2)}>时间</Text>
-                    <Text style={[good_css.heaTabItem,formData.cap_type==3?good_css.active:{}]} onPress={()=>this.cap_type_change(3)}>频率</Text>
-                </View>
+                    :null
+                }
+
+                <Text style={[good_css.heaTabItem,formData.cap_type==2?good_css.active:{}]} onPress={()=>this.cap_type_change(2)}>时间</Text>
+
+                <Text style={[good_css.heaTabItem,formData.cap_type==3?good_css.active:{}]} onPress={()=>this.cap_type_change(3)}>频率</Text>
+
+            </View>
+        );
+
+        return (
+            <View style={good_css.content}>
+
+                {hea}
+
                 {!ready ? <ActivityIndicator size="large" style={good_css.loadding}/>:<FlatList
                     data={skuArr}
                     refreshing={refreshing}
@@ -269,7 +296,7 @@ export default class SkuList extends Component {
                     renderItem={({ item }) => {
                         return (
                             <TouchableOpacity
-                                style={{flexDirection:'row',alignItems:'center'}}
+                                style={{flexDirection:'row',alignItems:'center',marginBottom:1}}
                                 onPress={()=>this.checkFun(item)}
                             >
                                 {del?
@@ -280,7 +307,18 @@ export default class SkuList extends Component {
                                         }
                                     </View>
                                     :null}
-                                <RanItem item={item} data={skuArr} navigate={navigate} />
+                                {formData.type==1?
+                                    <RanItem item={item} data={skuArr} navigate={navigate} />
+                                    :null
+                                }
+                                {formData.type==2?
+                                    <WeiItem item={item} data={skuArr} navigate={navigate} />
+                                    :null
+                                }
+                                {formData.type==3?
+                                    <SalItem item={item} data={skuArr} navigate={navigate} />
+                                    :null
+                                }
                             </TouchableOpacity>
                         );
                     }} />

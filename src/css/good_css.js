@@ -15,7 +15,6 @@ const good_css = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         padding:5,
-        backgroundColor:'#fff',
     },
     good_img:{
         width: 130,
@@ -220,7 +219,9 @@ const good_css = StyleSheet.create({
     input:{
         flex:1,
         fontSize:14,
-        height: 40,
+        height: 35,
+        padding:0,
+        lineHeight: 35,
         color:'#666'
     },
     searchIcon: {
@@ -252,6 +253,48 @@ const good_css = StyleSheet.create({
         height:height,
         left:left,
         top:top,
+    },
+    mask1: {
+        justifyContent:"flex-end",
+        flexDirection:'row',
+        backgroundColor:"rgba(0,0,0,0.3)",
+        position:"absolute",
+        width:width,
+        height:height,
+        left:left,
+        top:top,
+    },
+    mask1_wrap:{
+        backgroundColor:'#fff',
+        borderRadius:4,
+        width:125,
+        height:144,
+        marginRight:20,
+        marginTop:50,
+        justifyContent:'space-around',
+    },
+    mask1_icon:{
+        position:'absolute',
+        right:3,
+        top:-12,
+        borderBottomWidth:1,
+        borderBottomColor:'#fff',
+        fontSize:30,
+        color:'#fff'
+    },
+    mask1_btn:{
+        flexDirection:'row',
+        padding:10,
+        alignItems:'center',
+    },
+    mask1_img:{
+        width:18,
+        height:18,
+        marginRight: 10,
+        marginLeft: 10
+    },
+    mask1_text:{
+        fontSize:16,
     },
     tip:{
         flex:1,
@@ -341,6 +384,7 @@ const good_css = StyleSheet.create({
     },
     footer_view:{
         backgroundColor:'#fff',
+        marginBottom:1
     },
     item_ran_wrap:{
         backgroundColor:'#fff',

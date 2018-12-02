@@ -84,7 +84,7 @@ class Login extends Component {
       Ajax.post('http://jdchamgapi.chaojids.com/site/login',this.state.formData)
             .then((response) => {
               if(response.result*1===1){
-                  console.warn(response.data.token);
+                  console.log(response.data.token);
                   this.props.login(response.data.token);
                   AsyncStorage.setItem('token',response.data.token);
                   this.props.navigation.navigate('SkuList');

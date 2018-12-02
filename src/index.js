@@ -8,12 +8,14 @@ import {
 import Icon from "react-native-vector-icons/Ionicons"
 
 import SkuList from './components/SkuList';
-import Ranking from './components/Ranking';
-import Weight from './components/Weight';
-import Sales from './components/Sales';
+import Ranking from './page/Ranking';
+import Weight from './page/Weight';
+import Sales from './page/Sales';
 import RanHistory from './page/RanHistory';
+import Icon11 from './css/Icon';
 
 import Chat from './components/Chat';
+import Content from './chat/Content';
 import Search from './components/Search';
 
 import Login from './common/Login';
@@ -93,7 +95,9 @@ const MyApp = createStackNavigator({
     Customer_service,
     Version,
     Setting,
-    Suggest
+    Suggest,
+    Icon11,
+    Content
 }, {
     headerMode: 'screen',
     // headerMode: 'none',

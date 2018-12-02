@@ -6,12 +6,12 @@ import { doLogin } from '../store/actions/login';
 import * as types from "../store/constants";
 
 import RanList from '../page/RanList';
-import WeiList from '../page/WeiList';
-import SalList from '../page/SalList';
 import SearchInput from './SearchInput';
+import SideMenu from 'react-native-side-menu';
+import Menu from './Menu';
 
 const { width, height } = Dimensions.get('window');
-let totalPage=20;
+
 class skuList extends Component {
     constructor(props){
         super(props);
@@ -19,7 +19,8 @@ class skuList extends Component {
             skuArr:[],
             refreshing:false,
             ready:true,
-            type:1
+            type:1,
+            isOpen: false,
         };
     }
     static navigationOptions = {
@@ -57,10 +58,28 @@ class skuList extends Component {
     }
     //token置失效
     token_Del(){
-        // this.props.login('');
-        // this.setState({
-        //     token:''
-        // })
+        this.props.login('');
+        this.setState({
+            token:''
+        })
+    }
+
+    toggle() {
+        this.setState({isOpen: !this.state.isOpen,});
+    }
+
+    updateMenuState(isOpen) {
+        this.setState({isOpen: isOpen,})
+    }
+
+    onMenuItemSelected(url){
+        this.setState({
+            isOpen:false
+        },()=>{
+            this.props.navigation.navigate(url,{
+                item:{}
+            })
+        });
     }
 
     componentDidMount(){
@@ -68,9 +87,13 @@ class skuList extends Component {
     }
     render() {
         const {token} = this.props.state.login;
+        const {navigate} = this.props.navigation;
         console.log(token);
+
+        const menu = <Menu navigate={navigate} onItemSelected={this.onMenuItemSelected.bind(this)}/>;
+
         const ViewLoginOut = (
-            <TouchableOpacity style={{flexDirection:'column',justifyContent:'center',alignItems:'center',height:500}} onPress={()=>{
+            <TouchableOpacity style={{flexDirection:'column',justifyContent:'center',alignItems:'center',height:height-180}} onPress={()=>{
                 this.props.navigation.navigate('Login')
             }}>
                 <Image source={require('../img/kbai1.png')} style={{width:105,height:75}}/>
@@ -79,48 +102,59 @@ class skuList extends Component {
         );
 
         return (
-            <View style={{ width: width, height: height, backgroundColor: '#fff' }}>
-                <SearchInput
-                    navigation={this.props.navigation}
-                    searchData={this.searchData.bind(this)}
-                    delShow={this.delShow.bind(this)}
-                />
-                <ScrollableTabView
-                    renderTabBar={() => <DefaultTabBar style={{height:45}}/>}
-                    tabBarUnderlineStyle={{
-                        backgroundColor: '#f5f5f5',
-                        height: 3
-                    }}
-                    onChangeTab = {(obj)=>{this.setState({type:(obj.i*1+1)})}}
-                    tabBarBackgroundColor='#1e88f5'
-                    tabBarActiveTextColor='#fff'
-                    tabBarInactiveTextColor='#fff'
-                    tabBarTextStyle={{ fontSize: 16,paddingTop:5 }}
-                    locked={false}
-                >
-                    <View tabLabel='查排名' style={{ marginBottom: 50 }}>
-                        {token
-                            ?<RanList token={token} navigation={this.props.navigation} ref="ranList" token_Del={this.token_Del.bind(this)}/>
-                            :ViewLoginOut
-                        }
-                    </View>
+            <SideMenu menu={menu} isOpen={this.state.isOpen} onChange={(isOpen) => this.updateMenuState(isOpen)}>
+                <View style={{ width: width, height: height, backgroundColor: '#fff' }}>
+                    {
+                        this.state.isOpen?
+                            <View style={{position: 'absolute',top:0,left:0,zIndex: 1,backgroundColor:'rgba(0,0,0,0.3)',width:width,height:height}}>
+                                <Text></Text>
+                            </View>
+                            :null
+                    }
 
-                    <View tabLabel='查权重' style={{ marginBottom: 50 }} onPress={()=>{this.setState({type:2})}}>
-                        {token
-                            ?<WeiList token={token} navigation={this.props.navigation} ref="WeiList" token_Del={this.token_Del.bind(this)}/>
-                            :ViewLoginOut
-                        }
-                    </View>
+                    <SearchInput
+                        navigation={this.props.navigation}
+                        searchData={this.searchData.bind(this)}
+                        delShow={this.delShow.bind(this)}
+                        toggle={this.toggle.bind(this)}
+                    />
+                    <ScrollableTabView
+                        renderTabBar={() => <DefaultTabBar style={{height:45}}/>}
+                        tabBarUnderlineStyle={{
+                            backgroundColor: '#f5f5f5',
+                            height: 3
+                        }}
+                        onChangeTab = {(obj)=>{this.setState({type:(obj.i*1+1)})}}
+                        tabBarBackgroundColor='#1e88f5'
+                        tabBarActiveTextColor='#fff'
+                        tabBarInactiveTextColor='#fff'
+                        tabBarTextStyle={{ fontSize: 16,paddingTop:5 }}
+                        locked={false}
+                    >
+                        <View tabLabel='查排名' style={{ marginBottom: 50 }}>
+                            {token
+                                ?<RanList token={token} type={'1'} navigation={this.props.navigation} ref="ranList" token_Del={this.token_Del.bind(this)}/>
+                                :ViewLoginOut
+                            }
+                        </View>
 
-                    <View tabLabel='查销量' style={{ marginBottom: 50 }} onPress={()=>{this.setState({type:3})}}>
-                        {token
-                            ?<SalList token={token} navigation={this.props.navigation} ref="SalList" token_Del={this.token_Del.bind(this)}/>
-                            :ViewLoginOut
-                        }
-                    </View>
+                        <View tabLabel='查权重' style={{ marginBottom: 50 }} onPress={()=>{this.setState({type:2})}}>
+                            {token
+                                ?<RanList token={token} type={'2'} navigation={this.props.navigation} ref="WeiList" token_Del={this.token_Del.bind(this)}/>
+                                :ViewLoginOut
+                            }
+                        </View>
 
-                </ScrollableTabView>
-            </View>
+                        <View tabLabel='查销量' style={{ marginBottom: 50 }} onPress={()=>{this.setState({type:3})}}>
+                            {token
+                                ?<RanList token={token} type={'3'} navigation={this.props.navigation} ref="SalList" token_Del={this.token_Del.bind(this)}/>
+                                :ViewLoginOut
+                            }
+                        </View>
+
+                    </ScrollableTabView>
+                </View>
+            </SideMenu>
         );
     }
 }

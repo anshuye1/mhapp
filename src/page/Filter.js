@@ -34,6 +34,7 @@ export default class RanItem extends Component {
 
         return (
             <View style={styles.filterWrap}>
+                <ScrollView style={{height:height-150}}>
                 <View style={styles.optionItem}>
                     <Text style={styles.name}>查询入口：</Text>
                     {Object.keys(entranceObj).map((item)=>{
@@ -179,7 +180,7 @@ export default class RanItem extends Component {
                     </View>
                 </View>
 
-                <View style={{flex:1,flexDirection:'row',justifyContent:'flex-end',paddingTop:80}}>
+                <View style={{flex:1,flexDirection:'row',justifyContent:'flex-end',paddingTop:20}}>
                     <TouchableOpacity
                         onPress={()=>{
                             this.setState({
@@ -199,6 +200,7 @@ export default class RanItem extends Component {
                         <Text style={styles.bottomBtn1}>确定</Text>
                     </TouchableOpacity>
                 </View>
+                </ScrollView>
             </View>
         )
     }
@@ -207,7 +209,8 @@ export default class RanItem extends Component {
 const styles = StyleSheet.create({
     filterWrap:{
         flex:1,
-        padding:10
+        padding:5,
+        flexDirection:'row'
     },
     optionItem:{
         width:width,
