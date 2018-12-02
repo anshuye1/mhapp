@@ -5,7 +5,8 @@ import {
     Dimensions,
     StyleSheet,
     AsyncStorage,
-    Text
+    Text,
+    TouchableOpacity
 } from 'react-native'
 import Swiper from 'react-native-swiper';
 
@@ -38,7 +39,6 @@ export default class Welcome extends Component {
 
             if (result == 'false') {
                 console.log('不是第一次打开');
-
                 this.props.navigation.navigate('SkuList');
 
             } else  {
@@ -93,10 +93,13 @@ export default class Welcome extends Component {
 
                     </Swiper>
                     :
-                    <View style={{flex:1,flexDirection: 'column',justifyContent: 'center',alignItems: 'center',backgroundColor: '#1e88f3'}}>
+                    <TouchableOpacity
+                        style={{flex:1,flexDirection: 'column',justifyContent: 'center',alignItems: 'center',backgroundColor: '#1e88f3'}}
+                        onPress={()=>{this.props.navigation.navigate('SkuList');}}
+                    >
                         <Image source={require('../img/logo11.png')} />
-                        <Text style={{fontSize:20,color:'#fff',lineHeight:40,marginTop:10}}>欢迎来的JD魔盒</Text>
-                    </View>
+                        <Text style={{fontSize:20,color:'#fff',lineHeight:40,marginTop:10}}>欢迎来到JD魔盒</Text>
+                    </TouchableOpacity>
                 }
             </View>
         )
