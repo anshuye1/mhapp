@@ -7,6 +7,7 @@ import {
 
 import Icon from "react-native-vector-icons/Ionicons"
 
+import Welcome from './common/Welcome';
 import SkuList from './components/SkuList';
 import Ranking from './page/Ranking';
 import Weight from './page/Weight';
@@ -76,6 +77,12 @@ const BottomTab = createBottomTabNavigator({
 });
 
 const MyApp = createStackNavigator({
+    Welcome:{
+        screen:Welcome,
+        navigationOptions:{
+            header:null,
+        }
+    },
     Home: {
         screen: BottomTab,
         navigationOptions: {
