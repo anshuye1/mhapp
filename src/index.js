@@ -36,7 +36,7 @@ const BottomTab = createBottomTabNavigator({
         navigationOptions: {
             tabBarLabel: '我的sku',
             tabBarIcon: ({ tintColor }) => (
-                <Icon name="ios-filing" size={20} color={tintColor} />
+                <Icon name="ios-filing" size={25} color={tintColor} />
             ),
         },
     },
@@ -45,7 +45,7 @@ const BottomTab = createBottomTabNavigator({
         navigationOptions: {
             tabBarLabel: '消息',
             tabBarIcon: ({ tintColor }) => (
-                <Icon name="ios-chatboxes" size={20} color={tintColor} />
+                <Icon name="ios-chatboxes" size={25} color={tintColor} />
             ),
         },
     },
@@ -54,7 +54,7 @@ const BottomTab = createBottomTabNavigator({
         navigationOptions: {
             tabBarLabel: '我的',
             tabBarIcon: ({ tintColor }) => (
-                <Icon name="ios-person" size={20} color={tintColor} />
+                <Icon name="ios-person" size={25} color={tintColor} />
             ),
         },
     }
