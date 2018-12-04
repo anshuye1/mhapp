@@ -83,16 +83,23 @@ class skuList extends Component {
         });
     }
 
+    goBack(){
+        console.log(213);
+        this.props.navigation.goBack();
+    }
+
     componentDidMount(){
         this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
-            if (this.lastBackPressed && this.lastBackPressed + 2000 >= Date.now()) {//按第二次的时候，记录的时间+2000 >= 当前时间就可以退出
-                //最近2秒内按过back键，可以退出应用。
-                BackHandler.exitApp();//退出整个应用
-                return false
+            if(this.props.navigation.isFocused()){
+                if (this.lastBackPressed && this.lastBackPressed + 2000 >= Date.now()) {//按第二次的时候，记录的时间+2000 >= 当前时间就可以退出
+                    //最近2秒内按过back键，可以退出应用。
+                    BackHandler.exitApp();//退出整个应用
+                    return false
+                }
+                this.lastBackPressed = Date.now();//按第一次的时候，记录时间
+                ToastShow.toastShort('再按一次退出应用');//显示提示信息
+                return true;
             }
-            this.lastBackPressed = Date.now();//按第一次的时候，记录时间
-            ToastShow.toastShort('再按一次退出应用');//显示提示信息
-            return true;
         });
 
         this.getToken();
@@ -101,6 +108,7 @@ class skuList extends Component {
     componentWillUnmount() {
         this.backHandler.remove();
     }
+
     render() {
         const {token} = this.props.state.login;
         const {navigate} = this.props.navigation;

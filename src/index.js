@@ -22,6 +22,7 @@ import Search from './components/Search';
 import Login from './common/Login';
 import Signup from './common/Signup';
 import Forget from './common/Forget';
+import Modify from './common/Modify';
 import Mine from './components/Mine';
 import Vip from "./mine/Vip";
 import Product from "./mine/Product";
@@ -96,6 +97,7 @@ const MyApp = createStackNavigator({
     Login,
     Signup,
     Forget,
+    Modify,
     RanHistory,
     Vip,
     Product,

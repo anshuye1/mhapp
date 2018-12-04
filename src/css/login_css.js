@@ -57,7 +57,7 @@ const login_css = StyleSheet.create({
     inputWrap:{
         width:width,
         paddingHorizontal: 20,
-        alignItems: 'center'
+        alignItems: 'center',
     },
     timeBtn:{
         backgroundColor:'#1e88f5',

@@ -3,10 +3,11 @@ import {Text, View, Button, Image, Dimensions, TouchableOpacity, StyleSheet, Asy
 import Ajax from "../common/Ajax";
 import {doLogin} from "../store/actions/login";
 import {connect} from "react-redux";
-import * as types from "../store/constants";
 
+import MineHea from './MineHea';
+import mine_css from '../css/mine_css';
+import ToastShow from "../common/Toast";
 
-const {width,height} = Dimensions.get('window');
 
 class outLogin extends Component {
     static navigationOptions = ({ navigation }) => ({
@@ -39,20 +40,27 @@ class outLogin extends Component {
     }
 
     render() {
-        const {goBack} = this.props.navigation;
+        const {goBack,navigate} = this.props.navigation;
+        const {token} = this.props.state.login;
         return (
-            <View style={styles.container}>
-                <View style={styles.header}>
-                    <TouchableOpacity style={{alignItems:'flex-start',flex:0}} onPress={()=>goBack()}>
-                        <Image source={require('../img/fhui1.png')} style={{width:20,height:20,marginLeft:5}}/>
+            <View style={mine_css.modifyWrap}>
+                <MineHea goBack={goBack} title={'设置'}/>
+
+                <View style={mine_css.modifyInner}>
+                    <TouchableOpacity style={mine_css.modifyBtn} onPress={()=>{
+                        if(token){
+                            navigate('Modify',{
+                                token:token
+                            })
+                        }else{
+                            ToastShow.toastShort('请先登陆')
+                        }
+                    }}>
+                        <Text style={mine_css.modifyText}>修改密码</Text>
+                        <Image source={require('../img/gd11.png')} style={mine_css.modifyImg}/>
                     </TouchableOpacity>
-                    <View style={styles.header_wrap}>
-                        <Text style={styles.header_text}>设置</Text>
-                    </View>
-                </View>
-                <View>
-                    <TouchableOpacity onPress={this.outLoading.bind(this)}>
-                        <Text>退出登录</Text>
+                    <TouchableOpacity onPress={this.outLoading.bind(this)} style={mine_css.outWrap}>
+                        <Text style={mine_css.outBtn}>退出登录</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -60,26 +68,6 @@ class outLogin extends Component {
     }
 }
 
-const styles = StyleSheet.create({
-    container:{
-        flex:1,
-        backgroundColor:'#F0F3F5'
-    },
-    header:{
-        width:width,
-        height:50,
-        backgroundColor:'#1388f5',
-        justifyContent:'flex-start',
-        alignItems:'center',
-        flexDirection:'row'
-    },
-    header_wrap:{
-        flex:1,paddingRight:25
-    },
-    header_text:{
-        color:'#fff',fontSize:18,fontWeight:'600',textAlign:'center'
-    }
-});
 
 const mapState = state => ({
     state
