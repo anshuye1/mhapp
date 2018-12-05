@@ -4,6 +4,7 @@ import {
     Text,
 } from 'react-native';
 import Ajax from "../common/Ajax";
+import common_css from "../css/common_css";
 
 export default class User extends Component{
     constructor(props){
@@ -49,20 +50,26 @@ export default class User extends Component{
             '试用会员':{name:'试用',color:'#F54E33'},
         };
         return (
-            <View>
-                <View style={{marginBottom:10,flexDirection:'row'}}>
-                    <Text style={{ fontSize: 18, color: '#9B9B9B' }}>{phone}</Text>
-                    {level_name?<Text style={[{ fontSize: 14, color: '#fff',backgroundColor:'#1e88f5',textAlign:'center',padding:3,marginLeft:10,borderRadius:4 },obj[level_name]?{backgroundColor:obj[level_name].color}:{}]}>{obj[level_name]?obj[level_name].name:level_name}</Text>:null}
+            <View style={{flex:1}}>
+
+                <View style={common_css.userWrap}>
+                    <Text style={common_css.userName}>{phone}</Text>
+                    {level_name?<Text style={[common_css.userCode,obj[level_name]?{backgroundColor:obj[level_name].color}:{}]}>{obj[level_name]?obj[level_name].name:level_name}</Text>:null}
                 </View>
-                <View style={{flexDirection:'row'}}>
-                    <Text style={{fontSize:14,backgroundColor:'#1e88f5',width:20,height:20,lineHeight:20,color:'#fff',borderRadius:10,textAlign:'center',marginRight:5}}>
-                        邀
-                    </Text>
-                    <Text>剩余{share_time}天</Text>
-                    <Text style={{fontSize:14,backgroundColor:'#F54E33',width:20,height:20,lineHeight:20,color:'#fff',borderRadius:10,textAlign:'center',marginLeft:25,marginRight:5}}>
-                        ￥
-                    </Text>
-                    <Text>剩余{money_time}天</Text>
+
+                <View style={common_css.userRow}>
+                    <View style={{flexDirection: 'row'}}>
+                        <Text style={{fontSize:14,backgroundColor:'#1e88f5',width:20,height:20,lineHeight:20,color:'#fff',borderRadius:10,textAlign:'center',marginRight:5}}>
+                            邀
+                        </Text>
+                        <Text>剩余{share_time}天</Text>
+                    </View>
+                    <View style={{flexDirection: 'row'}}>
+                        <Text style={{fontSize:14,backgroundColor:'#F54E33',width:20,height:20,lineHeight:20,color:'#fff',borderRadius:10,textAlign:'center',marginRight:5}}>
+                            ￥
+                        </Text>
+                        <Text>剩余{money_time}天</Text>
+                    </View>
                 </View>
 
             </View>

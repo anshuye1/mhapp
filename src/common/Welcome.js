@@ -80,7 +80,7 @@ export default class Welcome extends Component {
                     <Swiper style={styles.wrapper}
                             showsButtons={false}       //为false时不显示控制按钮
                             paginationStyle={{      //小圆点位置
-                                bottom: 50
+                                bottom: 30
                             }}
                             loop={false}        //如果设置为false，那么滑动到最后一张时，再次滑动将不会滑到第一张图片。
                             autoplay={true}          //自动轮播

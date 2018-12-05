@@ -21,6 +21,7 @@ import * as types from "../store/constants";
 import Loading from './Loading';
 import Ajax from "../common/Ajax";
 import login_css from '../css/login_css';
+import common_css from "../css/common_css";
 
 const { width } = Dimensions.get('window');
 
@@ -127,9 +128,11 @@ class Login extends Component {
         {!refreshing&&<Loading />}
         <ImageBackground style={login_css.top} source={require('../img/dlbg.png')} resizeMode='stretch'>
           <View style={login_css.iconWrap}>
-              <Icon name="ios-arrow-back" size={50} color={'#fff'} onPress={() => goBack()} />
+              <TouchableOpacity onPress={() => goBack()}>
+                  <Image source={require('../img/fhui1.png')} style={login_css.backImg}/>
+              </TouchableOpacity>
           </View>
-          <View style={{marginTop:130}}>
+          <View style={{marginTop:115}}>
               <Image
                   style={{width:100,height:67}}
                   source={require('../img/Group23.png')}

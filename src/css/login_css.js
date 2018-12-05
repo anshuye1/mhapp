@@ -33,8 +33,8 @@ const login_css = StyleSheet.create({
         flexDirection: 'column',
         alignItems: 'center',
         backgroundColor: '#fff',
-        height:230,
-        marginBottom:58,
+        height:202,
+        marginBottom:40,
         justifyContent:'flex-start'
     },
     btnWrap:{
@@ -89,6 +89,11 @@ const login_css = StyleSheet.create({
         marginBottom:40,
         height:50,
         alignItems:'center'
+    },
+    backImg:{
+        width:22,
+        height:22,
+        marginTop:15
     }
 });
 

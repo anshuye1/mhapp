@@ -268,7 +268,7 @@ export default class SkuList extends Component {
                     :null
                 }
 
-                {formData.type?//关键词
+                {formData.type!=3?//关键词
                     <Text style={[good_css.heaTabItem,formData.cap_type==1?good_css.active:{}]} onPress={()=>this.cap_type_change(1)}>关键词</Text>
                     :null
                 }

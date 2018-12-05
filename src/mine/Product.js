@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Text, View,ScrollView,Image,Dimensions,TouchableOpacity,StyleSheet } from 'react-native';
+import MineHea from "./MineHea";
 
 const {width,height} = Dimensions.get('window');
 
@@ -11,15 +12,7 @@ export default class Vip extends Component {
         const {goBack} = this.props.navigation;
         return (
             <View style={styles.container}>
-                <View style={styles.header}>
-                    <TouchableOpacity style={{alignItems:'flex-start',flex:1}} onPress={()=>goBack()}>
-                        <Image source={require('../img/fhui1.png')} style={{width:20,height:20,marginLeft:5}}/>
-                    </TouchableOpacity>
-                    <View style={styles.header_wrap}>
-                        <Text style={styles.header_text}>产品介绍</Text>
-                    </View>
-                    <Text style={{flex:1}}></Text>
-                </View>
+                <MineHea goBack={goBack} title={'产品介绍'}/>
 
                 <ScrollView>
                     <View style={{backgroundColor:'#fff',width:width-32,margin:16,padding:20,borderRadius:8}}>

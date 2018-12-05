@@ -35,26 +35,36 @@ class skuList extends Component {
     //搜索
     searchData (content){
         const {type} = this.state;
-        if(type==1){
-            this.refs.ranList.refreshData(type,content);
-        }
-        if(type==2){
-            this.refs.WeiList.refreshData(type,content);
-        }
-        if(type==3){
-            this.refs.SalList.refreshData(type,content);
+        const {token} = this.props.state.login;
+        if(token){
+            if(type==1){
+                this.refs.ranList.refreshData(type,content);
+            }
+            if(type==2){
+                this.refs.WeiList.refreshData(type,content);
+            }
+            if(type==3){
+                this.refs.SalList.refreshData(type,content);
+            }
+        }else{
+            ToastShow.toastShort('请登录')
         }
     }
     delShow (){
         const {type} = this.state;
-        if(type==1){
-            this.refs.ranList.delShow();
-        }
-        if(type==2){
-            this.refs.WeiList.delShow();
-        }
-        if(type==3){
-            this.refs.SalList.delShow();
+        const {token} = this.props.state.login;
+        if(token){
+            if(type==1){
+                this.refs.ranList.delShow();
+            }
+            if(type==2){
+                this.refs.WeiList.delShow();
+            }
+            if(type==3){
+                this.refs.SalList.delShow();
+            }
+        }else{
+            ToastShow.toastShort('请登录')
         }
     }
     //token置失效

@@ -48,6 +48,63 @@ const common_css = StyleSheet.create({
         fontSize:16,
         paddingLeft:10,
         borderColor:'#DBDBDB'
+    },
+    msgBottom: {
+        flex: 1
+    },
+    msgBottomItem:{
+        height:62,
+        width:width,
+        borderBottomColor:'#F0F3F5',
+        borderBottomWidth:1,
+        backgroundColor:'#fff',
+        flexDirection:'row',
+        justifyContent:'flex-start',
+        alignItems:'center',
+        paddingLeft:15,
+    },
+    msgIconImg:{
+        width:20,
+        height:18,
+        marginRight:16
+    },
+    msgItem:{
+        fontSize:14,
+        color:'#4A4A4A',
+    },
+    msgHeaImg:{
+        width:25,
+        height:25,
+        marginLeft: 8,
+    },
+    userWrap:{
+        marginBottom:10,
+        flexDirection:'row',
+        flex:1,
+        alignItems:'flex-end',
+    },
+    userName:{
+        fontSize: 18,
+        color: '#4a4a4a',
+        lineHeight:20
+    },
+    userCode:{
+        fontSize: 14,
+        color: '#fff',
+        backgroundColor:'#1e88f5',
+        textAlign:'center',
+        paddingLeft:3,
+        paddingRight:3,
+        marginLeft:10,
+        borderRadius:4,
+        height:20
+    },
+    userRow:{
+        flexDirection:'row',
+        justifyContent:'space-between',
+        flex:1,
+        paddingRight: 10,
+        paddingTop:5
     }
 });
 

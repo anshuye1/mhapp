@@ -1,13 +1,16 @@
 import React, { Component } from 'react';
 import {Text, View, Button, Image, Dimensions, TouchableOpacity, StyleSheet, AsyncStorage} from 'react-native';
+import { connect } from 'react-redux';
 
 import Ajax from '../common/Ajax';
 import Loading from '../common/Loading';
+import common_css from "../css/common_css";
+import ToastShow from "../common/Toast";
 const UrlStart = 'http://jdchamgapi.chaojids.com';
 
 const {width,height} = Dimensions.get('window');
 
-export default class Vip extends Component {
+class Chat extends Component {
     static navigationOptions = ({ navigation }) => ({
         header:null
     });
@@ -15,7 +18,7 @@ export default class Vip extends Component {
         super();
         this.state = {
             data:[],
-            ready:false,
+            ready:true,
         }
     }
 
@@ -31,7 +34,12 @@ export default class Vip extends Component {
     }
 
     mesAjax(){
-        Ajax.post(UrlStart+'/jd/user/my-message',{token:this.state.token})
+        const {token} = this.props.state.login;
+        this.setState({
+            ready:false
+        });
+        console.log(token);
+        Ajax.post(UrlStart+'/jd/user/my-message',{token:token||''})
             .then((response)=>{
                 console.log(response);
                 if(response.result==1){
@@ -41,9 +49,9 @@ export default class Vip extends Component {
                     });
                 }else{
                     if(response.msg){
-                        alert(response.msg)
+                        ToastShow.toastShort(response.msg)
                     }else{
-                        alert('系统错误')
+                        ToastShow.toastShort('系统错误')
                     }
                     this.setState({
                         ready:true
@@ -54,7 +62,7 @@ export default class Vip extends Component {
                 this.setState({
                     ready:true
                 });
-                alert('系统错误')
+                ToastShow.toastShort('系统错误')
             })
     }
 
@@ -66,26 +74,30 @@ export default class Vip extends Component {
         const {goBack,navigate} = this.props.navigation;
         const {ready,data} = this.state;
         return (
-            <View style={styles.container}>
-                <View style={styles.header}>
-                    <TouchableOpacity style={{alignItems:'flex-start',flex:0}}>
-                        <Image source={require('../img/logo11.png')} style={{width:30,height:30,marginLeft:8}}/>
+            <View style={common_css.container}>
+                <View style={common_css.header}>
+                    <TouchableOpacity
+                        style={{alignItems:'flex-start',flex:1}}
+                        onPress={this.mesAjax.bind(this)}
+                    >
+                        <Image source={require('../img/logo11.png')} style={common_css.msgHeaImg}/>
                     </TouchableOpacity>
-                    <View style={styles.header_wrap}>
-                        <Text style={styles.header_text}>消息</Text>
+                    <View style={common_css.heaContent}>
+                        <Text style={common_css.headerText}>消息</Text>
                     </View>
+                    <Text style={common_css.heaRight}></Text>
                 </View>
 
 
                 {ready?
-                    <View style={styles.bottom}>
+                    <View style={common_css.msgBottom}>
                         {data.map((item,index)=>{
                             return (
-                                <TouchableOpacity style={styles.bottomItem} onPress={()=>{navigate('Content',{
+                                <TouchableOpacity style={common_css.msgBottomItem} onPress={()=>{navigate('Content',{
                                     id:item.id
                                 })}} key={index.toString()}>
-                                    <View><Image source={require('../img/xxi12.png')} style={styles.iconImg}/></View>
-                                    <Text style={styles.item}>{item.title}</Text>
+                                    <View><Image source={require('../img/xxi12.png')} style={common_css.msgIconImg}/></View>
+                                    <Text style={common_css.msgItem}>{item.title}</Text>
                                 </TouchableOpacity>
                             )
                         })}
@@ -99,59 +111,9 @@ export default class Vip extends Component {
     }
 }
 
-const styles = StyleSheet.create({
-    container:{
-        flex:1,
-        backgroundColor:'#F0F3F5'
-    },
-    header:{
-        width:width,
-        height:50,
-        backgroundColor:'#1388f5',
-        justifyContent:'flex-start',
-        alignItems:'center',
-        flexDirection:'row'
-    },
-    header_wrap:{
-        flex:1,paddingRight:38
-    },
-    header_text:{
-        color:'#fff',fontSize:18,fontWeight:'600',textAlign:'center'
-    },
-    bottom: {
-        flex: 1
-    },
-    bottomItem:{
-        height:62,
-        width:width,
-        borderBottomColor:'#F0F3F5',
-        borderBottomWidth:1,
-        backgroundColor:'#fff',
-        flexDirection:'row',
-        justifyContent:'flex-start',
-        alignItems:'center',
-        paddingLeft:15,
-    },
-    iconImg:{
-        width:20,
-        height:18,
-        marginRight:16
-    },
-    item:{
-        fontSize:14,
-        color:'#4A4A4A',
-    },
-    bottomLast:{
-        borderBottomWidth:0,
-    },
-    scrollView: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#fff'
-    },
-    headImg: {
-        width: 150,
-        height: 150
-    }
-});
+const mapState = state => ({
+    state
+})
+
+
+export default connect(mapState)(Chat)
