@@ -48,19 +48,19 @@ export default class Modify extends Component{
         let new_password = this.state.formData.new_password;
 
         if(!password){
-            Alert.alert('请输入密码');
+            ToastShow.toastShort('请输入密码');
             return false;
         }
         if(password.length<6){
-            Alert.alert('密码至少为6位');
+            ToastShow.toastShort('密码至少为6位');
             return false;
         }
         if(!new_password){
-            Alert.alert('请输入密码');
+            ToastShow.toastShort('请输入密码');
             return false;
         }
         if(new_password.length<6){
-            Alert.alert('密码至少为6位');
+            ToastShow.toastShort('密码至少为6位');
             return false;
         }
         this.setState({

@@ -15,6 +15,7 @@ import SalItem from './SalItem';
 import good_css from "../css/good_css";
 import ListFoot from "./ListFoot";
 import Ajax from "../common/Ajax";
+import ToastShow from "../common/Toast";
 
 export default class SkuList extends Component {
     constructor(props) {
@@ -61,9 +62,9 @@ export default class SkuList extends Component {
                         this.setState({showFoot:1 });
                     }else{
                         if(response.msg){
-                            alert(response.msg+'31231');
+                            ToastShow.toastShort(response.msg+'31231');
                         }else{
-                            alert('服务器响应超时');
+                            ToastShow.toastShort('服务器响应超时');
                         }
                     }
                 }
@@ -79,7 +80,7 @@ export default class SkuList extends Component {
             },()=>{
                 this.props.token_Del();
             });
-            alert(error+'23423');
+            // ToastShow.toastShort(error);
         });
     }
     //下拉加载
@@ -164,7 +165,7 @@ export default class SkuList extends Component {
                 delArr:[]
             })
         }else{
-            alert('没有可以删除的数据')
+            ToastShow.toastShort('没有可以删除的数据')
         }
     }
     //删除ajax
@@ -180,7 +181,7 @@ export default class SkuList extends Component {
                 .then((response) => {
                     console.log(response);
                     if(response.result==1){
-                        alert(response.msg);
+                        ToastShow.toastShort(response.msg);
                         this.setState({
                             delArr:[]
                         },()=>{
@@ -188,15 +189,15 @@ export default class SkuList extends Component {
                         });
                     }else{
                         if(response.msg){
-                            alert(response.msg);
+                            ToastShow.toastShort(response.msg);
                         }else{
-                            alert('服务器响应超时');
+                            ToastShow.toastShort('服务器响应超时');
                         }
                     }
                 }).catch((error) => {
             });
         }else{
-         alert('请选择要删除的商品')
+         ToastShow.toastShort('请选择要删除的商品')
         }
     }
     //选择

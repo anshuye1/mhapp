@@ -18,6 +18,7 @@ import mine_css from "../css/mine_css";
 import ToastShow from "../common/Toast";
 import Loading from "../common/Loading";
 import common_css from "../css/common_css";
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 
 const {width,height} = Dimensions.get('window');
@@ -41,19 +42,21 @@ class Mine extends Component {
       Ajax.post('http://jdchamgapi.chaojids.com/site/app-update')
           .then((respones)=>{
               if(respones.result*1===1){
-                  this.setState({
-                      ready:true,
-                      version:Platform.OS==='ios'?respones.data.ios_version.version_number:respones.data.version.version_number
-                  })
-                  if(version){
+                  let iosVersion = respones.data.ios_version.version_number;
+                  let anVersion = respones.data.version.version_number;
+                  if(this.state.version === iosVersion||this.state.version === anVersion){
                       ToastShow.toastShort('当前为最新版本')
+                  }else{
+                      this.setState({
+                          version:Platform.OS==='ios'?iosVersion:iosVersion
+                      })
                   }
               }else{
                   ToastShow.toastShort(respones.msg);
-                  this.setState({
-                      ready:true,
-                  })
               }
+              this.setState({
+                  ready:true,
+              })
           })
           .catch(()=>{
               this.setState({
@@ -100,10 +103,22 @@ class Mine extends Component {
         </ImageBackground>
         <View style={mine_css.meBottom}>
 
-            <TouchableOpacity style={mine_css.meBottomItem} onPress={()=>{navigate('Vip')}}>
+            <TouchableOpacity
+                style={mine_css.meBottomItem}
+                onPress={()=>{
+                    if(token&&this.refs.user&&this.refs.user.state.phone){
+                        navigate('Vip',{
+                            token:token,
+                            name:this.refs.user.state.phone
+                        })
+                    }else{
+                        ToastShow.toastShort('请登录')
+                    }
+                }}
+            >
                 <View style={mine_css.rowWrap}><Image source={require('../img/vip1.png')} style={mine_css.meIconImg}/>
                 <Text style={mine_css.meItem}>VIP会员</Text></View>
-                <Image source={require('../img/gd11.png')} style={mine_css.meIconImg}/>
+                <Icon style={mine_css.meIcon} name={'chevron-right'} />
             </TouchableOpacity>
 
             <TouchableOpacity style={mine_css.meBottomItem} onPress={()=>{navigate('Product')}}>
@@ -111,7 +126,7 @@ class Mine extends Component {
                     <Image source={require('../img/cpjs1.png')} style={mine_css.meIconImg}/>
                     <Text style={mine_css.meItem}>产品介绍</Text>
                 </View>
-                <Image source={require('../img/gd11.png')} style={mine_css.meIconImg}/>
+                <Icon style={mine_css.meIcon} name={'chevron-right'} />
             </TouchableOpacity>
 
             <TouchableOpacity style={mine_css.meBottomItem} onPress={()=>{navigate('Customer_service')}}>
@@ -119,15 +134,15 @@ class Mine extends Component {
                     <Image source={require('../img/wdkf1.png')} style={mine_css.meIconImg}/>
                     <Text style={mine_css.meItem}>我的客服</Text>
                 </View>
-                <Image source={require('../img/gd11.png')} style={mine_css.meIconImg}/>
+                <Icon style={mine_css.meIcon} name={'chevron-right'} />
             </TouchableOpacity>
 
-            <TouchableOpacity style={mine_css.meBottomItem} onPress={()=>{navigate('Suggest')}}>
+            <TouchableOpacity style={mine_css.meBottomItem} onPress={()=>{navigate('Suggest',{token:token})}}>
                 <View style={mine_css.rowWrap}>
                     <Image source={require('../img/yjfk1.png')} style={mine_css.meIconImg}/>
                     <Text style={mine_css.meItem}>意见反馈</Text>
                 </View>
-                <Image source={require('../img/gd11.png')} style={mine_css.meIconImg}/>
+                <Icon style={mine_css.meIcon} name={'chevron-right'} />
             </TouchableOpacity>
 
             <TouchableOpacity style={mine_css.meBottomItem} onPress={()=>{this.version(1)}}>
@@ -137,7 +152,7 @@ class Mine extends Component {
                 </View>
                 <View style={mine_css.rowWrap}>
                     <Text style={mine_css.smallFont}>当前版本 {version}</Text>
-                    <Image source={require('../img/gd11.png')} style={mine_css.meIconImg}/>
+                    <Icon style={mine_css.meIcon} name={'chevron-right'} />
                 </View>
             </TouchableOpacity>
 
@@ -146,7 +161,7 @@ class Mine extends Component {
                     <Image source={require('../img/szhi1.png')} style={mine_css.meIconImg}/>
                     <Text style={mine_css.meItem}>设置</Text>
                 </View>
-                <Image source={require('../img/gd11.png')} style={mine_css.meIconImg}/>
+                <Icon style={mine_css.meIcon} name={'chevron-right'} />
             </TouchableOpacity>
 
         </View>

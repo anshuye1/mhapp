@@ -9,7 +9,7 @@ import {
     ScrollView,
     Picker
 } from 'react-native';
-import Ajax from '../common/Ajax'
+
 const {width,height} = Dimensions.get('window');
 
 export default class RanItem extends Component {

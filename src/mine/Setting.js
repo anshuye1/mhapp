@@ -24,15 +24,15 @@ class outLogin extends Component {
             .then((response) => {
                 console.log(response);
                 if(response.result==1){
-                    alert(response.msg);
+                    ToastShow.toastShort(response.msg);
                     AsyncStorage.setItem('token','');
                     this.props.login('');
                     this.props.navigation.navigate('Login');
                 }else{
-                    alert(response.msg)
+                    ToastShow.toastShort(response.msg)
                 }
             }).catch((error) => {
-            alert(error)
+            console.log(error)
         });
     }
     componentDidMount(){

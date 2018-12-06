@@ -9,6 +9,7 @@ import {
     TouchableOpacity
 } from 'react-native'
 import Swiper from 'react-native-swiper';
+import ToastShow from "./Toast";
 
 const { width, height } = Dimensions.get('window');//获取手机的宽和高
 
@@ -52,7 +53,7 @@ export default class Welcome extends Component {
                 // 存储
                 AsyncStorage.setItem('isFirst','false',(error)=>{
                     if (error) {
-                        alert(error);
+                        ToastShow.toastShort(error);
                     }
                 });
 

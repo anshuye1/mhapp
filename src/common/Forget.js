@@ -59,27 +59,27 @@ export default class Forget extends Component{
         let password = this.state.formData.password;
         let password_confirm = this.state.formData.password_confirm;
         if(!mphone){
-            Alert.alert('请输入手机号');
+            ToastShow.toastShort('请输入手机号');
             return false;
         }
         if(!this.isPhone(mphone)){
-            Alert.alert('请输入正确的手机号');
+            ToastShow.toastShort('请输入正确的手机号');
             return false;
         }
         if(!validate_code){
-            Alert.alert('请输入短信验证码');
+            ToastShow.toastShort('请输入短信验证码');
             return false;
         }
         if(!password){
-            Alert.alert('请输入密码');
+            ToastShow.toastShort('请输入密码');
             return false;
         }
         if(password.length<6){
-            Alert.alert('密码至少为6位');
+            ToastShow.toastShort('密码至少为6位');
             return false;
         }
         if(password_confirm!==password){
-            Alert.alert('两次输入密码不一致');
+            ToastShow.toastShort('两次输入密码不一致');
             return false;
         }
         this.setState({
@@ -92,11 +92,11 @@ export default class Forget extends Component{
                 if(response.result*1===1){
                     this.goLogin(this.state.formData)
                 }else{
-                    Alert.alert(response.msg)
+                    ToastShow.toastShort(response.msg)
                 }
             }).catch((error) => {
             this.setState({ refreshing: true });
-            // Alert.alert('系统错误');
+            // ToastShow.toastShort('系统错误');
             // console.warn(error);
         });
     }
@@ -119,11 +119,11 @@ export default class Forget extends Component{
     sendFun(){
         let mphone = this.state.formData.mphone;
         if(!mphone){
-            Alert.alert('请输入手机号');
+            ToastShow.toastShort('请输入手机号');
             return false;
         }
         if(!this.isPhone(mphone)){
-            Alert.alert('请输入正确的手机号');
+            ToastShow.toastShort('请输入正确的手机号');
             return false;
         }
         Ajax.post('http://jdchamgapi.chaojids.com/site/send-mphone-code',{"mphone":mphone,type:2})
@@ -131,19 +131,19 @@ export default class Forget extends Component{
                 console.log(response);
                 if(response.result*1===1){
                     this.settime();
-                    Alert.alert(response.msg)
+                    ToastShow.toastShort(response.msg)
                 }else{
                     this.setState({
                         currentDown:60
                     });
-                    Alert.alert(response.msg)
+                    ToastShow.toastShort(response.msg)
                 }
             }).catch((error) => {
             this.setState({
                 currentDown:60
             });
             console.warn(error);
-            // Alert.alert('系统错误');
+            // ToastShow.toastShort('系统错误');
             // console.error(error);
         });
     }

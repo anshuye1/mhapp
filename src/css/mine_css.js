@@ -179,6 +179,12 @@ const mine_css = StyleSheet.create({
         height:18,
         marginRight:16
     },
+    meIcon:{
+        marginRight:16,
+        fontSize:16,
+        color:'#ccc',
+        marginLeft:10
+    },
     meItem:{
         fontSize:16,
         color:'#4A4A4A',
@@ -191,6 +197,134 @@ const mine_css = StyleSheet.create({
         fontSize:12,
         color:'#9B9B9B',
         marginTop:3
+    },
+    //suggest
+    suFontHea:{
+        marginBottom:10,
+        fontSize:16,
+        color:'#4A4A4A'
+    },
+    suInput:{
+        height:220,
+        backgroundColor:'#fff',
+        borderWidth:1,
+        borderColor:'#ddd',
+        fontSize:16,
+        color:'#4A4A4A',
+        padding:10,
+        lineHeight:25,
+        textAlignVertical: 'top',
+        marginBottom:15,
+        borderRadius:8
+    },
+    suInput1:{
+        backgroundColor:'#fff',
+        borderWidth:1,
+        borderColor:'#ddd',
+        fontSize:16,
+        color:'#4A4A4A',
+        padding:10,
+        lineHeight:30,
+        marginBottom:15,
+        borderRadius:8
+    },
+    suBtn:{
+        lineHeight:60,
+        textAlign:'center',
+        color:'#fff',
+        fontSize:18,
+        backgroundColor:'#1e88f5',
+        borderRadius:8,
+        marginTop:10
+    },
+    //vip
+    vipWrap:{
+        flex:1,
+        flexDirection:'column',
+        alignItems:'center',
+        backgroundColor:'#fff'
+    },
+    vipGroup:{
+        width:285,
+        height:45,
+        margin:20,
+        borderRadius:8,
+        backgroundColor:'#EAF4FF',
+        flexDirection:'row',
+        justifyContent:'space-between'
+    },
+    vipBtn:{
+        flex:1,
+        textAlign:'center',
+        lineHeight:45,
+        fontSize:18
+    },
+    vipBtn1:{
+        backgroundColor:'#1e88f5',
+        borderRadius:8,
+        color:'#fff',
+    },
+    vipItem:{
+        flexDirection:'row',
+        justifyContent:'flex-start',
+        alignItems:'center',
+        width:width,
+        padding:10
+    },
+    vipOption:{
+        flexDirection:'row',
+        alignItems:'center',
+        justifyContent:'space-around',
+        width:width-90,
+        color:'#4a4a4a',
+        lineHeight:25,
+    },
+    vipName:{
+        width:70,
+        lineHeight:25,
+        textAlign:'right'
+    },
+    vipItemBtn:{
+        width:70,
+        height:29,
+        lineHeight:29,
+        textAlign:'center',
+        color:'#4a4a4a',
+        borderWidth:1,
+        borderColor:'#C7C7C7',
+        borderRadius:4
+    },
+    vipDisabled:{
+        color:'#C7C7C7'
+    },
+    vipActive:{
+        color:'#fff',
+        backgroundColor:'#1e88f5',
+        borderColor:'#1e88f5',
+    },
+    vipItemBtn1:{
+        width:60,
+        height:29,
+        lineHeight:29,
+        textAlign:'center',
+        color:'#4a4a4a',
+        borderWidth:1,
+        borderColor:'#C7C7C7',
+        borderRadius:4
+    },
+    vipSmallImg:{
+        width:18,
+        height:18,
+    },
+    vipSubmit:{
+        backgroundColor:'#1e88f5',
+        width:100,
+        height:36,
+        lineHeight:36,
+        color:'#fff',
+        textAlign:'center',
+        borderRadius:4,
+        marginTop:15
     }
 });
 

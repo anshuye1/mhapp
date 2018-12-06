@@ -5,6 +5,7 @@ import {
 } from 'react-native';
 import Ajax from "../common/Ajax";
 import common_css from "../css/common_css";
+import ToastShow from "../common/Toast";
 
 export default class User extends Component{
     constructor(props){
@@ -30,10 +31,10 @@ export default class User extends Component{
                         money_time:response.data.level_fate
                     })
                 }else{
-                    alert(response.msg+'4323432')
+                    ToastShow.toastShort(response.msg)
                 }
             }).catch((error) => {
-            alert(error+'42432')
+            console.log(error)
         });
     }
 

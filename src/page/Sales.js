@@ -19,6 +19,7 @@ import good_css from '../css/good_css';
 import Ajax from "../common/Ajax";
 import Loading from "../common/Loading";
 import MenuRan from "./MenuRan";
+import ToastShow from "../common/Toast";
 
 const UrlStart = 'http://jdchamgapi.chaojids.com';
 
@@ -56,7 +57,7 @@ export default class Sales extends Component {
         formData.token = this.state.token;
         console.log(formData,UrlStart);
         if(!formData.sku){
-            alert('请输入sku或链接');
+            ToastShow.toastShort('请输入sku或链接');
             return false;
         }
         this.setState({

@@ -15,13 +15,11 @@ import {
 
 import { connect } from 'react-redux';
 import { doLogin } from '../store/actions/login';
-import Icon from "react-native-vector-icons/Ionicons";
-import * as types from "../store/constants";
 
 import Loading from './Loading';
 import Ajax from "../common/Ajax";
 import login_css from '../css/login_css';
-import common_css from "../css/common_css";
+import ToastShow from "./Toast";
 
 const { width } = Dimensions.get('window');
 
@@ -64,19 +62,19 @@ class Login extends Component {
       let mphone = this.state.formData.mphone;
       let password = this.state.formData.password;
       if(!mphone){
-          Alert.alert('请输入手机号');
+          ToastShow.toastShort('请输入手机号');
           return false;
       }
       if(!this.isPhone(mphone)){
-          Alert.alert('请输入正确的手机号');
+          ToastShow.toastShort('请输入正确的手机号');
           return false;
       }
       if(!password){
-          Alert.alert('请输入密码');
+          ToastShow.toastShort('请输入密码');
           return false;
       }
       if(password.length<6){
-          Alert.alert('密码至少为6位');
+          ToastShow.toastShort('密码至少为6位');
           return false;
       }
       this.setState({
@@ -90,11 +88,11 @@ class Login extends Component {
                   AsyncStorage.setItem('token',response.data.token);
                   this.props.navigation.navigate('SkuList');
               }else{
-                Alert.alert(response.msg)
+                ToastShow.toastShort(response.msg)
               }
           }).catch((error) => {
               this.setState({ refreshing: true });
-              Alert.alert('系统错误');
+              ToastShow.toastShort('系统错误');
               // console.error(error);
           });
   }
@@ -108,9 +106,9 @@ class Login extends Component {
       });
       if(data.password){
           if(data.password_confirm){
-              alert('修改密码成功')
+              ToastShow.toastShort('修改密码成功')
           }else{
-              alert('注册成功')
+              ToastShow.toastShort('注册成功')
           }
       }
   }

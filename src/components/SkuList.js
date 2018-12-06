@@ -165,21 +165,21 @@ class skuList extends Component {
                         tabBarTextStyle={{ fontSize: 16,paddingTop:5 }}
                         locked={false}
                     >
-                        <View tabLabel='查排名' style={{ marginBottom: 50 }}>
+                        <View tabLabel='查排名' style={{flex:1 }}>
                             {token
                                 ?<RanList token={token} type={'1'} navigation={this.props.navigation} ref="ranList" token_Del={this.token_Del.bind(this)}/>
                                 :ViewLoginOut
                             }
                         </View>
 
-                        <View tabLabel='查权重' style={{ marginBottom: 50 }} onPress={()=>{this.setState({type:2})}}>
+                        <View tabLabel='查权重' style={{flex:1 }} onPress={()=>{this.setState({type:2})}}>
                             {token
                                 ?<RanList token={token} type={'2'} navigation={this.props.navigation} ref="WeiList" token_Del={this.token_Del.bind(this)}/>
                                 :ViewLoginOut
                             }
                         </View>
 
-                        <View tabLabel='查销量' style={{ marginBottom: 50 }} onPress={()=>{this.setState({type:3})}}>
+                        <View tabLabel='查销量' style={{flex:1 }} onPress={()=>{this.setState({type:3})}}>
                             {token
                                 ?<RanList token={token} type={'3'} navigation={this.props.navigation} ref="SalList" token_Del={this.token_Del.bind(this)}/>
                                 :ViewLoginOut

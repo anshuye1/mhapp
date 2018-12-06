@@ -26,6 +26,7 @@ import MenuRan from './MenuRan';
 import good_css from '../css/good_css';
 import Ajax from "../common/Ajax";
 import Loading from "../common/Loading";
+import ToastShow from "../common/Toast";
 
 const defaultVal = {
     entrance:'1',// 1：电脑端 2手机端 3微信端
@@ -149,11 +150,11 @@ export default class Ranking extends Component {
         formData.token = this.state.token;
         console.log(formData,UrlStart);
         if(!formData.keyword){
-            alert('请输入关键词');
+            ToastShow.toastShort('请输入关键词');
             return false;
         }
         if(!formData.sku){
-            alert('请输入sku或链接或店铺名');
+            ToastShow.toastShort('请输入sku或链接或店铺名');
             return false;
         }
         this.setState({

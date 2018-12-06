@@ -150,7 +150,7 @@ const good_css = StyleSheet.create({
         width:width,
         height:50,
         left:0,
-        top:height-150-85,
+        bottom:43,
         zIndex:9,
         justifyContent:'space-between',
         flexDirection:'row',
@@ -173,6 +173,7 @@ const good_css = StyleSheet.create({
     content:{
         paddingBottom: 50,
         marginBottom:30,
+        flex:1
     },
     radio:{
         width:20,
@@ -411,12 +412,12 @@ const good_css = StyleSheet.create({
     sal_table:{
         paddingLeft:15,
         paddingRight:15,
-        paddingBottom:20,
+        paddingBottom:10,
         backgroundColor:'#fff',
         marginBottom:1
     },
     sal_title:{
-        lineHeight:40,
+        lineHeight:30,
         color:'#4a4a4a',
     }
 });

@@ -58,23 +58,23 @@ class Signup extends Component{
         let validate_code = this.state.formData.validate_code;
         let password = this.state.formData.password;
         if(!mphone){
-            Alert.alert('请输入手机号');
+            ToastShow.toastShort('请输入手机号');
             return false;
         }
         if(!this.isPhone(mphone)){
-            Alert.alert('请输入正确的手机号');
+            ToastShow.toastShort('请输入正确的手机号');
             return false;
         }
         if(!validate_code){
-            Alert.alert('请输入短信验证码');
+            ToastShow.toastShort('请输入短信验证码');
             return false;
         }
         if(!password){
-            Alert.alert('请输入密码');
+            ToastShow.toastShort('请输入密码');
             return false;
         }
         if(password.length<6){
-            Alert.alert('密码至少为6位');
+            ToastShow.toastShort('密码至少为6位');
             return false;
         }
         this.setState({
@@ -87,11 +87,11 @@ class Signup extends Component{
                 if(response.result*1===1){
                     this.goLogin(this.state.formData)
                 }else{
-                    Alert.alert(response.msg)
+                    ToastShow.toastShort(response.msg)
                 }
         }).catch((error) => {
             this.setState({ refreshing: true });
-            // Alert.alert('系统错误');
+            // ToastShow.toastShort('系统错误');
             // console.warn(error);
         });
     }
@@ -114,31 +114,31 @@ class Signup extends Component{
     sendFun(){
         let mphone = this.state.formData.mphone;
         if(!mphone){
-            Alert.alert('请输入手机号');
+            ToastShow.toastShort('请输入手机号');
             return false;
         }
         if(!this.isPhone(mphone)){
-            Alert.alert('请输入正确的手机号');
+            ToastShow.toastShort('请输入正确的手机号');
             return false;
         }
         Ajax.post('http://jdchamgapi.chaojids.com/site/send-mphone-code',{"mphone":mphone,type:1})
             .then((response) => {
                 console.log(response);
                 if(response.result*1===1){
-                Alert.alert(response.msg)
+                ToastShow.toastShort(response.msg)
                 this.settime();
             }else{
                 this.setState({
                     currentDown:60
                 });
-                Alert.alert(response.msg)
+                ToastShow.toastShort(response.msg)
             }
         }).catch((error) => {
             this.setState({
                 currentDown:60
             });
             console.warn(error);
-            // Alert.alert('系统错误');
+            // ToastShow.toastShort('系统错误');
             // console.error(error);
         });
     }
