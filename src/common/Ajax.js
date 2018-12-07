@@ -1,5 +1,5 @@
-const urlStartDefault = 'http://app.jdmohe.com';//正式
-// const urlStartDefault = 'http://jdchamgapi.chaojids.com';//测试
+// const urlStartDefault = 'http://app.jdmohe.com';//正式
+const urlStartDefault = 'http://jdchamgapi.chaojids.com';//测试
 
 export default class Ajax{
     static get = (url,data) => {

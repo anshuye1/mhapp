@@ -5,6 +5,7 @@ import mine_css from "../css/mine_css";
 import Ajax from "../common/Ajax";
 import ToastShow from "../common/Toast";
 import Loading from "../common/Loading";
+import Alipay from 'react-native-yunpeng-alipay'
 const levelObj = {
     1:'2',
     2:'3',
@@ -133,11 +134,26 @@ export default class Vip extends Component {
         this.setState({
             ready:false
         });
-        Ajax.post('/pay/get-pay-info',{token:token,amount:amount,month:monthActive,level_id:levelObj[vipActive]})
+        console.log(token, amount, monthActive, levelObj[vipActive]);
+        Ajax.post('/jd/pay/get-pay-info',{token:token,amount:amount,month:monthActive,level_id:levelObj[vipActive]})
             .then((respones)=>{
                 console.log(respones);
                 if(respones.result*1===1){
-                    ToastShow.toastShort(respones.msg)
+                    /*打开支付宝进行支付*/
+                    Alipay.pay(respones.data).then((data) => {
+                        console.log(data);
+                        if (data.length && data[0].resultStatus) {
+                                ToastShow.toastShort('支付成功')
+                            } else {
+                                ToastShow.toastShort('其他失败原因')
+                            }
+                        }, (err) => {
+                        console.log(err);
+                            ToastShow.toastShort('支付失败，请重新支付')
+                        })
+                        .catch((error)=>{
+                            console.log(error)
+                        })
                 }else{
                     ToastShow.toastShort(respones.msg)
                 }
