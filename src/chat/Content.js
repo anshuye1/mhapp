@@ -4,7 +4,6 @@ import Ajax from "../common/Ajax";
 import Loading from "../common/Loading";
 
 const {width,height} = Dimensions.get('window');
-const UrlStart = 'http://jdchamgapi.chaojids.com';
 
 export default class Content extends Component {
     static navigationOptions = ({ navigation }) => ({
@@ -20,7 +19,7 @@ export default class Content extends Component {
 
     mesDetailAjax(){
         const {state:{params:{id}}} = this.props.navigation;
-        Ajax.post(UrlStart+'/user/my-message-in',{id:id})
+        Ajax.post('/user/my-message-in',{id:id})
             .then((response)=>{
                 console.log(response);
                 if(response.result==1){

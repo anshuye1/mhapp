@@ -80,7 +80,7 @@ class Signup extends Component{
         this.setState({
             refreshing:false,
         });
-        Ajax.post('http://jdchamgapi.chaojids.com/site/signup',this.state.formData)
+        Ajax.post('/site/signup',this.state.formData)
             .then((response)=>{
                 console.log(response);
                 this.setState({ refreshing: true });
@@ -121,7 +121,7 @@ class Signup extends Component{
             ToastShow.toastShort('请输入正确的手机号');
             return false;
         }
-        Ajax.post('http://jdchamgapi.chaojids.com/site/send-mphone-code',{"mphone":mphone,type:1})
+        Ajax.post('/site/send-mphone-code',{"mphone":mphone,type:1})
             .then((response) => {
                 console.log(response);
                 if(response.result*1===1){

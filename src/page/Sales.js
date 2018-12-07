@@ -21,7 +21,6 @@ import Loading from "../common/Loading";
 import MenuRan from "./MenuRan";
 import ToastShow from "../common/Toast";
 
-const UrlStart = 'http://jdchamgapi.chaojids.com';
 
 export default class Sales extends Component {
     constructor(props){
@@ -55,7 +54,7 @@ export default class Sales extends Component {
     queryAjax(){
         let formData = this.state.formData;
         formData.token = this.state.token;
-        console.log(formData,UrlStart);
+        console.log(formData);
         if(!formData.sku){
             ToastShow.toastShort('请输入sku或链接');
             return false;
@@ -63,7 +62,7 @@ export default class Sales extends Component {
         this.setState({
             ready:false
         });
-        Ajax.post(UrlStart+'/jd/sales/data',formData)
+        Ajax.post('/jd/sales/data',formData)
             .then((response)=>{
                 console.log(response);
                 if(response.result==1){

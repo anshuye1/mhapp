@@ -67,7 +67,7 @@ export default class Modify extends Component{
             refreshing:false,
         });
         console.log(this.state.formData);
-        Ajax.post('http://jdchamgapi.chaojids.com/jd/user/alter-password',this.state.formData)
+        Ajax.post('/jd/user/alter-password',this.state.formData)
             .then((response)=>{
                 console.log(response);
                 this.setState({ refreshing: true });

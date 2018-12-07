@@ -80,7 +80,7 @@ class Login extends Component {
       this.setState({
           refreshing:false,
       });
-      Ajax.post('http://jdchamgapi.chaojids.com/site/login',this.state.formData)
+      Ajax.post('/site/login',this.state.formData)
             .then((response) => {
               if(response.result*1===1){
                   console.log(response.data.token);

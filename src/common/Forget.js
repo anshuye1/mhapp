@@ -85,7 +85,7 @@ export default class Forget extends Component{
         this.setState({
             refreshing:false,
         });
-        Ajax.post('http://jdchamgapi.chaojids.com/site/request-password-reset',this.state.formData)
+        Ajax.post('/site/request-password-reset',this.state.formData)
             .then((response)=>{
                 console.log(response);
                 this.setState({ refreshing: true });
@@ -126,7 +126,7 @@ export default class Forget extends Component{
             ToastShow.toastShort('请输入正确的手机号');
             return false;
         }
-        Ajax.post('http://jdchamgapi.chaojids.com/site/send-mphone-code',{"mphone":mphone,type:2})
+        Ajax.post('/site/send-mphone-code',{"mphone":mphone,type:2})
             .then((response) => {
                 console.log(response);
                 if(response.result*1===1){

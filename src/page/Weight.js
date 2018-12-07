@@ -22,7 +22,6 @@ import Ajax from "../common/Ajax";
 import Loading from "../common/Loading";
 import ToastShow from "../common/Toast";
 
-const UrlStart = 'http://jdchamgapi.chaojids.com';
 
 export default class Weight extends Component {
     constructor(props){
@@ -63,7 +62,7 @@ export default class Weight extends Component {
     queryAjax(){
         let formData = this.state.formData;
         formData.token = this.state.token;
-        console.log(formData,UrlStart);
+        console.log(formData);
         if(!formData.keyword){
             ToastShow.toastShort('请输入关键词');
             return false;
@@ -75,7 +74,7 @@ export default class Weight extends Component {
         this.setState({
             ready:false
         });
-        Ajax.post(UrlStart+'/jd/ranking/weight-search',formData)
+        Ajax.post('/jd/ranking/weight-search',formData)
             .then((response)=>{
                 console.log(response);
                 if(response.result==1){

@@ -20,7 +20,7 @@ export default class User extends Component{
     }
     //得到用户信息
     getUser(){
-        Ajax.post('http://jdchamgapi.chaojids.com/jd/personal/get-user-info',{token:this.props.token})
+        Ajax.post('/jd/personal/get-user-info',{token:this.props.token})
             .then((response) => {
                 console.log(response);
                 if(response.result==1){
@@ -59,13 +59,13 @@ export default class User extends Component{
                 </View>
 
                 <View style={common_css.userRow}>
-                    <View style={{flexDirection: 'row'}}>
+                    <View style={{flexDirection: 'row',flex:1}}>
                         <Text style={{fontSize:14,backgroundColor:'#1e88f5',width:20,height:20,lineHeight:20,color:'#fff',borderRadius:10,textAlign:'center',marginRight:5}}>
                             邀
                         </Text>
                         <Text>剩余{share_time}天</Text>
                     </View>
-                    <View style={{flexDirection: 'row'}}>
+                    <View style={{flexDirection: 'row',flex:1}}>
                         <Text style={{fontSize:14,backgroundColor:'#F54E33',width:20,height:20,lineHeight:20,color:'#fff',borderRadius:10,textAlign:'center',marginRight:5}}>
                             ￥
                         </Text>

@@ -61,7 +61,7 @@ export default class Vip extends Component {
     }
 
     suggest(){
-        Ajax.post('http://jdchamgapi.chaojids.com/user/feedback',this.state.formData)
+        Ajax.post('/user/feedback',this.state.formData)
             .then((response)=>{
                 if(response.result*1===1){
                     this.setState({

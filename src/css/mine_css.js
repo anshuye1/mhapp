@@ -133,7 +133,7 @@ const mine_css = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         backgroundColor: '#F0F3F5',
-        height:100,
+        height:120,
         marginBottom:50,
         justifyContent:'space-around'
     },
@@ -183,6 +183,12 @@ const mine_css = StyleSheet.create({
         marginRight:16,
         fontSize:16,
         color:'#ccc',
+        marginLeft:10
+    },
+    modifyImgIcon:{
+        width:17,
+        height:22,
+        marginRight:16,
         marginLeft:10
     },
     meItem:{
@@ -264,12 +270,35 @@ const mine_css = StyleSheet.create({
         borderRadius:8,
         color:'#fff',
     },
+    heaTitle:{
+        marginBottom:10,
+        color:'#4a4a4a'
+    },
+    shareBg:{
+        width:200,
+        height:231,
+        marginTop:10,
+        marginBottom:10
+    },
+    shareNum:{
+      marginTop:30,
+      marginBottom:30
+    },
+    shareBtn:{
+        width:100,
+        height:36,
+        backgroundColor:'#1e88f5',
+        color:'#fff',
+        lineHeight:36,
+        textAlign:'center',
+        borderRadius:4
+    },
     vipItem:{
         flexDirection:'row',
         justifyContent:'flex-start',
         alignItems:'center',
         width:width,
-        padding:10
+        padding:10,
     },
     vipOption:{
         flexDirection:'row',
@@ -292,7 +321,7 @@ const mine_css = StyleSheet.create({
         color:'#4a4a4a',
         borderWidth:1,
         borderColor:'#C7C7C7',
-        borderRadius:4
+        borderRadius:4,
     },
     vipDisabled:{
         color:'#C7C7C7'
@@ -310,7 +339,7 @@ const mine_css = StyleSheet.create({
         color:'#4a4a4a',
         borderWidth:1,
         borderColor:'#C7C7C7',
-        borderRadius:4
+        borderRadius:4,
     },
     vipSmallImg:{
         width:18,

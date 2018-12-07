@@ -1,9 +1,10 @@
-
+const urlStartDefault = 'http://app.jdmohe.com';//正式
+// const urlStartDefault = 'http://jdchamgapi.chaojids.com';//测试
 
 export default class Ajax{
     static get = (url,data) => {
         return new Promise((resolve,reject)=>{
-            fetch(url,{
+            fetch(urlStartDefault+url,{
                 method:'GET',
                 headers:{
                     'Accept': 'application/json',//告诉服务器，我们能接受json格式的返回类型，
@@ -23,7 +24,7 @@ export default class Ajax{
 
     static post = (url,data) => {
         return new Promise((resolve,reject)=>{
-            fetch(url,{
+            fetch(urlStartDefault+url,{
                 method:'POST',
                 headers:{
                     'Accept': 'application/json',//告诉服务器，我们能接受json格式的返回类型，

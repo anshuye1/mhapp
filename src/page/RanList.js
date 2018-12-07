@@ -46,7 +46,7 @@ export default class SkuList extends Component {
     fetchData = () => {
         const {formData} = this.state;
         console.log(formData);
-        Ajax.post('http://jdchamgapi.chaojids.com/jd/ranking/seek',formData)
+        Ajax.post('/jd/ranking/seek',formData)
             .then((response) => {
                 console.log(response);
                 if(response.result==1){
@@ -62,7 +62,7 @@ export default class SkuList extends Component {
                         this.setState({showFoot:1 });
                     }else{
                         if(response.msg){
-                            ToastShow.toastShort(response.msg+'31231');
+                            ToastShow.toastShort(response.msg);
                         }else{
                             ToastShow.toastShort('服务器响应超时');
                         }
@@ -177,7 +177,7 @@ export default class SkuList extends Component {
             id:delArr.join(',')
         };
         if(delArr.length){
-            Ajax.post('http://jdchamgapi.chaojids.com/jd/ranking/delete-log',formData)
+            Ajax.post('/jd/ranking/delete-log',formData)
                 .then((response) => {
                     console.log(response);
                     if(response.result==1){

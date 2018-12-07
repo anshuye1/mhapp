@@ -6,7 +6,6 @@ import Ajax from '../common/Ajax';
 import Loading from '../common/Loading';
 import common_css from "../css/common_css";
 import ToastShow from "../common/Toast";
-const UrlStart = 'http://jdchamgapi.chaojids.com';
 
 const {width,height} = Dimensions.get('window');
 
@@ -39,7 +38,7 @@ class Chat extends Component {
             ready:false
         });
         console.log(token);
-        Ajax.post(UrlStart+'/jd/user/my-message',{token:token||''})
+        Ajax.post('/jd/user/my-message',{token:token||''})
             .then((response)=>{
                 console.log(response);
                 if(response.result==1){

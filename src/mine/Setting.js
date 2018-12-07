@@ -20,7 +20,7 @@ class outLogin extends Component {
         }
     }
     outLoading(){
-        Ajax.post('http://jdchamgapi.chaojids.com/jd/user/logaut',{token:this.props.state.login.token})
+        Ajax.post('/jd/user/logaut',{token:this.props.state.login.token})
             .then((response) => {
                 console.log(response);
                 if(response.result==1){

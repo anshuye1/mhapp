@@ -39,7 +39,6 @@ const defaultVal = {
     service_id:'',
     city_id:'',//按地区查询
 };
-const UrlStart = 'http://jdchamgapi.chaojids.com';
 
 export default class Ranking extends Component {
     constructor(props){
@@ -117,7 +116,7 @@ export default class Ranking extends Component {
     }
     //城市
     cityAjax(){
-        Ajax.post(UrlStart+'/user/citys')
+        Ajax.post('/user/citys')
             .then((response)=>{
                 console.log(response);
                 if(response.result==1){
@@ -148,7 +147,7 @@ export default class Ranking extends Component {
     queryAjax(){
         let formData = this.state.formData;
         formData.token = this.state.token;
-        console.log(formData,UrlStart);
+        console.log(formData);
         if(!formData.keyword){
             ToastShow.toastShort('请输入关键词');
             return false;
@@ -160,7 +159,7 @@ export default class Ranking extends Component {
         this.setState({
             ready:false
         });
-        Ajax.post(UrlStart+'/jd/ranking/rank-search',formData)
+        Ajax.post('/jd/ranking/rank-search',formData)
             .then((response)=>{
                 console.log(response);
                 if(response.result==1){

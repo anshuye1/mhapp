@@ -37,7 +37,7 @@ export default class RanHistory extends Component {
     fetchData = () => {
         const {formData} = this.state;
         console.log(formData);
-        Ajax.post('http://jdchamgapi.chaojids.com/jd/ranking/history-log',formData)
+        Ajax.post('/jd/ranking/history-log',formData)
             .then((response) => {
                 console.log(response);
                 if(response.result==1){
@@ -142,7 +142,7 @@ export default class RanHistory extends Component {
         };
         if(delArr.length){
             console.log(formData);
-            Ajax.post('http://jdchamgapi.chaojids.com/jd/ranking/delete-log',formData)
+            Ajax.post('/jd/ranking/delete-log',formData)
                 .then((response) => {
                     console.log(response);
                     if(response.result==1){
