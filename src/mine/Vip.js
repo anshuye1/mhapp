@@ -1,5 +1,15 @@
 import React, { Component } from 'react';
-import { Text, View,Button,Image,Dimensions,TouchableOpacity,StyleSheet,Share } from 'react-native';
+import {
+    Text,
+    View,
+    Button,
+    Image,
+    Dimensions,
+    TouchableOpacity,
+    StyleSheet,
+    Share,
+    DeviceEventEmitter
+} from 'react-native';
 import MineHea from "./MineHea";
 import mine_css from "../css/mine_css";
 import Ajax from "../common/Ajax";
@@ -134,21 +144,48 @@ export default class Vip extends Component {
         this.setState({
             ready:false
         });
-        console.log(token, amount, monthActive, levelObj[vipActive]);
         Ajax.post('/jd/pay/get-pay-info',{token:token,amount:amount,month:monthActive,level_id:levelObj[vipActive]})
             .then((respones)=>{
                 console.log(respones);
                 if(respones.result*1===1){
                     /*打开支付宝进行支付*/
                     Alipay.pay(respones.data).then((data) => {
-                        console.log(data);
-                        if (data.length && data[0].resultStatus) {
-                                ToastShow.toastShort('支付成功')
+                            if (data.indexOf('resultStatus')!==-1) {
+                                let resultStatus = data.match(/resultStatus={[0-9]+}/g)[0].match(/\d+/g)[0];
+                                console.log(resultStatus);
+                                /*处理支付结果*/
+                                switch (resultStatus) {
+                                    case "9000":
+                                        ToastShow.toastShort('支付成功');
+                                        DeviceEventEmitter.emit('vip');
+                                        break;
+                                    case "8000":
+                                        ToastShow.toastShort('支付结果未知,请查询订单状态');
+                                        break;
+                                    case "4000":
+                                        ToastShow.toastShort('订单支付失败');
+                                        break;
+                                    case "5000":
+                                        ToastShow.toastShort('重复请求');
+                                        break;
+                                    case "6001":
+                                        ToastShow.toastShort('用户中途取消');
+                                        break;
+                                    case "6002":
+                                        ToastShow.toastShort('网络连接出错');
+                                        break;
+                                    case "6004":
+                                        ToastShow.toastShort('支付结果未知,请查询订单状态');
+                                        break;
+                                    default:
+                                        ToastShow.toastShort('其他失败原因');
+                                        break;
+                                }
                             } else {
                                 ToastShow.toastShort('其他失败原因')
                             }
                         }, (err) => {
-                        console.log(err);
+                            console.log(err);
                             ToastShow.toastShort('支付失败，请重新支付')
                         })
                         .catch((error)=>{

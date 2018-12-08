@@ -7,7 +7,8 @@ import {
     Dimensions,
     TouchableOpacity,
     AsyncStorage,
-    Platform
+    Platform,
+    // NativeModules
 } from 'react-native';
 import { connect } from 'react-redux';
 
@@ -30,25 +31,76 @@ class Mine extends Component {
     super(props);
     this.state = {
         ready:true,
-        version:''
+        version:'',
+        AsyncStorage:'',
+        apkUrl:''
     }
-
   }
+
+  getVersion () {
+    return AsyncStorage.getItem('version').then((value) => {
+        this.setState({
+            version:value
+        },()=>{
+            if(!value){//如果没有存版本号
+                this.version()
+            }
+        });
+    });
+  }
+
+  //保存版本号
+  saveVersion (key, value) {
+      this.setState({
+          version:value
+      });
+      return AsyncStorage.setItem(key,value);
+  }
+
+  //比较版本号
+  versionUpdate(new_version){
+      const {version} = this.state;
+      if(!version){
+          this.version();//重新获取版本号
+          return;
+      }
+      console.log(321321);
+      if (Platform.OS === 'android') {
+          if (version == new_version) {
+              ToastShow.toastShort('已经是最新版本');
+          } else {
+              NativeModules.upgrade.upgrade(this.state.apkUrl);
+          }
+      }else{
+          // NativeModules.upgrade.upgrade('1297109983', (msg) => {
+          //     if ('YES' == msg) {
+          //         //跳转到APP Stroe
+          //         NativeModules.upgrade.openAPPStore('1297109983');
+          //     } else {
+          //         ToastShow.toastShort('当前为最新版本');
+          //     }
+          // });
+      }
+  }
+
+  //请求版本号
   version(version){
       this.setState({
          ready:false
       });
       Ajax.post('/site/app-update')
           .then((respones)=>{
+              console.log(respones);
               if(respones.result*1===1){
                   let iosVersion = respones.data.ios_version.version_number;
                   let anVersion = respones.data.version.version_number;
-                  if(this.state.version === iosVersion||this.state.version === anVersion){
-                      ToastShow.toastShort('当前为最新版本')
+                  this.setState({
+                      apkUrl:respones.data.version.url
+                  });
+                  if(version){//判断版本号
+                    this.versionUpdate(iosVersion);
                   }else{
-                      this.setState({
-                          version:Platform.OS==='ios'?iosVersion:iosVersion
-                      })
+                      this.saveVersion('version',iosVersion);//保存版本号
                   }
               }else{
                   ToastShow.toastShort(respones.msg);
@@ -64,7 +116,7 @@ class Mine extends Component {
           })
   }
   componentDidMount() {
-      this.version()
+      this.getVersion();
   }
 
   render() {

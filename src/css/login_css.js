@@ -7,8 +7,6 @@ const {width,height} = Dimensions.get('window');
 const login_css = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'flex-start',
-        alignItems: 'center',
         backgroundColor: '#fff'
     },
     loginInput: {
@@ -18,7 +16,8 @@ const login_css = StyleSheet.create({
         marginBottom:15,
         borderRadius:8,
         fontSize:16,
-        paddingLeft:10
+        paddingLeft:10,
+        borderColor:'#DBDBDB'
     },
     middleBottom: {
         marginTop:10,
@@ -58,6 +57,7 @@ const login_css = StyleSheet.create({
         width:width,
         paddingHorizontal: 20,
         alignItems: 'center',
+        marginTop:20
     },
     timeBtn:{
         backgroundColor:'#1e88f5',
@@ -94,6 +94,10 @@ const login_css = StyleSheet.create({
         width:22,
         height:22,
         marginTop:15
+    },
+    eyeImg:{
+        width:20,
+        height:20
     }
 });
 

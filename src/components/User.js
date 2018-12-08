@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {
     View,
     Text,
+    DeviceEventEmitter
 } from 'react-native';
 import Ajax from "../common/Ajax";
 import common_css from "../css/common_css";
@@ -42,7 +43,14 @@ export default class User extends Component{
         if(this.props.token){
             this.getUser();
         }
+        DeviceEventEmitter.addListener('vip',()=>{
+            this.getUser()
+        });
     }
+
+    componentWillUnmount(){
+        DeviceEventEmitter.remove();
+    };
 
     render(){
         const {phone,share_time,money_time,level_name} = this.state;

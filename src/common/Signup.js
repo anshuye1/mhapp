@@ -2,24 +2,21 @@ import React, { Component } from 'react';
 import {
     View,
     Text,
-    StyleSheet,
     Dimensions,
     TextInput,
-    Alert,
     Keyboard,
-    ImageBackground,
     Image,
-    TouchableOpacity, AsyncStorage
+    TouchableOpacity,
+    ScrollView
 } from 'react-native';
 
 import { connect } from 'react-redux';
 import { doLogin } from '../store/actions/login';
-import Icon from "react-native-vector-icons/Ionicons";
-import * as types from "../store/constants";
 
 import Loading from './Loading';
 import login_css from '../css/login_css';
 import Ajax from "../common/Ajax";
+import MineHea from "../mine/MineHea";
 
 const { width } = Dimensions.get('window');
 
@@ -149,15 +146,13 @@ class Signup extends Component{
         const { isFocus,refreshing,countdown,pass } = this.state;
         const { goBack,navigate } = this.props.navigation;
         return (
-            <View style={login_css.container}>
+            <ScrollView style={login_css.container} keyboardShouldPersistTaps={'never'}>
                 {!refreshing&&<Loading />}
-                <View style={login_css.hea}>
-                    <Icon name="ios-arrow-back" size={40} color={'#fff'} onPress={() => goBack()} />
-                    <Text style={{color:'#fff',fontSize:20,textAlign:'center',flex:1,paddingRight:30}}>注册</Text>
-                </View>
+                <MineHea goBack={goBack} title={'注册'}/>
+
                 <View style={login_css.inputWrap}>
                     <TextInput
-                        style={[login_css.loginInput,{borderColor: isFocus===1?'#1e88f5':'#DBDBDB'}]}
+                        style={login_css.loginInput}
                         underlineColorAndroid='transparent'
                         onFocus={()=>this.setState({isFocus: 1})}
                         onChangeText={(text) => this.setState({ text,formData:{...this.state.formData,mphone:text} })}
@@ -168,7 +163,7 @@ class Signup extends Component{
 
                     <View style={{flexDirection:'row',width: width*0.9,justifyContent:'space-between',flexWrap:'nowrap'}}>
                         <TextInput
-                            style={[login_css.loginInput,{borderColor: isFocus===3?'#1e88f5':'#DBDBDB',width:width*0.9-150}]}
+                            style={[login_css.loginInput,{width:width*0.9-150}]}
                             underlineColorAndroid='transparent'
                             onFocus={()=>this.setState({isFocus: 3})}
                             onChangeText={(text) => this.setState({ text,formData:{...this.state.formData,validate_code:text} })}
@@ -187,7 +182,7 @@ class Signup extends Component{
 
                     <View style={{position:'relative'}}>
                         <TextInput
-                            style={[login_css.loginInput,{borderColor: isFocus===2?'#1e88f5':'#DBDBDB'}]}
+                            style={login_css.loginInput}
                             underlineColorAndroid='transparent'
                             onFocus={()=>this.setState({isFocus: 2})}
                             onChangeText={(text) => this.setState({ text,formData:{...this.state.formData,password:text} })}
@@ -198,7 +193,7 @@ class Signup extends Component{
                             secureTextEntry={pass}
                         />
                         <TouchableOpacity style={{position:'absolute',right:10,top:15}} onPress={()=>{this.setState({pass:!pass})}}>
-                            <Image source={pass?require('../img/mimaxianshi1.png'):require('../img/mimaxianshi2.png')} style={{width:20,height:20}}/>
+                            <Image source={pass?require('../img/mimaxianshi1.png'):require('../img/mimaxianshi2.png')} style={login_css.eyeImg}/>
                         </TouchableOpacity>
                     </View>
 
@@ -215,9 +210,7 @@ class Signup extends Component{
 
                     </View>
                 </View>
-                <View>
-                </View>
-            </View>
+            </ScrollView>
         )
     }
 }
