@@ -7,6 +7,7 @@ import * as types from "../store/constants";
 
 import RanList from '../page/RanList';
 import ToastShow from '../common/Toast';
+import common_css from '../css/common_css';
 import SearchInput from './SearchInput';
 import SideMenu from 'react-native-side-menu';
 import Menu from './Menu';
@@ -137,7 +138,7 @@ class skuList extends Component {
 
         return (
             <SideMenu menu={menu} isOpen={this.state.isOpen} onChange={(isOpen) => this.updateMenuState(isOpen)}>
-                <View style={{ width: width, height: height, backgroundColor: '#fff' }}>
+                <View style={[{ width: width, height: height, backgroundColor: '#fff' },common_css.iphoneX]}>
                     {
                         this.state.isOpen?
                             <View style={{position: 'absolute',top:0,left:0,zIndex: 1,backgroundColor:'rgba(0,0,0,0.3)',width:width,height:height}}>

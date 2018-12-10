@@ -9,6 +9,7 @@ import SalItem from "./SalItem";
 import Loading from "../common/Loading";
 import Ajax from "../common/Ajax";
 import ToastShow from "../common/Toast";
+import common_css from "../css/common_css";
 
 export default class RanHistory extends Component {
     static navigationOptions = ({ navigation }) => ({
@@ -168,10 +169,16 @@ export default class RanHistory extends Component {
     //选择
     checkFun(item){
         let service_id = item.service_id;
-        const {delArr,del} = this.state;
-        console.log(item);
+        const {delArr,del,formData:{type}} = this.state;
+        let ObjUrl = {
+            1:'Ranking',
+            2:'Weight',
+            3:'Sales',
+        };
         if(!del){
-            this.props.navigation.navigate('Ranking',{
+            console.log(this.props.navigation);
+            this.props.navigation.state.params.setVal(item);
+            this.props.navigation.navigate(ObjUrl[type],{
                 item:item
             })
         }
@@ -198,7 +205,7 @@ export default class RanHistory extends Component {
         const {goBack,navigate} = this.props.navigation;
         const { skuArr,showFoot,refreshing,ready,del,delArr,formData:{type}} = this.state;
         return (
-            <View style={good_css.container}>
+            <View style={common_css.container1}>
                 <View style={good_css.header}>
                     <TouchableOpacity style={{alignItems:'flex-start',flex:1}} onPress={()=>goBack()}>
                         <Image source={require('../img/fhui1.png')} style={{width:20,height:20,marginLeft:5}}/>

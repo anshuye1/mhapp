@@ -7,6 +7,7 @@ import {connect} from "react-redux";
 import MineHea from './MineHea';
 import mine_css from '../css/mine_css';
 import ToastShow from "../common/Toast";
+import common_css from "../css/common_css";
 
 
 class outLogin extends Component {
@@ -43,7 +44,7 @@ class outLogin extends Component {
         const {goBack,navigate} = this.props.navigation;
         const {token} = this.props.state.login;
         return (
-            <View style={mine_css.modifyWrap}>
+            <View style={common_css.container1}>
                 <MineHea goBack={goBack} title={'设置'}/>
 
                 <View style={mine_css.modifyInner}>

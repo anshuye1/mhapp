@@ -1,17 +1,36 @@
-import {StyleSheet,Dimensions} from 'react-native';
+import {StyleSheet,Dimensions,Platform} from 'react-native';
 
 const {width,height} = Dimensions.get('window');
+//iphoneX 序列机型的屏幕高宽
+//XSM SCREEN_HEIGHTL = 896.000000,SCREEN_WIDTHL = 414.000000  2.1642512077
+//XS  SCREEN_HEIGHTL = 812.000000,SCREEN_WIDTHL = 375.000000  2.1653333333
+//XR  SCREEN_HEIGHTL = 896.000000,SCREEN_WIDTHL = 414.000000  2.1642512077
+//X   SCREEN_HEIGHTL = 812.000000,SCREEN_WIDTHL = 375.000000  2.1653333333
 
+//目前iPhone X序列手机的适配算法：高宽比先转换为字符串，截取前三位，转换为number类型 再乘以100
+const isIphoneX = (Platform.OS === 'ios' && (Number(((height/width)+"").substr(0,4)) * 100) === 216);
 
 const common_css = StyleSheet.create({
     container:{
         flex:1,
-        backgroundColor:'#F0F3F5'
+        backgroundColor:'#F0F3F5',
+        borderTopWidth: isIphoneX?30:0,
+        borderTopColor: '#1e88f5',
+    },
+    container1:{
+        flex:1,
+        backgroundColor:'#fff',
+        borderTopWidth: isIphoneX?30:0,
+        borderTopColor: '#1e88f5',
+    },
+    iphoneX:{
+        borderTopWidth: isIphoneX?30:0,
+        borderTopColor: '#1e88f5',
     },
     header:{
         width:width,
         height:50,
-        backgroundColor:'#1388f5',
+        backgroundColor:'#1e88f5',
         justifyContent:'flex-start',
         alignItems:'center',
         flexDirection:'row'

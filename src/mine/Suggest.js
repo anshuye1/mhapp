@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { Text, Button, View,TextInput,Image,Dimensions,TouchableOpacity,StyleSheet,Alert } from 'react-native';
+import { Text, Button, View,TextInput,Image,Dimensions,TouchableOpacity,StyleSheet,Alert,ScrollView } from 'react-native';
 import ImagePicker from 'react-native-image-picker';
 import ToastShow from "../common/Toast"; // 导入
 import Ajax from '../common/Ajax';
 import MineHea from "./MineHea";
 import mine_css from "../css/mine_css";
+import common_css from "../css/common_css";
 
 const options = { // 弹出框配置
     title:'请选择',
@@ -85,9 +86,9 @@ export default class Vip extends Component {
         const {goBack} = this.props.navigation;
         const {formData} = this.state;
         return (
-            <View style={mine_css.modifyWrap}>
+            <View style={common_css.container1}>
                 <MineHea goBack={goBack} title={'意见反馈'}/>
-                <View style={{padding:20}}>
+                <ScrollView style={{padding:20}} keyboardShouldPersistTaps={'never'}>
                     <Text style={mine_css.suFontHea}>
                         问题和意见（必填）
                     </Text>
@@ -131,7 +132,7 @@ export default class Vip extends Component {
                     >
                         <Text style={mine_css.suBtn}>确定</Text>
                     </TouchableOpacity>
-                </View>
+                </ScrollView>
             </View>
         );
     }

@@ -3,6 +3,7 @@ import { Text, View,Button,Image,Dimensions,TouchableOpacity,StyleSheet,Clipboar
 import MineHea from "./MineHea";
 import mine_css from "../css/mine_css";
 import ToastShow from "../common/Toast";
+import common_css from "../css/common_css";
 
 const {width,height} = Dimensions.get('window');
 
@@ -39,7 +40,7 @@ export default class Vip extends Component {
         const {wx,qq} = this.state;
         console.log(wx);
         return (
-            <View style={styles.container}>
+            <View style={common_css.container}>
                 <MineHea goBack={goBack} title={'我的客服'}/>
                 <View style={mine_css.contentWrap}>
                     <View style={mine_css.contentTop}>

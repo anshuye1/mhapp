@@ -18,6 +18,7 @@ import Loading from './Loading';
 import Ajax from "../common/Ajax";
 import login_css from '../css/login_css';
 import ToastShow from "./Toast";
+import common_css from "../css/common_css";
 
 class Login extends Component {
     constructor(props) {
@@ -124,7 +125,7 @@ class Login extends Component {
         const {goBack, navigate} = this.props.navigation;
         console.log(this.state.formData);
         return (
-            <ScrollView style={login_css.container} keyboardShouldPersistTaps={'never'}>
+            <ScrollView style={common_css.container1} keyboardShouldPersistTaps={'never'}>
                 {!refreshing && <Loading/>}
                 <ImageBackground style={login_css.top} source={require('../img/dlbg.png')} resizeMode='stretch'>
                     <View style={login_css.iconWrap}>

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Text, View,Button,Image,Dimensions,TouchableOpacity,StyleSheet } from 'react-native';
+import common_css from "../css/common_css";
 
 const {width,height} = Dimensions.get('window');
 
@@ -10,7 +11,7 @@ export default class Vip extends Component {
     render() {
         const {goBack} = this.props.navigation;
         return (
-            <View style={styles.container}>
+            <View style={common_css.container1}>
                 <View style={styles.header}>
                     <TouchableOpacity style={{alignItems:'flex-start',flex:0}} onPress={()=>goBack()}>
                         <Image source={require('../img/fhui1.png')} style={{width:20,height:20,marginLeft:5}}/>

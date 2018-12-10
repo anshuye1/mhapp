@@ -88,7 +88,7 @@ export default class Modify extends Component{
         const { isFocus,refreshing,countdown,pass,pass1 } = this.state;
         const { goBack,navigate } = this.props.navigation;
         return (
-            <View style={login_css.container}>
+            <View style={common_css.container1}>
                 {!refreshing?<Loading />:null}
                 <MineHea goBack={goBack} title={'修改密码'}/>
                 <View style={[login_css.inputWrap,{paddingTop:20}]}>

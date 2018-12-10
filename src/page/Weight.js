@@ -21,6 +21,7 @@ import good_css from '../css/good_css';
 import Ajax from "../common/Ajax";
 import Loading from "../common/Loading";
 import ToastShow from "../common/Toast";
+import common_css from "../css/common_css";
 
 
 export default class Weight extends Component {
@@ -126,6 +127,20 @@ export default class Weight extends Component {
             menuRan:false
         })
     }
+    //返回重新渲染数据
+    setVal(item){
+        this.setState({
+            formData:{
+                keyword:item.keyword||'',
+                sku:item.sku||'',
+                weight_min:0,
+                weight_max:200,
+                price_min:item.price_max*1?item.price_min:'',
+                price_max:item.price_max*1?item.price_max:'',
+                service_id:'',
+            }
+        })
+    }
 
     componentDidMount(){
         this.getToken();
@@ -163,7 +178,7 @@ export default class Weight extends Component {
             :null;
 
         return (
-            <View style={good_css.container}>
+            <View style={common_css.container1}>
 
                 <View style={good_css.header}>
                     <TouchableOpacity style={{alignItems:'flex-start',flex:1}} onPress={()=>goBack()}>
@@ -232,7 +247,8 @@ export default class Weight extends Component {
                         </TouchableOpacity>
                         <TouchableOpacity style={good_css.history_btn_wrap} onPress={()=>navigate('RanHistory',{
                             token:token,
-                            type:2
+                            type:2,
+                            setVal:this.setVal.bind(this)
                         })}>
                             <Text style={good_css.history_btn}>历史记录</Text>
                         </TouchableOpacity>

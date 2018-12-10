@@ -221,7 +221,7 @@ const mine_css = StyleSheet.create({
         lineHeight:25,
         textAlignVertical: 'top',
         marginBottom:15,
-        borderRadius:8
+        borderRadius:8,
     },
     suInput1:{
         backgroundColor:'#fff',
@@ -230,12 +230,11 @@ const mine_css = StyleSheet.create({
         fontSize:16,
         color:'#4A4A4A',
         padding:10,
-        lineHeight:30,
         marginBottom:15,
-        borderRadius:8
+        borderRadius:8,
     },
     suBtn:{
-        lineHeight:60,
+        lineHeight:50,
         textAlign:'center',
         color:'#fff',
         fontSize:18,
@@ -244,11 +243,14 @@ const mine_css = StyleSheet.create({
         marginTop:10
     },
     //vip
+    vipBox:{
+        flex:1,
+        backgroundColor:'#fff'
+    },
     vipWrap:{
         flex:1,
         flexDirection:'column',
         alignItems:'center',
-        backgroundColor:'#fff'
     },
     vipGroup:{
         width:285,

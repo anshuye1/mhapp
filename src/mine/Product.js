@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Text, View,ScrollView,Image,Dimensions,TouchableOpacity,StyleSheet } from 'react-native';
 import MineHea from "./MineHea";
+import common_css from "../css/common_css";
 
 const {width,height} = Dimensions.get('window');
 
@@ -11,7 +12,7 @@ export default class Vip extends Component {
     render() {
         const {goBack} = this.props.navigation;
         return (
-            <View style={styles.container}>
+            <View style={common_css.container}>
                 <MineHea goBack={goBack} title={'产品介绍'}/>
 
                 <ScrollView>

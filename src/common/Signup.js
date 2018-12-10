@@ -17,6 +17,7 @@ import Loading from './Loading';
 import login_css from '../css/login_css';
 import Ajax from "../common/Ajax";
 import MineHea from "../mine/MineHea";
+import common_css from "../css/common_css";
 
 const { width } = Dimensions.get('window');
 
@@ -146,7 +147,7 @@ class Signup extends Component{
         const { isFocus,refreshing,countdown,pass } = this.state;
         const { goBack,navigate } = this.props.navigation;
         return (
-            <ScrollView style={login_css.container} keyboardShouldPersistTaps={'never'}>
+            <ScrollView style={common_css.container1} keyboardShouldPersistTaps={'never'}>
                 {!refreshing&&<Loading />}
                 <MineHea goBack={goBack} title={'注册'}/>
 

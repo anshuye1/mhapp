@@ -20,6 +20,7 @@ import Ajax from "../common/Ajax";
 import Loading from "../common/Loading";
 import MenuRan from "./MenuRan";
 import ToastShow from "../common/Toast";
+import common_css from "../css/common_css";
 
 
 export default class Sales extends Component {
@@ -107,6 +108,14 @@ export default class Sales extends Component {
             menuRan:false
         })
     }
+    //返回重新渲染数据
+    setVal(item){
+        this.setState({
+            formData:{
+                sku:item.sku||'',
+            }
+        })
+    }
 
     componentDidMount(){
         this.getToken();
@@ -144,7 +153,7 @@ export default class Sales extends Component {
             :null;
 
         return (
-            <View style={good_css.container}>
+            <View style={common_css.container1}>
 
                 <View style={good_css.header}>
                     <TouchableOpacity style={{alignItems:'flex-start',flex:1}} onPress={()=>goBack()}>
@@ -194,7 +203,8 @@ export default class Sales extends Component {
                         </TouchableOpacity>
                         <TouchableOpacity style={good_css.history_btn_wrap} onPress={()=>navigate('RanHistory',{
                             token:token,
-                            type:3
+                            type:3,
+                            setVal:this.setVal.bind(this)
                         })}>
                             <Text style={good_css.history_btn}>历史记录</Text>
                         </TouchableOpacity>

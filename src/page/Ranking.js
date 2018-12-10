@@ -27,6 +27,7 @@ import good_css from '../css/good_css';
 import Ajax from "../common/Ajax";
 import Loading from "../common/Loading";
 import ToastShow from "../common/Toast";
+import common_css from "../css/common_css";
 
 const defaultVal = {
     entrance:'1',// 1：电脑端 2手机端 3微信端
@@ -41,6 +42,9 @@ const defaultVal = {
 };
 
 export default class Ranking extends Component {
+    static navigationOptions = ({ navigation }) => ({
+        header:null
+    });
     constructor(props){
         super(props);
         const {state:{params:{item}}} = props.navigation;
@@ -70,9 +74,6 @@ export default class Ranking extends Component {
             menuRan:false,//导航
         };
     }
-    static navigationOptions = ({ navigation }) => ({
-        header:null
-    });
 
     //显示动画
     in() {
@@ -203,6 +204,24 @@ export default class Ranking extends Component {
             menuRan:false
         })
     }
+    //返回重新渲染数据
+    setVal(item){
+        this.setState({
+            formData:{
+                keyword:item.keyword||'',
+                sku:item.sku||'',
+                entrance:item.entrance||item.client_type||defaultVal.entrance,// 1：电脑端 2手机端 3微信端
+                type:item.type||defaultVal.type,//1：指定商品 2指定店铺
+                sort:item.sort||defaultVal.sort,//1：综合 2：销售 3：评论数 4：新品 5：价格
+                price_min:item.price_max*1?item.price_min:defaultVal.price_min,
+                price_max:item.price_max*1?item.price_max:defaultVal.price_max,
+                page:item.page_start||defaultVal.page,
+                page_size:item.page_end||defaultVal.page_size,
+                service_id:'',
+                city_id:'',//按地区查询
+            },
+        })
+    }
 
     componentDidMount(){
         this.cityAjax();
@@ -258,7 +277,7 @@ export default class Ranking extends Component {
                 :null;
 
         return (
-            <View style={good_css.container}>
+            <View style={common_css.container1}>
 
                 <View style={good_css.header}>
                     <TouchableOpacity style={{alignItems:'flex-start',flex:1}} onPress={()=>goBack()}>
@@ -339,7 +358,8 @@ export default class Ranking extends Component {
                         </TouchableOpacity>
                         <TouchableOpacity style={good_css.history_btn_wrap} onPress={()=>navigate('RanHistory',{
                             token:token,
-                            type:1
+                            type:1,
+                            setVal:this.setVal.bind(this)
                         })}>
                             <Text style={good_css.history_btn}>历史记录</Text>
                         </TouchableOpacity>
