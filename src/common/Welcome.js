@@ -59,7 +59,7 @@ export default class Welcome extends Component {
 
                 this.timer=setTimeout(()=>{
                     this.props.navigation.navigate('SkuList');//7秒后进入底部导航主页
-                },4500)
+                },7000)
             }
         });
     }
@@ -81,16 +81,24 @@ export default class Welcome extends Component {
                     <Swiper style={styles.wrapper}
                             showsButtons={false}       //为false时不显示控制按钮
                             paginationStyle={{      //小圆点位置
-                                bottom: 30
+                                bottom: 80
                             }}
                             loop={false}        //如果设置为false，那么滑动到最后一张时，再次滑动将不会滑到第一张图片。
                             autoplay={true}          //自动轮播
-                            autoplayTimeout={1.5}      //每隔2秒切换
+                            autoplayTimeout={2}      //每隔2秒切换
                     >
 
                         <Image style={styles.image} source={require('../img/ydye1.png')}/>
                         <Image style={styles.image} source={require('../img/ydye2.png')}/>
-                        <Image style={styles.image} source={require('../img/ydye3.png')}/>
+                        <View style={{flex:1,position:'relative',alignItems:'center'}}>
+                            <Image style={styles.image} source={require('../img/ydye3.png')}/>
+                            <TouchableOpacity
+                                onPress={()=>{this.props.navigation.navigate('SkuList');}}
+                                style={{position:'absolute',width:182,height:44,backgroundColor:'#1e88f5',bottom:30,borderRadius:4}}
+                            >
+                                <Text style={{lineHeight:44,color:'#fff',textAlign:'center',fontSize:16}}>立即体验</Text>
+                            </TouchableOpacity>
+                        </View>
 
                     </Swiper>
                     :

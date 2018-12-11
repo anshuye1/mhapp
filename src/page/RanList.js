@@ -263,8 +263,8 @@ export default class SkuList extends Component {
 
                 {formData.type==1?//端口
                     <TouchableOpacity style={good_css.heaTabItem} onPress={this.entranceFun.bind(this)}>
-                        <Text style={[{height:40,lineHeight:40,textAlign:'center',color:'#4A4A4A',},formData.entrance?good_css.active:{}]} >{textObj[formData.entrance]||'端口'} </Text>
-                        {shadow? <Image source={require('../img/xla2.png')} style={{width:8,height:8}}/>:<Image source={require('../img/xla1.png')} style={{width:8,height:8}}/>}
+                        <Text style={[good_css.heaTabItemBtn,formData.entrance?good_css.active:{}]} >{textObj[formData.entrance]||'端口'} </Text>
+                        {shadow? <Image source={require('../img/xla2.png')} style={good_css.tabIcon}/>:<Image source={require('../img/xla1.png')} style={good_css.tabIcon}/>}
                     </TouchableOpacity>
                     :null
                 }
@@ -353,7 +353,7 @@ export default class SkuList extends Component {
                 {del?
                     <View style={good_css.bottomFix}>
                         <TouchableOpacity
-                            style={{flexDirection:'row',alignItems:'center'}}
+                            style={good_css.goodsRow}
                             onPress={()=>{
                                 if(skuArr.length==delArr.length){
                                     this.setState({
@@ -372,20 +372,20 @@ export default class SkuList extends Component {
                                 <Image source={require('../img/xze2.png')} style={good_css.radio}/>:
                                 <Image source={require('../img/xze1.png')} style={good_css.radio}/>
                             }
-                            <Text style={{fontSize:16}}>全选</Text>
+                            <Text style={good_css.font16}>全选</Text>
                         </TouchableOpacity>
-                        <View style={{flexDirection:'row'}}>
+                        <View style={good_css.goodsRow}>
                             <TouchableOpacity
                                 onPress={()=>this.setState({
                                     del:false
                                 })}
                             >
-                                <Text style={{fontSize:16,width:80,height:40,lineHeight:40,borderColor:'#999',borderWidth:1,color:'#999',borderRadius:8,textAlign:'center'}}>取消</Text>
+                                <Text style={good_css.delBtn}>取消</Text>
                             </TouchableOpacity>
                             <TouchableOpacity
                                 onPress={this.deleteFun.bind(this)}
                             >
-                                <Text style={{fontSize:16,width:80,height:40,lineHeight:40,backgroundColor:'#FF3851',color:'#fff',borderRadius:8,textAlign:'center',marginLeft:15}}>删除</Text>
+                                <Text style={good_css.delBtn1}>删除</Text>
                             </TouchableOpacity>
                         </View>
 

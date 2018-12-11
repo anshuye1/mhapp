@@ -9,6 +9,12 @@ const login_css = StyleSheet.create({
         flex: 1,
         backgroundColor: '#fff'
     },
+    InputWrap:{
+        flexDirection: 'row',
+        width: width * 0.9,
+        justifyContent: 'space-between',
+        flexWrap: 'nowrap'
+    },
     loginInput: {
         width: width*0.9,
         height: 45,
@@ -18,6 +24,9 @@ const login_css = StyleSheet.create({
         fontSize:16,
         paddingLeft:10,
         borderColor:'#DBDBDB'
+    },
+    loginInputSmall:{
+        width: width * 0.9 - 150
     },
     middleBottom: {
         marginTop:10,
@@ -59,6 +68,9 @@ const login_css = StyleSheet.create({
         alignItems: 'center',
         marginTop:20
     },
+    inputWrapTop:{
+        paddingTop:20
+    },
     timeBtn:{
         backgroundColor:'#1e88f5',
         color:'#fff',
@@ -95,9 +107,19 @@ const login_css = StyleSheet.create({
         height:22,
         marginTop:15
     },
+    eyeImgWrap:{
+        position: 'absolute',
+        right: 10,
+        top: 15
+    },
     eyeImg:{
         width:20,
         height:20
+    },
+    loginLogo:{
+        width: 100,
+        height: 67,
+        marginTop: 115
     }
 });
 

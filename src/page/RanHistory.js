@@ -286,7 +286,7 @@ export default class RanHistory extends Component {
                             <TouchableOpacity
                                 onPress={this.deleteFun.bind(this)}
                             >
-                                <Text style={{fontSize:16,width:80,height:40,lineHeight:40,backgroundColor:'#FF3851',color:'#fff',borderRadius:8,textAlign:'center'}}>删除</Text>
+                                <Text style={good_css.delBtn1}>删除</Text>
                             </TouchableOpacity>
                         </View>
 

@@ -11,7 +11,7 @@ export default class ToastShow extends Component {
         }
         this.toast = Toast.show(content.toString(), {
             duration: Toast.durations.SHORT,
-            position: Platform.OS === 'android' ? Toast.positions.BOTTOM : Toast.positions.CENTER,
+            position: Platform.OS === 'android' ? Toast.positions.CENTER : Toast.positions.CENTER,
             shadow: true,
             animation: true,
             hideOnPress: true,
@@ -24,7 +24,7 @@ export default class ToastShow extends Component {
         }
         this.toast = Toast.show(content.toString(), {
             duration: Toast.durations.LONG,
-            position: Platform.OS === 'android' ? Toast.positions.BOTTOM : Toast.positions.CENTER,
+            position: Platform.OS === 'android' ? Toast.positions.CENTER : Toast.positions.CENTER,
             shadow: true,
             animation: true,
             hideOnPress: true,

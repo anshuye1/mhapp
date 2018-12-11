@@ -20,6 +20,10 @@ import common_css from "../css/common_css";
 const {width} = Dimensions.get('window');
 
 export default class Forget extends Component {
+    static navigationOptions = ({navigation}) => ({
+        header: null
+    });
+
     constructor(props) {
         super(props);
         this.state = {
@@ -103,7 +107,7 @@ export default class Forget extends Component {
 
     //时间倒数
     settime() {
-        let t = setInterval(() => {
+        this.t = setInterval(() => {
             if (this.state.countdown > 0) {
                 this.setState({
                     countdown: this.state.countdown - 1
@@ -112,7 +116,7 @@ export default class Forget extends Component {
                 this.setState({
                     countdown: 60
                 });
-                clearInterval(t)
+                clearInterval(this.t)
             }
         }, 1000)
     }
@@ -150,9 +154,9 @@ export default class Forget extends Component {
         });
     }
 
-    static navigationOptions = ({navigation}) => ({
-        header: null
-    });
+    componentWillUnmount(){
+        clearInterval(this.t)
+    }
 
     render() {
         const {isFocus, refreshing, countdown, pass, pass1} = this.state;
@@ -173,16 +177,9 @@ export default class Forget extends Component {
                         keyboardType="numeric"
                     />
 
-                    <View style={{
-                        flexDirection: 'row',
-                        width: width * 0.9,
-                        justifyContent: 'space-between',
-                        flexWrap: 'nowrap'
-                    }}>
+                    <View style={login_css.InputWrap}>
                         <TextInput
-                            style={[login_css.loginInput, {
-                                width: width * 0.9 - 150
-                            }]}
+                            style={[login_css.loginInput, login_css.loginInputSmall]}
                             underlineColorAndroid='transparent'
                             onFocus={() => this.setState({isFocus: 3})}
                             onChangeText={(text) => this.setState({
@@ -219,7 +216,7 @@ export default class Forget extends Component {
                             keyboardType="default"
                             secureTextEntry={pass}
                         />
-                        <TouchableOpacity style={{position: 'absolute', right: 10, top: 15}} onPress={() => {
+                        <TouchableOpacity style={login_css.eyeImgWrap} onPress={() => {
                             this.setState({pass: !pass})
                         }}>
                             <Image
@@ -243,12 +240,12 @@ export default class Forget extends Component {
                             keyboardType="default"
                             secureTextEntry={pass1}
                         />
-                        <TouchableOpacity style={{position: 'absolute', right: 10, top: 15}} onPress={() => {
+                        <TouchableOpacity style={login_css.eyeImgWrap} onPress={() => {
                             this.setState({pass1: !pass1})
                         }}>
                             <Image
                                 source={pass1 ? require('../img/mimaxianshi1.png') : require('../img/mimaxianshi2.png')}
-                                style={{width: 20, height: 20}}/>
+                                style={login_css.eyeImg}/>
                         </TouchableOpacity>
                     </View>
 

@@ -91,7 +91,7 @@ export default class Modify extends Component{
             <View style={common_css.container1}>
                 {!refreshing?<Loading />:null}
                 <MineHea goBack={goBack} title={'修改密码'}/>
-                <View style={[login_css.inputWrap,{paddingTop:20}]}>
+                <View style={[login_css.inputWrap,login_css.inputWrapTop]}>
 
                     <View style={[common_css.inputBox,{borderColor: isFocus===1?'#1e88f5':'#DBDBDB'}]}>
                         <Text>原密码：</Text>
@@ -106,8 +106,8 @@ export default class Modify extends Component{
                             keyboardType="default"
                             secureTextEntry={pass}
                         />
-                        <TouchableOpacity style={{position:'absolute',right:10,top:15}} onPress={()=>{this.setState({pass:!pass})}}>
-                            <Image source={pass?require('../img/mimaxianshi1.png'):require('../img/mimaxianshi2.png')} style={{width:20,height:20}}/>
+                        <TouchableOpacity style={login_css.eyeImgWrap} onPress={()=>{this.setState({pass:!pass})}}>
+                            <Image source={pass?require('../img/mimaxianshi1.png'):require('../img/mimaxianshi2.png')} style={login_css.eyeImg}/>
                         </TouchableOpacity>
                     </View>
 
@@ -124,8 +124,8 @@ export default class Modify extends Component{
                             keyboardType="default"
                             secureTextEntry={pass1}
                         />
-                        <TouchableOpacity style={{position:'absolute',right:10,top:15}} onPress={()=>{this.setState({pass1:!pass1})}}>
-                            <Image source={pass1?require('../img/mimaxianshi1.png'):require('../img/mimaxianshi2.png')} style={{width:20,height:20}}/>
+                        <TouchableOpacity style={login_css.eyeImgWrap} onPress={()=>{this.setState({pass1:!pass1})}}>
+                            <Image source={pass1?require('../img/mimaxianshi1.png'):require('../img/mimaxianshi2.png')} style={login_css.eyeImg}/>
                         </TouchableOpacity>
                     </View>
 

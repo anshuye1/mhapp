@@ -8,7 +8,10 @@ import {
     TouchableOpacity,
     AsyncStorage,
     Platform,
-    // NativeModules
+    NativeModules,
+    DeviceEventEmitter,
+    ToastAndroid,
+    Alert
 } from 'react-native';
 import { connect } from 'react-redux';
 
@@ -65,11 +68,20 @@ class Mine extends Component {
           return;
       }
       console.log(321321);
+      //TODO 这里还不能下载
       if (Platform.OS === 'android') {
-          if (version == new_version) {
+          if (version != new_version) {
               ToastShow.toastShort('已经是最新版本');
           } else {
-              NativeModules.upgrade.upgrade(this.state.apkUrl);
+              Alert.alert('发现新版本','是否下载',
+                  [
+                      {text:"确定", onPress:() => {
+                              //apkUrl为app下载连接地址
+                              NativeModules.upgrade.upgrade(this.state.apkUrl);
+                          }},
+                      {text:"取消"}
+                  ]
+              );
           }
       }else{
           // NativeModules.upgrade.upgrade('1297109983', (msg) => {
@@ -117,6 +129,11 @@ class Mine extends Component {
   }
   componentDidMount() {
       this.getVersion();
+      DeviceEventEmitter.addListener('LOAD_PROGRESS',(msg)=>{
+          let title = "当前下载进度：" + msg;
+          console.log(title);
+          ToastAndroid.show(title, ToastAndroid.SHORT);
+      });
   }
 
   render() {

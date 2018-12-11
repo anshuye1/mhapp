@@ -356,6 +356,32 @@ const mine_css = StyleSheet.create({
         textAlign:'center',
         borderRadius:4,
         marginTop:15
+    },
+    //消息
+    mesContentWrap:{
+        backgroundColor:'#fff',
+        width:width-32,
+        margin:16,
+        padding:20,
+        borderRadius:8,
+    },
+    mesTitle:{
+        fontSize:16,
+        textAlign: 'center',
+        color:'#4a4a4a',
+        lineHeight:30
+    },
+    mesTime:{
+        fontSize:12,
+        textAlign:'right',
+        color:'#ccc',
+        lineHeight:30
+    },
+    mesContent:{
+        textAlign:'left',
+        color:'#4a4a4a',
+        lineHeight:20,
+        marginBottom: 100
     }
 });
 

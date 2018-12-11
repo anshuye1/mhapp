@@ -7,6 +7,47 @@ const [left, top] = [0, 0];
 const [middleLeft, middleTop] = [(width - aWidth) / 2, (height - aHeight) / 2 - navigatorH];
 
 const good_css = StyleSheet.create({
+    wrapper:{
+        position: 'absolute',
+        top:0,
+        left:0,
+        zIndex: 1,
+        backgroundColor:'rgba(0,0,0,0.3)',
+        width:width,
+        height:height
+    },
+    tabBar:{
+        backgroundColor: '#f5f5f5',
+        height: 3
+    },
+    tab:{
+        height:45
+    },
+    tabFont:{
+        fontSize: 16,paddingTop:5
+    },
+    tabItem:{
+        flex:1,
+    },
+    ViewLoginOut:{
+        flexDirection:'column',
+        justifyContent:'center',
+        alignItems:'center',
+        height:height-180
+    },
+    outImg:{
+        width:105,height:75
+    },
+    outText:{
+        fontSize:14,
+        flexWrap:'nowrap',
+        width:width*0.8,
+        marginTop:20,
+        color:'#BDBDBD'
+    },
+    blueText:{
+        color:'#1e88f5'
+    },
     img_wrap:{
         flex: 0
     },
@@ -106,6 +147,15 @@ const good_css = StyleSheet.create({
         justifyContent:'center',
         alignItems:'center'
     },
+    heaTabItemBtn:{
+        height:40,
+        lineHeight:40,
+        textAlign:'center',
+        color:'#4A4A4A'
+    },
+    tabIcon:{
+        width:8,height:8
+    },
     active:{
         color:'#1e88f5'
     },
@@ -150,7 +200,7 @@ const good_css = StyleSheet.create({
         width:width,
         height:50,
         left:0,
-        bottom:43,
+        bottom:0,
         zIndex:9,
         justifyContent:'space-between',
         flexDirection:'row',
@@ -170,9 +220,38 @@ const good_css = StyleSheet.create({
         alignItems:'center',
         paddingRight:30,
     },
+    //删除
+    goodsRow:{
+        flexDirection:'row',
+        alignItems:'center'
+    },
+    font16:{
+        fontSize:16
+    },
+    delBtn:{
+        fontSize:16,
+        width:80,
+        height:40,
+        lineHeight:40,
+        borderColor:'#999',
+        borderWidth:1,
+        color:'#999',
+        borderRadius:8,
+        textAlign:'center'
+    },
+    delBtn1:{
+        fontSize:16,
+        width:80,
+        height:40,
+        lineHeight:40,
+        backgroundColor:'#FF3851',
+        color:'#fff',
+        borderRadius:8,
+        textAlign:'center',
+        marginLeft:15
+    },
+
     content:{
-        paddingBottom: 50,
-        marginBottom:30,
         flex:1
     },
     radio:{

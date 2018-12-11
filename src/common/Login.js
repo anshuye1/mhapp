@@ -15,6 +15,7 @@ import {connect} from 'react-redux';
 import {doLogin} from '../store/actions/login';
 
 import Loading from './Loading';
+import MineHea from '../mine/MineHea';
 import Ajax from "../common/Ajax";
 import login_css from '../css/login_css';
 import ToastShow from "./Toast";
@@ -133,9 +134,9 @@ class Login extends Component {
                             <Image source={require('../img/fhui1.png')} style={login_css.backImg}/>
                         </TouchableOpacity>
                     </View>
-                    <View style={{marginTop: 115}}>
+                    <View>
                         <Image
-                            style={{width: 100, height: 67}}
+                            style={login_css.loginLogo}
                             source={require('../img/Group23.png')}
                         />
                     </View>
@@ -166,7 +167,7 @@ class Login extends Component {
                             keyboardType="default"
                             secureTextEntry={pass}
                         />
-                        <TouchableOpacity style={{position: 'absolute', right: 10, top: 15}} onPress={() => {
+                        <TouchableOpacity style={login_css.eyeImgWrap} onPress={() => {
                             this.setState({pass: !pass})
                         }}>
                             <Image

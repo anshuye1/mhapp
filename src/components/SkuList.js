@@ -11,6 +11,7 @@ import common_css from '../css/common_css';
 import SearchInput from './SearchInput';
 import SideMenu from 'react-native-side-menu';
 import Menu from './Menu';
+import good_css from "../css/good_css";
 
 const { width, height } = Dimensions.get('window');
 
@@ -128,20 +129,20 @@ class skuList extends Component {
         const menu = <Menu navigate={navigate} onItemSelected={this.onMenuItemSelected.bind(this)}/>;
 
         const ViewLoginOut = (
-            <TouchableOpacity style={{flexDirection:'column',justifyContent:'center',alignItems:'center',height:height-180}} onPress={()=>{
+            <TouchableOpacity style={good_css.ViewLoginOut} onPress={()=>{
                 this.props.navigation.navigate('Login')
             }}>
-                <Image source={require('../img/kbai1.png')} style={{width:105,height:75}}/>
-                <Text style={{fontSize:14,flexWrap:'nowrap',width:width*0.8,marginTop:20,color:'#BDBDBD'}}>登录状态下 PC端查询的历史数据会同步到这里哦，<Text style={{color:'#1e88fe'}}>去登录</Text></Text>
+                <Image source={require('../img/kbai1.png')} style={good_css.outImg}/>
+                <Text style={good_css.outText}>登录状态下 PC端查询的历史数据会同步到这里哦，<Text style={good_css.blueText}>去登录</Text></Text>
             </TouchableOpacity>
         );
 
         return (
             <SideMenu menu={menu} isOpen={this.state.isOpen} onChange={(isOpen) => this.updateMenuState(isOpen)}>
-                <View style={[{ width: width, height: height, backgroundColor: '#fff' },common_css.iphoneX]}>
+                <View style={[common_css.container1,common_css.iphoneX]}>
                     {
                         this.state.isOpen?
-                            <View style={{position: 'absolute',top:0,left:0,zIndex: 1,backgroundColor:'rgba(0,0,0,0.3)',width:width,height:height}}>
+                            <View style={good_css.wrapper}>
                                 <Text></Text>
                             </View>
                             :null
@@ -154,33 +155,30 @@ class skuList extends Component {
                         toggle={this.toggle.bind(this)}
                     />
                     <ScrollableTabView
-                        renderTabBar={() => <DefaultTabBar style={{height:45}}/>}
-                        tabBarUnderlineStyle={{
-                            backgroundColor: '#f5f5f5',
-                            height: 3
-                        }}
+                        renderTabBar={() => <DefaultTabBar style={good_css.tab}/>}
+                        tabBarUnderlineStyle={good_css.tabBar}
                         onChangeTab = {(obj)=>{this.setState({type:(obj.i*1+1)})}}
                         tabBarBackgroundColor='#1e88f5'
                         tabBarActiveTextColor='#fff'
                         tabBarInactiveTextColor='#fff'
-                        tabBarTextStyle={{ fontSize: 16,paddingTop:5 }}
+                        tabBarTextStyle={good_css.tabFont}
                         locked={false}
                     >
-                        <View tabLabel='查排名' style={{flex:1 }}>
+                        <View tabLabel='查排名' style={good_css.tabItem}>
                             {token
                                 ?<RanList token={token} type={'1'} navigation={this.props.navigation} ref="ranList" token_Del={this.token_Del.bind(this)}/>
                                 :ViewLoginOut
                             }
                         </View>
 
-                        <View tabLabel='查权重' style={{flex:1 }} onPress={()=>{this.setState({type:2})}}>
+                        <View tabLabel='查权重' style={good_css.tabItem} onPress={()=>{this.setState({type:2})}}>
                             {token
                                 ?<RanList token={token} type={'2'} navigation={this.props.navigation} ref="WeiList" token_Del={this.token_Del.bind(this)}/>
                                 :ViewLoginOut
                             }
                         </View>
 
-                        <View tabLabel='查销量' style={{flex:1 }} onPress={()=>{this.setState({type:3})}}>
+                        <View tabLabel='查销量' style={good_css.tabItem} onPress={()=>{this.setState({type:3})}}>
                             {token
                                 ?<RanList token={token} type={'3'} navigation={this.props.navigation} ref="SalList" token_Del={this.token_Del.bind(this)}/>
                                 :ViewLoginOut

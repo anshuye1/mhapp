@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import {
     View,
     Text,
-    Dimensions,
     TextInput,
     Keyboard,
     Image,
@@ -18,15 +17,14 @@ import login_css from '../css/login_css';
 import Ajax from "../common/Ajax";
 import MineHea from "../mine/MineHea";
 import common_css from "../css/common_css";
-
-const { width } = Dimensions.get('window');
+import ToastShow from '../common/Toast'
 
 class Signup extends Component{
     constructor(props){
         super(props);
         this.state = {
             isFocus: 0,
-            refreshing:true,
+            ready:true,
             formData:{
                 mphone:'',
                 password:'',
@@ -76,26 +74,26 @@ class Signup extends Component{
             return false;
         }
         this.setState({
-            refreshing:false,
+            ready:false,
         });
         Ajax.post('/site/signup',this.state.formData)
             .then((response)=>{
                 console.log(response);
-                this.setState({ refreshing: true });
+                this.setState({ ready: true });
                 if(response.result*1===1){
                     this.goLogin(this.state.formData)
                 }else{
                     ToastShow.toastShort(response.msg)
                 }
         }).catch((error) => {
-            this.setState({ refreshing: true });
+            this.setState({ ready: true });
             // ToastShow.toastShort('系统错误');
             // console.warn(error);
         });
     }
     //时间倒数
     settime(){
-        let t = setInterval(()=>{
+        this.t = setInterval(()=>{
             if(this.state.countdown>0){
                 this.setState({
                     countdown:this.state.countdown-1
@@ -104,7 +102,7 @@ class Signup extends Component{
                 this.setState({
                     countdown:60
                 });
-                clearInterval(t)
+                clearInterval(this.t)
             }
         },1000)
     }
@@ -119,10 +117,13 @@ class Signup extends Component{
             ToastShow.toastShort('请输入正确的手机号');
             return false;
         }
+        this.setState({
+            ready:false,
+        });
         Ajax.post('/site/send-mphone-code',{"mphone":mphone,type:1})
-            .then((response) => {
-                console.log(response);
-                if(response.result*1===1){
+        .then((response) => {
+            console.log(response);
+            if(response.result*1===1){
                 ToastShow.toastShort(response.msg)
                 this.settime();
             }else{
@@ -131,9 +132,13 @@ class Signup extends Component{
                 });
                 ToastShow.toastShort(response.msg)
             }
+            this.setState({
+                ready:true,
+            });
         }).catch((error) => {
             this.setState({
-                currentDown:60
+                currentDown:60,
+                ready:true,
             });
             console.warn(error);
             // ToastShow.toastShort('系统错误');
@@ -143,12 +148,17 @@ class Signup extends Component{
     static navigationOptions = ({ navigation }) => ({
         header: null
     });
+
+    componentWillUnmount(){
+        clearInterval(this.t)
+    }
+
     render(){
-        const { isFocus,refreshing,countdown,pass } = this.state;
+        const { isFocus,ready,countdown,pass } = this.state;
         const { goBack,navigate } = this.props.navigation;
         return (
             <ScrollView style={common_css.container1} keyboardShouldPersistTaps={'never'}>
-                {!refreshing&&<Loading />}
+                {ready?null:<Loading />}
                 <MineHea goBack={goBack} title={'注册'}/>
 
                 <View style={login_css.inputWrap}>
@@ -162,22 +172,20 @@ class Signup extends Component{
                         keyboardType="numeric"
                     />
 
-                    <View style={{flexDirection:'row',width: width*0.9,justifyContent:'space-between',flexWrap:'nowrap'}}>
+                    <View style={login_css.InputWrap}>
                         <TextInput
-                            style={[login_css.loginInput,{width:width*0.9-150}]}
+                            style={[login_css.loginInput,login_css.loginInputSmall]}
                             underlineColorAndroid='transparent'
                             onFocus={()=>this.setState({isFocus: 3})}
                             onChangeText={(text) => this.setState({ text,formData:{...this.state.formData,validate_code:text} })}
                             placeholder='输入验证码'
                             placeholderTextColor='#ccc'
                         />
-                        <TouchableOpacity>
-                            {countdown<60?<Text
-                                style={login_css.timeBtn1}
-                            >重新发送({countdown})</Text>:<Text
-                                onPress={()=>{this.sendFun()}}
-                                style={login_css.timeBtn}
-                            >发送验证码</Text>}
+                        <TouchableOpacity onPress={this.sendFun.bind(this)}>
+                            {countdown<60?
+                                <Text style={login_css.timeBtn1}>重新发送({countdown})</Text>
+                                :
+                                <Text style={login_css.timeBtn}>发送验证码</Text>}
                         </TouchableOpacity>
                     </View>
 
@@ -193,7 +201,7 @@ class Signup extends Component{
                             keyboardType="default"
                             secureTextEntry={pass}
                         />
-                        <TouchableOpacity style={{position:'absolute',right:10,top:15}} onPress={()=>{this.setState({pass:!pass})}}>
+                        <TouchableOpacity style={login_css.eyeImgWrap} onPress={()=>{this.setState({pass:!pass})}}>
                             <Image source={pass?require('../img/mimaxianshi1.png'):require('../img/mimaxianshi2.png')} style={login_css.eyeImg}/>
                         </TouchableOpacity>
                     </View>
