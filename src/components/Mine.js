@@ -70,14 +70,14 @@ class Mine extends Component {
       console.log(321321);
       //TODO 这里还不能下载
       if (Platform.OS === 'android') {
-          if (version != new_version) {
+          if (version == new_version) {
               ToastShow.toastShort('已经是最新版本');
           } else {
               Alert.alert('发现新版本','是否下载',
                   [
                       {text:"确定", onPress:() => {
                               //apkUrl为app下载连接地址
-                              NativeModules.upgrade.upgrade(this.state.apkUrl);
+                              NativeModules.upgrade.upgrade(this.state.apkUrl)
                           }},
                       {text:"取消"}
                   ]

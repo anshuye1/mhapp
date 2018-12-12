@@ -1,4 +1,4 @@
 <resources>
-    <string name="android_auto_update_download_progress">正在下载:%1$d%%</string>
     <string name="app_name">JD魔盒</string>
+    <string name="android_auto_update_download_progress">正在下载:%1$d%%</string>
 </resources>

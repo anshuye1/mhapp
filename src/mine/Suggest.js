@@ -1,25 +1,13 @@
 import React, { Component } from 'react';
 import { Text, Button, View,TextInput,Image,Dimensions,TouchableOpacity,StyleSheet,Alert,ScrollView } from 'react-native';
-import ImagePicker from 'react-native-image-picker';
+
 import ToastShow from "../common/Toast"; // 导入
 import Ajax from '../common/Ajax';
 import MineHea from "./MineHea";
 import mine_css from "../css/mine_css";
 import common_css from "../css/common_css";
 
-const options = { // 弹出框配置
-    title:'请选择',
-    cancelButtonTitle:'取消',
-    takePhotoButtonTitle:'拍照',
-    chooseFromLibraryButtonTitle:'选择相册',
-    quality:0.75,
-    allowsEditing:true,
-    noData:false,
-    storageOptions: {
-        skipBackup: true,
-        path:'images'
-    }
-};
+
 
 export default class Vip extends Component {
 
@@ -34,32 +22,11 @@ export default class Vip extends Component {
                 token:props.navigation.state.params.token
             }
         };
-        this._imagePicker = this._imagePicker.bind(this); // bind
     }
 
     static navigationOptions = ({ navigation }) => ({
         header:null
     });
-    _imagePicker() {
-        ImagePicker.showImagePicker(options,(res) => {
-            if (res.didCancel) {  // 返回
-                return
-            } else {
-                let source;  // 保存选中的图片
-                source = {uri: 'data:image/jpeg;base64,' + res.data};
-
-                if (Platform.OS === 'android') {
-                    source = { uri: res.uri };
-                } else {
-                    source = { uri: res.uri.replace('file://','') };
-                }
-
-                this.setState({
-                    avatarSource: source
-                });
-            }
-        })
-    }
 
     suggest(){
         Ajax.post('/user/feedback',this.state.formData)
@@ -105,12 +72,6 @@ export default class Vip extends Component {
                             }
                         })}
                     />
-                    {/*<Text style={styles.fontHea}>*/}
-                        {/*图片（选填，提供问题截图）*/}
-                    {/*</Text>*/}
-                    {/*<TouchableOpacity onPress={()=>{this._imagePicker()}}>*/}
-                        {/*<Text>上传图片</Text>*/}
-                    {/*</TouchableOpacity>*/}
                     <Text style={mine_css.suFontHea}>
                         联系方式（选填，便于我们与你联系）
                     </Text>

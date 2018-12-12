@@ -4,7 +4,6 @@ import android.app.Application;
 
 import com.facebook.react.ReactApplication;
 import com.yunpeng.alipay.AlipayPackage;
-import com.imagepicker.ImagePickerPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
@@ -29,7 +28,6 @@ public class MainApplication extends Application implements ReactApplication {
             new UpgradePackage(),
           new MainReactPackage(),
             new AlipayPackage(),
-            new ImagePickerPackage(),
             new VectorIconsPackage()
       );
     }
