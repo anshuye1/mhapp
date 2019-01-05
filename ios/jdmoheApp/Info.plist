@@ -51,7 +51,7 @@
 		</dict>
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string/>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>
@@ -84,5 +84,7 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>CodePushDeploymentKey</key>
+	<string>OFtMbneLRlcg-JDXuXvdJKFp9_3wf4eb6812-f373-4d7d-920c-619db1092814 </string>
 </dict>
 </plist>
