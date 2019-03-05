@@ -93,6 +93,7 @@ class Login extends Component {
                 } else {
                     ToastShow.toastShort(response.msg)
                 }
+                this.setState({refreshing: true});
             }).catch((error) => {
             this.setState({refreshing: true});
             ToastShow.toastShort('系统错误');

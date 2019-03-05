@@ -5,18 +5,18 @@ const initialState = {
   token: null
 }
 const login = (state = initialState, action) => {
-  // switch (action.type) {
-  //     case types.LOGIN:
-  //     return {
-  //         ...state,
-  //         token: action.payload,
-  //     }
-  //   default:
-  //     return state
-  // }
-    return {
-        token: action.payload,
-    }
+  switch (action.type) {
+      case types.LOGIN:
+      return {
+          ...state,
+          token: action.payload,
+      }
+    default:
+      return state
+  }
+  //   return {
+  //       token: action.payload,
+  //   }
 }
 
 export default login

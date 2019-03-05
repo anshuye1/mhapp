@@ -163,6 +163,7 @@ class Mine extends Component {
                   }else{
                       this.saveVersion('version',iosVersion);//保存版本号
                   }
+                  ToastShow.toastShort('已经是最新版本');
               }else{
                   ToastShow.toastShort(respones.msg);
               }
@@ -178,12 +179,15 @@ class Mine extends Component {
   }
   componentDidMount() {
       this.getVersion();
-      DeviceEventEmitter.addListener('LOAD_PROGRESS',(msg)=>{
+      this.emit = DeviceEventEmitter.addListener('LOAD_PROGRESS',(msg)=>{
           let title = "当前下载进度：" + msg;
           console.log(title);
           ToastAndroid.show(title, ToastAndroid.SHORT);
       });
   }
+  componentWillUnmount(){
+      this.emit&&this.emit.remove();
+  };
 
   render() {
     const { navigate } = this.props.navigation;
@@ -220,23 +224,23 @@ class Mine extends Component {
         </ImageBackground>
         <View style={mine_css.meBottom}>
 
-            <TouchableOpacity
-                style={mine_css.meBottomItem}
-                onPress={()=>{
-                    if(token&&this.refs.user&&this.refs.user.state.phone){
-                        navigate('Vip',{
-                            token:token,
-                            name:this.refs.user.state.phone
-                        })
-                    }else{
-                        ToastShow.toastShort('请登录')
-                    }
-                }}
-            >
-                <View style={mine_css.rowWrap}><Image source={require('../img/vip1.png')} style={mine_css.meIconImg}/>
-                <Text style={mine_css.meItem}>VIP会员</Text></View>
-                <Image source={require('../img/gd11.png')} style={mine_css.modifyImgIcon}/>
-            </TouchableOpacity>
+            {/*<TouchableOpacity*/}
+                {/*style={mine_css.meBottomItem}*/}
+                {/*onPress={()=>{*/}
+                    {/*if(token&&this.refs.user&&this.refs.user.state.phone){*/}
+                        {/*navigate('Vip',{*/}
+                            {/*token:token,*/}
+                            {/*name:this.refs.user.state.phone*/}
+                        {/*})*/}
+                    {/*}else{*/}
+                        {/*ToastShow.toastShort('请登录')*/}
+                    {/*}*/}
+                {/*}}*/}
+            {/*>*/}
+                {/*<View style={mine_css.rowWrap}><Image source={require('../img/vip1.png')} style={mine_css.meIconImg}/>*/}
+                {/*<Text style={mine_css.meItem}>VIP会员</Text></View>*/}
+                {/*<Image source={require('../img/gd11.png')} style={mine_css.modifyImgIcon}/>*/}
+            {/*</TouchableOpacity>*/}
 
             <TouchableOpacity style={mine_css.meBottomItem} onPress={()=>{navigate('Product')}}>
                 <View style={mine_css.rowWrap}>

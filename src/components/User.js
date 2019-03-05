@@ -43,13 +43,13 @@ export default class User extends Component{
         if(this.props.token){
             this.getUser();
         }
-        DeviceEventEmitter.addListener('vip',()=>{
+        this.emit = DeviceEventEmitter.addListener('vip',()=>{
             this.getUser()
         });
     }
 
     componentWillUnmount(){
-        DeviceEventEmitter.remove();
+        this.emit&&this.emit.remove();
     };
 
     render(){
